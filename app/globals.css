@@ -1,26 +1,66 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --font-playfair: 'Playfair Display', 'Playfair Fallback';
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  width: 100vw;
+  overflow-x: hidden;
+  scroll-behavior: smooth;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  width: 100vw;
+  overflow-x: hidden;
+  background-color: #000;
+  font-family: var(--font-playfair);
+}
+
+
+
+#showcase {
+  @apply relative w-full h-full; /* Ensure full width/height */
+
+
+.media {
+  @apply relative w-full h-screen overflow-hidden; /* Use h-screen for the pinned area */
+
+
+video {
+  @apply w-full h-full object-cover;
+}
+
+.mask {
+  @apply absolute inset-0 z-10 flex items-center justify-center pointer-events-none;
+}
+
+.mask img {
+  @apply w-full h-full object-cover;
+  /* REMOVED: transform: matrix(...) - Let GSAP handle this */
+}
+
+/* Optional: Hide mask on mobile via CSS if you don't want it at all */
+@media (max-width: 1024px) {
+  .mask {
+    display: none;
+  }
+}
+}
+
+  .content {
+    @apply relative z-10 my-5 lg:-mt-40 bg-[#0A0A0A] font-semibold text-xl lg:opacity-0;
+
+    .wrapper {
+      @apply container mx-auto px-5 pb-20 2xl:px-0 flex flex-col lg:flex-row justify-center gap-20;
+    }
+
+    h2 {
+      @apply font-semibold text-3xl lg:text-7xl text-white;
+    }
+
+    h3 {
+      @apply font-semibold text-xl lg:text-5xl text-white;
+    }
+  }
 }
