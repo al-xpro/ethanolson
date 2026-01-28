@@ -135,11 +135,9 @@ const Navbar = () => {
     tl.current?.eventCallback("onReverseComplete", () => {
       setIsOpen(false);
 
-      // 4. Use Lenis to scroll smoothly instead of native behavior
-      // This ensures everything stays in sync
       lenis?.scrollTo(`#${section}`, {
         offset: 0,
-        duration: 1.5,
+        duration: 15,
         lock: false,
       });
     });
@@ -149,11 +147,11 @@ const Navbar = () => {
     <>
       <nav
         ref={navRef}
-        className="fixed inset-0 z-50 bg-white text-black/70 uppercase overflow-hidden md:left-1/2 md:w-1/2"
+        className="fixed inset-0 z-200 bg-white text-black/70 uppercase overflow-hidden md:left-1/2 md:w-1/2"
       >
         <div className="mx-auto flex h-full flex-col justify-between px-10 py-28 gap-y-10">
           <div className="flex flex-col gap-y-2 text-5xl sm:text-6xl lg:text-8xl">
-            {["home", "services", "about", "work", "contact"].map((section, index) => (
+            {["home", "services", "about", "works", "stories", "contact"].map((section, index) => (
               <div key={index} ref={(el: any) => (linksRef.current[index] = el)}>
                 <span
                   className="transition-all duration-300 cursor-pointer hover:text-black"
@@ -196,7 +194,7 @@ const Navbar = () => {
       </nav>
 
       {/* Burger Button Container */}
-      <div className="fixed z-50 top-4 inset-x-0 pointer-events-none min-w-[320px]">
+      <div className="fixed z-200 top-4 inset-x-0 pointer-events-none min-w-[320px]">
         {/* Important: Ensure this wrapper matches the Navbar wrapper width so the button doesn't jump */}
         <div className="mx-auto w-full px-10">
           <div

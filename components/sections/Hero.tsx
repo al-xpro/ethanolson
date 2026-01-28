@@ -2,7 +2,7 @@ import { Canvas } from "@react-three/fiber";
 import { Environment, Float, Lightformer } from "@react-three/drei";
 import AnimatedHeaderSection from "@/components/ui/AnimatedHeaderSection";
 import { heroData } from "@/lib/data";
-import { ObjectIllusion } from "../ui/ObjectIllustion";
+import { ObjectIllusionHero } from "../ui/ObjectIllustionHero";
 
 const Hero = () => {
   return (
@@ -17,7 +17,7 @@ const Hero = () => {
         <Canvas shadows camera={{ position: [0, 0, -10], fov: 17.5, near: 1, far: 20 }}>
           <ambientLight intensity={1} />
           <Float speed={1} rotationIntensity={1} floatIntensity={1}>
-            <ObjectIllusion />
+            <ObjectIllusionHero />
           </Float>
           <Environment resolution={512}>
             <group rotation={[0, 0, 0]}>
@@ -43,7 +43,7 @@ const Hero = () => {
               />
 
               {/* Back kicker */}
-              <Lightformer form="circle" intensity={4} position={[0, 0, -5]} scale={5} />
+              <Lightformer form="circle" intensity={4} position={[0, 0, -2]} scale={5} />
             </group>
           </Environment>
         </Canvas>
