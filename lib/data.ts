@@ -9,136 +9,86 @@ export const heroData = {
   img: "/images/hero.png",
 };
 
-// Service Summary
+// Zoom Parallax
 
-export const serviceSummaryData = {
-  
-}
+export const Picture1 = "/images/sea.avif";
+export const Picture2 = "/images/sea.avif";
+export const Picture3 = "/images/sea.avif";
+export const Picture4 = "/images/sea.avif";
+export const Picture5 = "/images/sea.avif";
+export const Picture6 = "/images/sea.avif";
 
+// Services section
 
 export const servicesData = [
   {
-    title: "FullStack Development",
+    title: "UI / UX Design Systems",
     description:
-      "Your business deserves a fast, secure, and future-proof digital foundation. I develop custom web apps with clean architecture, optimized databases, and seamless integrations—ensuring reliability at every layer.",
-    items: [
+      "I design interface systems that scale effortlessly. From structure to style, every component is crafted to ensure consistency, accessibility, and long-term product clarity.",
+    visuals: [
       {
-        title: "Backend Engineering",
-        description: "(REST/GraphQL APIs, Microservices, Auth Systems)",
-      },
-      {
-        title: "Frontend Excellence",
-        description: "(React, Vue, TypeScript, Interactive UI/UX)",
-      },
-      {
-        title: "Database Design",
-        description: "(SQL/NoSQL Optimization, Scalable Structures)",
+        src: "/images/first-service.png",
+        alt: "Design system components",
       },
     ],
   },
+
   {
-    title: "DevOps & Cloud Solutions",
+    title: "Interactive Frontend Experiences",
     description:
-      "Deploying software shouldn't be a gamble. I automate infrastructure, enforce security, and leverage cloud platforms (AWS/Azure) to keep your app running smoothly—24/7, at any scale.",
-    items: [
+      "I bring interfaces to life through motion and interaction. Smooth animations, subtle micro-interactions, and fluid layouts transform static screens into engaging experiences.",
+    visuals: [
       {
-        title: "CI/CD Pipelines",
-        description: "(GitHub Actions, Docker, Kubernetes)",
-      },
-      {
-        title: "Server Management ",
-        description: "(Linux, Nginx, Load Balancing)",
-      },
-      {
-        title: "Performance Tuning",
-        description: "(Caching, Compression, Lighthouse 90+ Scores)",
+        src: "/images/second-service.png",
+        alt: "Micro-interactions UI",
       },
     ],
   },
+
   {
-    title: "Security & Optimization",
+    title: "Product & UX Engineering",
     description:
-      "Slow or hacked apps destroy trust. I harden security (XSS/SQLI protection, OAuth) and optimize bottlenecks so your app stays fast, safe, and scalable as you grow.",
-    items: [
+      "I connect design intent with production-ready code. Every interface is engineered for usability, performance, and maintainability—so products evolve without friction.",
+    visuals: [
       {
-        title: "Code Audits",
-        description: "(Refactoring, Tech Debt Cleanup)",
-      },
-      {
-        title: "Pen Testing",
-        description: "(Vulnerability Assessments)",
-      },
-      {
-        title: "SEO Tech Stack",
-        description: "(SSR, Metadata, Structured Data)",
+        src: "/images/third-service.png",
+        alt: "UX iteration process",
       },
     ],
   },
+
   {
-    title: "Web & Mobile Apps",
+    title: "Branding & Visual Identity",
     description:
-      "A clunky interface can sink even the best ideas. I craft responsive, pixel perfect web and mobile apps (React Native/Flutter) that users love—bridging design and functionality seamlessly.",
-    items: [
+      "I craft visual identities that feel intentional and timeless. Every logo, color, and typographic choice is designed to communicate meaning and emotion.",
+    visuals: [
       {
-        title: "Cross-Platform Apps",
-        description: "(Single codebase for iOS/Android/Web)",
-      },
-      {
-        title: "PWAs",
-        description: "(Offline mode, Push Notifications)",
-      },
-      {
-        title: "E-Commerce",
-        description: "(Checkout flows, Payment Gateways, Inventory APIs)",
+        src: "/images/fourth-service.png",
+        alt: "Logo exploration",
       },
     ],
   },
 ];
 
+// Testimonial section
 
-export const performanceImages = [
-    { id: "p1", src: "/assets/projects/apple-tech-store.jpg" },
-    { id: "p2", src: "/assets/projects/plant-shop.jpg" },
-    { id: "p3", src: "/assets/projects/electronics-store.jpg" },
-    { id: "p4", src: "/assets/projects/home-decor-store.jpg" },
-    { id: "p5", src: "/assets/projects/game-store.jpg" },
-    { id: "p6", src: "/assets/projects/mobile-accessories-store.jpg" },
-];
-
-export const performanceImgPositions = [
-    {
-        id: "p1",
-        left: 5,
-        bottom: 65,
-    },
-    {
-        id: "p2",
-        right: 10,
-        bottom: 60,
-    },
-    {
-        id: "p3",
-        right: -5,
-        bottom: 45,
-    },
-    {
-        id: "p4",
-        right: -10,
-        bottom: 0,
-    },
-    {
-        id: "p5",
-        left: 20,
-        bottom: 50,
-    },
-    {
-        id: "p6",
-        left: 2,
-        bottom: 30,
-    },
-    {
-        id: "p7",
-        left: -5,
-        bottom: 0,
-    },
-];
+export const FLoating1 = "/images/sea.avif";
+export const FLoating2 = "/images/sea.avif";
+export const FLoating3 = "/images/sea.avif";
+export const FLoating4 = "/images/sea.avif";
+export const FLoating5 = "/images/sea.avif";
+export const FLoating6 = "/images/sea.avif";
+export const FLoating7 = "/images/sea.avif";
+export const FLoating8 = "/images/sea.avif";
+export const FLoating9 = "/images/sea.avif";
+export const FLoating10 = "/images/sea.avif";
+export const FLoating11 = "/images/sea.avif";
+export const FLoating12 = "/images/sea.avif";
+export const FLoating13 = "/images/sea.avif";
+export const FLoating14 = "/images/sea.avif";
+export const FLoating15 = "/images/sea.avif";
+export const FLoating16 = "/images/sea.avif";
+export const FLoating17 = "/images/sea.avif";
+export const FLoating18 = "/images/sea.avif";
+export const FLoating19 = "/images/sea.avif";
+export const FLoating20 = "/images/sea.avif";
