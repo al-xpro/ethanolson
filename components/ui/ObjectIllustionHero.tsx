@@ -5,7 +5,7 @@ import { useGLTF, useProgress } from "@react-three/drei";
 import gsap from "gsap";
 import * as THREE from "three";
 
-export function ObjectIllusion(props: JSX.IntrinsicElements["group"]) {
+export function ObjectIllusionHero(props: JSX.IntrinsicElements["group"]) {
   const container = useRef<THREE.Group>(null);
   const { scene } = useGLTF("/models/Figure.glb");
   const { progress } = useProgress();
