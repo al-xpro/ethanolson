@@ -1,23 +1,10 @@
 "use client";
 
+import { workImages } from "@/lib/data";
 import { motion, MotionValue, useScroll, useTransform } from "framer-motion";
 import Lenis from "lenis";
 import { useEffect, useRef, useState } from "react";
 
-const images = [
-  "/projects/project-01.png",
-  "/projects/project-02.png",
-  "/projects/project-03.png",
-  "/projects/project-04.png",
-  "/projects/project-05.png",
-  "/projects/project-06.png",
-  "/projects/project-07.png",
-  "/projects/project-08.png",
-  "/projects/project-09.png",
-  "/projects/project-10.png",
-  "/projects/project-11.png",
-  "/projects/project-12.png",
-];
 
 export const WorkParallax = () => {
   const gallery = useRef<HTMLDivElement>(null);
@@ -56,10 +43,10 @@ export const WorkParallax = () => {
   }, []);
 
   return (
-    <div className="w-full">
+    <div className="relative w-full h-full">
       <div
         ref={gallery}
-        className="relative box-border flex h-[175vh] gap-[2vw] overflow-hidden p-[2vw]"
+        className="relative box-border flex h-[175vh] min-h-[500px]  gap-[2vw] overflow-hidden p-[2vw]"
       >
         {/* TOP BLUR */}
         <div className="parallax-blur parallax-blur--top" />
@@ -68,16 +55,16 @@ export const WorkParallax = () => {
         <div className="parallax-blur parallax-blur--bottom" />
 
         <div className="block">
-          <Column images={[images[0], images[1], images[2]]} y={y} />
+          <Column images={[workImages[0], workImages[1], workImages[2]]} y={y} />
+        </div>
+        <div className="hidden md:block">
+          <Column images={[workImages[3], workImages[4], workImages[5]]} y={y2} />
+        </div>
+        <div className="block">
+          <Column images={[workImages[6], workImages[7], workImages[8]]} y={y3} />
         </div>
         <div className="hidden lg:block">
-          <Column images={[images[3], images[4], images[5]]} y={y2} />
-        </div>
-        <div className="hidden lg:block">
-          <Column images={[images[6], images[7], images[8]]} y={y3} />
-        </div>
-        <div className="hidden lg:block">
-          <Column images={[images[9], images[10], images[11]]} y={y4} />
+          <Column images={[workImages[9], workImages[10], workImages[11]]} y={y4} />
         </div>
       </div>
     </div>
@@ -92,15 +79,15 @@ type ColumnProps = {
 const Column = ({ images, y }: ColumnProps) => {
   return (
     <motion.div
-      className="relative -top-[45%] flex h-full w-full flex-col gap-[2vw] first:top-[-45%] [&:nth-child(2)]:top-[-95%] [&:nth-child(3)]:top-[-45%] [&:nth-child(4)]:top-[-75%]"
+      className="relative -top-[45%] flex h-full min-h-[500px] w-full flex-col gap-[2vw] first:top-[-45%] [&:nth-child(2)]:top-[-95%] [&:nth-child(3)]:top-[-45%] [&:nth-child(4)]:top-[-75%]"
       style={{ y }}
     >
       {images.map((src, i) => (
-        <div key={i} className="relative h-full w-full overflow-hidden">
+        <div key={i} className="relative w-full h-full overflow-hidden">
           <img
             src={`${src}`}
             alt="image"
-            className="pointer-events-none w-full h-full object-cover"
+            className="pointer-events-none w-full h-full object-cover rounded-xl xl:rounded-[1.5vw]"
           />
         </div>
       ))}

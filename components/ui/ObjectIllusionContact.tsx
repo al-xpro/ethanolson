@@ -10,16 +10,18 @@ export function ObjectIllusionContact(props: JSX.IntrinsicElements["group"]) {
   const { scene } = useGLTF("/models/mac.glb");
   const { progress } = useProgress();
 
-const ironMaterial = new THREE.MeshPhysicalMaterial({
-  color: "#2B2B2B",
-  metalness: 1,
-  roughness: 0.2,
-  reflectivity: 20,
-  clearcoat: 0.1,
-  clearcoatRoughness: 0.1,
-  envMapIntensity: 2.2,
-});
+  // Create the sleek dark material
+  const ironMaterial = new THREE.MeshPhysicalMaterial({
+    color: "#2B2B2B",
+    metalness: 1,
+    roughness: 0.5,
+    reflectivity: 20,
+    clearcoat: 0.1,
+    clearcoatRoughness: 0.1,
+    envMapIntensity: 2.2,
+  });
 
+  // Apply material
   scene.traverse((child) => {
     if ((child as THREE.Mesh).isMesh) {
       const mesh = child as THREE.Mesh;
@@ -29,8 +31,9 @@ const ironMaterial = new THREE.MeshPhysicalMaterial({
     }
   });
 
+  // Initial positioning
   scene.scale.setScalar(20.5);
-  scene.position.set(0, -3.3, 0.6);
+  scene.position.set(0, -5.0, 0.6);
 
   // --- Animate ONLY when fully loaded ---
   useEffect(() => {
@@ -44,9 +47,9 @@ const ironMaterial = new THREE.MeshPhysicalMaterial({
         z: 0.4,
       },
       {
-        x: -0.6,
-        y: 2.5,
-        z: 0.05,
+        x: -0.1,
+        y: 0, 
+        z: 0,
         duration: 2.2,
         ease: "expo.out",
       }
@@ -58,7 +61,7 @@ const ironMaterial = new THREE.MeshPhysicalMaterial({
       ref={container}
       {...props}
       dispose={null}
-      rotation={[0, 0, 0]}
+      rotation={[-1.2, 0.8, 0.4]} 
     >
       <primitive object={scene} />
     </group>

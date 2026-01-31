@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { useRef } from "react";
 import { AnimatedTextLines } from "@/components/ui/AnimatedTextLines";
@@ -22,6 +22,7 @@ const AnimatedHeaderSection = ({
   const headerRef = useRef(null);
   const shouldSplitTitle = title.includes(" ");
   const titleParts = shouldSplitTitle ? title.split(" ") : [title];
+
   useGSAP(() => {
     const tl = gsap.timeline({
       scrollTrigger: withScrollTrigger
@@ -46,21 +47,23 @@ const AnimatedHeaderSection = ({
       "<+0.2"
     );
   }, []);
+
   return (
-    <div ref={contextRef} className="relative z-10">
+    <div ref={contextRef} className="relative z-10 h-full pointer-events-none">
       <div style={{ clipPath: "polygon(0 0, 100% 0, 100% 100%, 0 100%)" }}>
         <div
           ref={headerRef}
-          className="flex flex-col justify-center pt-10 sm:pt-12 md:pt-16 gap-10"
+          className="flex flex-col justify-center pt-10 sm:pt-12 md:pt-16 xl:pt-[2.5vw] gap-10 xl:gap-[1.5vw]"
         >
           <p
-            className={`text-xs md:text-sm font-light tracking-[0.5rem] uppercase px-5 sm:px-10 ${textColor}`}
+            style={{ pointerEvents: 'auto' }}
+            className={`text-xs md:text-sm xl:text-[1vw] font-light tracking-[0.5rem] uppercase px-5 sm:px-10 xl:px-[1.5vw] ${textColor}`}
           >
             {subTitle}
           </p>
-          <div className="px-5 sm:px-10">
+          <div className="px-5 sm:px-10 xl:px-[1.5vw]" style={{ pointerEvents: 'auto' }}>
             <h1
-              className={`flex flex-col gap-4 text-5xl sm:text-7xl md:text-9xl max-w-md uppercase md:gap-16 md:block ${textColor}`}
+              className={`flex flex-col gap-4 text-5xl sm:text-7xl md:text-9xl xl:text-[5vw] max-w-md uppercase md:gap-16 xl:gap-[1.5vw] md:block ${textColor}`}
             >
               {titleParts.map((part, index) => (
                 <span key={index}>{part} </span>
@@ -69,12 +72,13 @@ const AnimatedHeaderSection = ({
           </div>
         </div>
       </div>
-      <div className={`relative px-5 sm:px-10 ${textColor}`}>
-        <div className="absolute inset-x-0 border-t-2" />
-        <div className="py-10 sm:py-12 md:py-16 text-start">
+
+      <div className={`relative px-5 sm:px-10 xl:px-[1.5vw] ${textColor}`}>
+        <div className="absolute inset-x-0 border-t-2 xl:border-t-[0.1vw]" />
+        <div className="py-10 sm:py-12 md:py-16 xl:py-[3.5vw] text-start" style={{ pointerEvents: 'auto' }}>
           <AnimatedTextLines
             text={text}
-            className={`font-light text-white/80 value-text-responsive text-md sm:text-xl md:text-3xl ${textColor}`}
+            className={`font-light text-white/80 value-text-responsive ${textColor}`}
           />
         </div>
       </div>

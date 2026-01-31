@@ -1,20 +1,16 @@
 "use client";
 
 import AnimatedHeaderSection from "@/components/ui/AnimatedHeaderSection";
-import { WorkParallax } from "./WorkParallax";
+import { WorkParallax } from "../ui/WorkParallax";
+import { worksHeader } from "@/lib/data";
 
 const Works = () => {
   return (
-    <section id="works" className="h-full">
-      {/* this is for the navbar */}
+    <section id="works" className="relative h-full">
       <AnimatedHeaderSection
-        subTitle={"My recent works"}
-        title={"Works"}
-        text={`Projects that I've worked on over the years, 
-        showcasing my skills and expertise
-        in design and development.
-
-`}
+        subTitle={worksHeader.subTitle}
+        title={worksHeader.title}
+        text={worksHeader.text}
         textColor={"text-white"}
         withScrollTrigger={true}
       />

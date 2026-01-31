@@ -1,16 +1,19 @@
 import { Canvas } from "@react-three/fiber";
 import { Environment, Float, Lightformer } from "@react-three/drei";
 import AnimatedHeaderSection from "@/components/ui/AnimatedHeaderSection";
-import { heroData } from "@/lib/data";
+import { heroHeader } from "@/lib/data";
 import { ObjectIllusionHero } from "../ui/ObjectIllustionHero";
 
 const Hero = () => {
   return (
-    <section id="home" className="flex flex-col justify-start min-h-screen">
+    <section
+      id="home"
+      className="relative flex flex-col h-screen w-full justify-start min-h-[700px] overflow-hidden"
+    >
       <AnimatedHeaderSection
-        subTitle={heroData.subTitle}
-        title={heroData.title}
-        text={heroData.text}
+        subTitle={heroHeader.subTitle}
+        title={heroHeader.title}
+        text={heroHeader.text}
         textColor={"text-white"}
       />
       <figure className="absolute inset-0 -z-50 min-h-[700px]">
