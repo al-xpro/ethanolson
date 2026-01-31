@@ -1,8 +1,9 @@
 "use client";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef } from "react";
 import { motion, useMotionValueEvent, useScroll } from "framer-motion";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
+import { CaseStudiesContent } from "@/lib/data";
 
 export const StickyScrollRevealLarge = ({
   content,
@@ -35,35 +36,26 @@ export const StickyScrollRevealLarge = ({
     setActiveCard(closestBreakpointIndex);
   });
 
-  const linearGradients = [
-    "linear-gradient(to bottom right, #06b6d4, #10b981)",
-    "linear-gradient(to bottom right, #ec4899, #6366f1)",
-    "linear-gradient(to bottom right, #f97316, #eab308)",
-  ];
-
-  const [backgroundGradient, setBackgroundGradient] = useState(linearGradients[0]);
-
-  useEffect(() => {
-    setBackgroundGradient(linearGradients[activeCard % linearGradients.length]);
-  }, [activeCard]);
 
   return (
-    <div className="relative mx-auto max-w-7xl px-6 py-20">
-      <div className="grid grid-cols-2 gap-10">
-        {/* TEXT COLUMN */}
+    <div className="relative mx-auto px-6 xl:px-[3vw] py-20 xl:py-[5vw]">
+      <div className="relative grid grid-cols-[300px_auto] lg:grid-cols-2 gap-10 xl:gap-[5vw]">
         <div ref={ref} className="relative">
           {content.map((item, index) => (
-            <div key={item.title + index} className="min-h-[80vh] flex flex-col justify-center py-10">
+            <div
+              key={item.title + index}
+              className="relative h-[80vh] min-h-[500px] flex flex-col justify-center py-10 xl:py-[5vw]"
+            >
               <motion.h2
                 animate={{ opacity: activeCard === index ? 1 : 0.3 }}
-                className="text-4xl font-semibold text-white"
+                className="text-4xl xl:text-[3vw] font-semibold text-white"
               >
                 {item.title}
               </motion.h2>
 
               <motion.p
                 animate={{ opacity: activeCard === index ? 1 : 0.3 }}
-                className="mt-6 max-w-md text-lg text-slate-300 leading-relaxed"
+                className="mt-6 xl:mt-[2vw] text-lg xl:text-[2vw] text-white/80 leading-relaxed"
               >
                 {item.description}
               </motion.p>
@@ -71,16 +63,36 @@ export const StickyScrollRevealLarge = ({
           ))}
         </div>
 
-        {/* STICKY MEDIA */}
         <div className="relative">
           <div
-            style={{ background: backgroundGradient }}
             className={cn(
-              "sticky top-32 h-[320px] w-full rounded-xl transition-colors duration-500 overflow-hidden",
+              "sticky top-20 xl:top-[5vw] h-[30vh] lg:h-[40vh] min-h-[250px] aspect-square w-full rounded-4xl xl:rounded-[3vw] transition-colors duration-500 overflow-hidden",
               contentClassName
             )}
           >
-            <Image src="/avatar.png" fill className="object-cover" alt="avatar" />
+            <div className="relative w-full h-full">
+              {CaseStudiesContent.map((item, index) => (
+                <motion.div
+                  key={item.image.src}
+                  className="absolute inset-0"
+                  initial={{ opacity: 0, scale: 1.05 }}
+                  animate={{
+                    opacity: activeCard === index ? 1 : 0,
+                    scale: activeCard === index ? 1 : 1.05,
+                  }}
+                  transition={{ duration: 0.6, ease: "easeOut" }}
+                >
+                  <Image
+                    src={item.image.src}
+                    alt={item.image.alt}
+                    fill
+                    className="object-cover"
+                    sizes="(min-width: 1024px) 50vw, 100vw"
+                    priority={index === 0}
+                  />
+                </motion.div>
+              ))}
+            </div>
           </div>
         </div>
       </div>

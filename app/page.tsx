@@ -11,11 +11,11 @@ import { IntroParallax } from "@/components/sections/IntroParallax";
 import Contact from "@/components/sections/Contact";
 import { useProgress } from "@react-three/drei";
 import CaseStudies from "@/components/sections/CaseStudies";
-import ImageParallax from "@/components/sections/ImageParallax";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import ZoomParallax from "@/components/sections/ZoomParallax";
-import MiddleParallax from "@/components/sections/MiddleParallax";
-import Testimonials from "@/components/sections/Testimonials";
+import { MiddleParallax } from "@/components/sections/MiddleParallax";
+import Stories from "@/components/sections/Stories";
+import OutroParallax from "@/components/sections/OutroParallax";
 
 export default function Home() {
   const { progress } = useProgress();
@@ -32,7 +32,7 @@ export default function Home() {
   });
 
   return (
-    <ReactLenis root className="relative w-screen min-h-screen overflow-x-auto">
+    <ReactLenis root className="relative w-screen min-h-screen">
       {!isReady && (
         <div className="fixed inset-0 z-[999] flex flex-col items-center justify-center bg-black text-white transition-opacity duration-700 font-light">
           <p className="mb-4 text-4xl tracking-widest animate-pulse">
@@ -50,8 +50,8 @@ export default function Home() {
         <Works />
         <CaseStudies />
         <MiddleParallax />
-        <Testimonials />
-        <ImageParallax />
+        <Stories />
+        <OutroParallax />
         <Contact />
       </div>
     </ReactLenis>
