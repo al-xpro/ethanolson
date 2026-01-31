@@ -80,7 +80,6 @@ export const MiddleParallax = () => {
             <div className="relative h-[50vh] w-full flex items-center min-h-[300px]">
               <video
                 playsInline={true}
-                id="exploreVideo"
                 className="w-full h-full object-cover object-center rounded-xl xl:rounded-[1.5vw] aspect-square"
                 preload="none"
                 muted
