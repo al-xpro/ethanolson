@@ -10,8 +10,8 @@ const playfair = Playfair({
 });
 
 export const metadata: Metadata = {
-  title: "John Doe Portfolio",
-  description: "A showcase of John Doe's design and development projects.",
+  title: "Ethan Olson Portfolio",
+  description: "A showcase of Etham Olson's design and development projects.",
 };
 
 export default function RootLayout({
