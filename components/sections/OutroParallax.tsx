@@ -18,7 +18,7 @@ export default function OutroParallax() {
   return (
     <div
       ref={container}
-      className="relative flex items-center justify-center h-screen overflow-hidden top-5 xl:top-[5vh]"
+      className="relative flex items-center justify-center h-screen overflow-hidden top-7 md:top-5 xl:top-[5vh]"
       style={{ clipPath: "polygon(0% 0, 100% 0%, 100% 100%, 0 100%)" }}
     >
       <div className="flex justify-center my-40 z-20">
