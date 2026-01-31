@@ -85,7 +85,7 @@ const Services = () => {
                   fill
                   className="object-cover transition-transform duration-700"
                   sizes="(max-width: 768px) 100vw, 50vw"
-                  priority={index === 0}
+                  priority
                 />
 
                 {/* Mobile-only overlay gradient for better text contrast if things overlap */}
