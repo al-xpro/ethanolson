@@ -35,7 +35,7 @@ export default function Home() {
     <ReactLenis root className="relative w-screen min-h-screen">
       {!isReady && (
         <div className="fixed inset-0 z-[999] flex flex-col items-center justify-center bg-black text-white transition-opacity duration-700 font-light">
-          <p className="mb-4 text-4xl tracking-widest animate-pulse">
+          <p className="mb-4 text-4xl xl:text-[2.5vw] tracking-widest animate-pulse">
             Loading {Math.floor(progress)}%
           </p>
         </div>

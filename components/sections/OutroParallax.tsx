@@ -29,7 +29,7 @@ export default function OutroParallax() {
 
       <div className="fixed top-[-10vh] left-0 h-[120vh] w-full">
         <motion.div style={{ y }} className="relative w-full h-full">
-          <Image src={isMobile ? "/images/landscape-small.jpg" : "/images/landscape-big.jpg"} fill alt="image" style={{ objectFit: "cover" }} />
+          <Image src={isMobile ? "/images/landscape-small.jpg" : "/images/landscape-big.jpg"} fill alt="image" style={{ objectFit: "cover" }} priority />
         </motion.div>
       </div>
     </div>

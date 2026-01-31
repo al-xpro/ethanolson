@@ -91,9 +91,9 @@ export const IntroParallax = () => {
 
         {/* Intro Text (Visible at start) */}
         <div className="intro-text absolute bottom-20 inset-x-0 z-20 flex flex-col items-center justify-end text-center pb-10 pointer-events-none">
-          <h3 className="text-4xl md:text-6xl lg:text-7xl xl:text-[5vw] font-bold tracking-tight">
+          <h5 className="text-4xl md:text-6xl lg:text-7xl xl:text-[5vw] font-bold tracking-tight">
             Shaped by vision
-          </h3>
+          </h5>
           <p className="mt-4 text-lg md:text-xl xl:text-[2vw] text-white/80 uppercase tracking-widest">
             Powered by Precision
           </p>
