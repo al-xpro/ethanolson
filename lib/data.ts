@@ -1,7 +1,7 @@
 // Hero section
 
 export const heroHeader = {
-  subTitle: "Hi, I'm John",
+  subTitle: "Hi, I'm Ethan",
   title: "Design Engineer",
   text: `I design intuitive and engaging digital
   experiences that captivate users
@@ -228,7 +228,7 @@ export const testimonials: Testimonial[] = [
     username: "alexmorgan",
     avatar: "/avatars/alex.jpg",
     description:
-      "Working with John was effortless. The attention to detail and motion design is honestly next level.",
+      "Working with Ethan was effortless. The attention to detail and motion design is honestly next level.",
   },
   {
     id: "t-2",
@@ -252,7 +252,7 @@ export const testimonials: Testimonial[] = [
     username: "emily_a",
     avatar: "/avatars/emily.jpg",
     description:
-      "The website is a reflection of John's expertise in web development. Outstanding what he can build.",
+      "The website is a reflection of Ethan's expertise in web development. Outstanding what he can build.",
   },
   {
     id: "t-5",
@@ -284,7 +284,7 @@ export const testimonials: Testimonial[] = [
     username: "fisher_sarah",
     avatar: "/avatars/sarah.jpg",
     description:
-      "The app design clearly reflects John's expertise in UI/UX. I want to see more of his work in the future.",
+      "The app design clearly reflects Ethan's expertise in UI/UX. I want to see more of his work in the future.",
   },
   {
     id: "t-9",
@@ -316,7 +316,7 @@ export const testimonials: Testimonial[] = [
     username: "garsan_ciandra",
     avatar: "/avatars/sandra.jpg",
     description:
-      "Love it! John is a true genius when it comes to design. I'm inspired.",
+      "Love it! Ethan is a true genius when it comes to design. I'm inspired.",
   },
   {
     id: "t-13",
@@ -340,7 +340,7 @@ export const testimonials: Testimonial[] = [
     username: "luisalopez",
     avatar: "/avatars/luisa.jpg",
     description:
-      "John has a talent for creating stunning interfaces that captivate users and drive business growth.",
+      "Ethan has a talent for creating stunning interfaces that captivate users and drive business growth.",
   },
   {
     id: "t-16",
@@ -364,7 +364,7 @@ export const testimonials: Testimonial[] = [
     username: "edo_perez",
     avatar: "/avatars/eduardo.jpg",
     description:
-      "John is so good, there's no reason to look anywhere else 🔥",
+      "Ethan is so good, there's no reason to look anywhere else 🔥",
   },
   {
     id: "t-19",
