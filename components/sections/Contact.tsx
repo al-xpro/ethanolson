@@ -60,7 +60,7 @@ const Contact = () => {
       <div>
         {/* 1. Header Text: Wrapped in pointer-events-auto so you can select text */}
         {/* The parent container needs to be pointer-events-none (handled below) */}
-        <div className="relative z-10 pointer-events-none">
+        <div className="relative z-10 pointer-events-none select-text">
           <AnimatedHeaderSection
             subTitle={contactHeader.subTitle}
             title={contactHeader.title}
@@ -90,7 +90,7 @@ const Contact = () => {
                   <a
                     key={index}
                     href={social.href}
-                    className="text-sm xl:text-[2vw] tracking-widest uppercase hover:text-white/30 transition-colors duration-300"
+                    className="text-sm xl:text-[2vw] tracking-widest uppercase hover:text-white/30 transition-colors duration-300 pointer-events-auto select-text"
                   >
                     <div className="flex gap-2 xl:gap-[0.5vw] xl:pt-[0.2vw]">
                       <span className="relative pt-0.5 xl:pt-[0.5vw]">{social.icon}</span>
