@@ -59,14 +59,14 @@ export const IntroParallax = () => {
               y: 0,
               ease: "power2.out",
               duration: 1,
-            }, "+=0.2") // Small delay after mask settles
+            }, "+=0.1") // Small delay after mask settles
             
             .to(".flow-text-bottom", {
               autoAlpha: 1,
               y: 0,
               ease: "power2.out",
               duration: 1,
-            }, "<+0.2"); // Start shortly after the top text
+            }, "<+0.8"); // Start shortly after the top text
         }
       );
     },
@@ -91,34 +91,34 @@ export const IntroParallax = () => {
 
         {/* Intro Text (Visible at start) */}
         <div className="intro-text absolute bottom-20 inset-x-0 z-20 flex flex-col items-center justify-end text-center pb-10 pointer-events-none">
-          <h3 className="text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight">
+          <h3 className="text-4xl md:text-6xl lg:text-7xl xl:text-[5vw] font-bold tracking-tight">
             Shaped by vision
           </h3>
-          <p className="mt-4 text-lg md:text-xl text-white/80 uppercase tracking-widest">
+          <p className="mt-4 text-lg md:text-xl xl:text-[2vw] text-white/80 uppercase tracking-widest">
             Powered by Precision
           </p>
         </div>
 
         {/* Mask */}
         <div className="mask absolute inset-0 flex items-center justify-center pointer-events-none z-30">
-          <img src="/images/flow.svg" alt="Mask" className="w-full h-full object-cover" />
+          <img src="/images/mask.svg" alt="Mask" className="w-full h-full object-cover" />
         </div>
 
         {/* Flow Text (Appears after mask closes) */}
         {/* Added z-40 to ensure it sits on top of the mask layer */}
-        <div className="flow-text pointer-events-none absolute inset-0 z-40 flex flex-col items-center justify-center h-full w-full">
-            <div className="w-full max-w-7xl flex flex-col h-full justify-between py-32 md:py-40">
+        <div className="flow-text pointer-events-none absolute inset-0 z-40 flex flex-col items-center justify-center h-full v w-full">
+            <div className="w-full flex flex-col h-full justify-between py-36 md:py-44">
                 {/* Top Text */}
                 <div className="flow-text-top text-center opacity-0">
-                    <h3 className="text-4xl md:text-6xl lg:text-8xl font-bold text-white/90 tracking-[0.2rem] uppercase">
+                    <h3 className="text-4xl md:text-6xl lg:text-7xl xl:text-[5vw] font-bold text-white/90 tracking-[0.2rem]">
                     Where Ideas
                     </h3>
                 </div>
 
                 {/* Bottom Text */}
                 <div className="flow-text-bottom text-center opacity-0">
-                    <h3 className="text-4xl md:text-6xl lg:text-8xl font-bold text-white/90 tracking-[0.2rem] uppercase">
-                    Take Shape
+                    <h3 className="text-4xl md:text-6xl lg:text-7xl xl:text-[5vw] font-bold text-white/90 tracking-[0.2rem]">
+                      Into Reality
                     </h3>
                 </div>
             </div>

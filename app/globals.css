@@ -5,37 +5,11 @@
 }
 
 html {
-  overflow-x: hidden;
   scroll-behavior: smooth;
 }
 
 body {
-  overflow-x: hidden;
   font-family: var(--font-playfair);
-}
-
-
-
-#showcase {
-  @apply relative w-full h-full; /* Ensure full width/height */
-
-
-.media {
-  @apply relative w-full h-screen overflow-hidden; /* Use h-screen for the pinned area */
-
-
-video {
-  @apply w-full h-full object-cover;
-}
-
-.mask {
-  @apply absolute inset-0 z-10 flex items-center justify-center pointer-events-none;
-}
-
-.mask img {
-  @apply w-full h-full object-cover;
-}
-}
 }
 
 /* Parallax Blur Effect */
