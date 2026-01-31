@@ -78,7 +78,7 @@ const Contact = () => {
               <h2 className="xl:text-[2vw]">E-mail</h2>
               <div className="w-full h-px xl:h-[0.1vw] my-2 bg-white/30" />
               <p className="text-xl tracking-wider lowercase md:text-2xl lg:text-3xl xl:text-[2vw]">
-                JohnDoe@gmail.com
+                EthanOlson@gmail.com
               </p>
             </div>
 
