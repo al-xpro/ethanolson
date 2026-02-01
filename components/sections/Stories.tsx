@@ -139,7 +139,7 @@ export default function Stories() {
       onMouseMove={(e) => {
         manageMouseMove(e as any);
       }}
-      className="relative h-full min-w-[320px]"
+      className="relative h-full min-w-[320px] overflow-hidden"
       id="stories"
     >
       <AnimatedHeaderSection
