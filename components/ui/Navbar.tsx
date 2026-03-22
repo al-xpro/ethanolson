@@ -5,6 +5,7 @@ import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { useLenis } from "lenis/react";
 import { FaGithub, FaInstagram, FaLinkedin, FaYoutube } from "react-icons/fa";
+import Link from "next/link";
 
 const socials = [
   { name: "Instagram", href: "/", icon: <FaInstagram /> },
@@ -212,7 +213,9 @@ const Navbar = () => {
           >
             <div className="font-light">
               <p className="tracking-wider xl:text-[1vw] text-black">E-mail</p>
-              <p className="text-xl xl:text-[1vw] tracking-widest lowercase">EthanOlson@gmail.com</p>
+              <p className="text-xl xl:text-[1vw] tracking-widest lowercase">
+                EthanOlson@gmail.com
+              </p>
             </div>
 
             <div className="font-light">

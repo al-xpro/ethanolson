@@ -4,13 +4,14 @@ import { useGSAP } from "@gsap/react";
 import AnimatedHeaderSection from "@/components/ui/AnimatedHeaderSection";
 import gsap from "gsap";
 import { FaGithub, FaInstagram, FaLinkedin, FaYoutube } from "react-icons/fa";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Canvas } from "@react-three/fiber";
 import { Environment, Lightformer, PerspectiveCamera } from "@react-three/drei";
 import { ObjectIllusionContact } from "../ui/ObjectIllusionContact";
 import { Leva } from "leva";
 import { CustomCamera } from "../ui/CustomCamera";
 import { contactHeader } from "@/lib/data";
+import Link from "next/link";
 
 const socials = [
   { name: "Instagram", href: "/", icon: <FaInstagram /> },
@@ -20,6 +21,12 @@ const socials = [
 ];
 
 const Contact = () => {
+  const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
+
+  useEffect(() => {
+    setCurrentYear(new Date().getFullYear());
+  }, []);
+
   const path = useRef<SVGPathElement>(null);
 
   useGSAP(() => {
@@ -136,6 +143,23 @@ const Contact = () => {
               </Environment>
             </Canvas>
           </figure>
+        </div>
+      </div>
+      <div className="relative flex w-full h-full px-4 sm:px-10 xl:px-[1.5vw] py-10 xl:py-[1.5vw] pointer-events-auto">
+        <div className="flex flex-col sm:flex-row w-full items-center sm:justify-between gap-2">
+          <p className="text-center sm:text-left text-sm md:text-md lg:text-lg xl:text-[1.3vw] leading-normal text-white">
+            © {currentYear} Ethan Olson Portfolio. All rights reserved.
+          </p>
+          <p className="text-center sm:text-left text-sm md:text-md lg:text-lg xl:text-[1.3vw] leading-normal text-white">
+            Designed and Developed by&nbsp;
+            <Link
+              href="https://alxpro.com"
+              target="_blank"
+              className="text-white font-bold hover:underline cursor-pointer"
+            >
+              AlxPro
+            </Link>
+          </p>
         </div>
       </div>
     </section>
