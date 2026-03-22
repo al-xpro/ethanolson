@@ -22,7 +22,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${playfair.variable} antialiased bg-[#0A0A0A] min-w-[320px] overflow-x-hidden`}
+        className={`${playfair.variable} antialiased bg-[#111111] min-w-[320px] overflow-x-hidden`}
       >
         {children}
       </body>
