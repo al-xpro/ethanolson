@@ -1,15 +1,17 @@
 @import "tailwindcss";
 
-:root {
-  --font-playfair: 'Playfair Display', 'Playfair Fallback';
-}
-
-html {
-  scroll-behavior: smooth;
-}
-
 body {
   font-family: var(--font-playfair);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
 
 /* Parallax Blur Effect */
@@ -45,5 +47,3 @@ body {
     rgba(10, 10, 10, 0)
   );
 }
-
-

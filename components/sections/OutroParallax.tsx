@@ -1,19 +1,44 @@
-"use client"
+"use client";
 
-import Image from "next/image";
-import { useScroll, useTransform, motion } from "framer-motion";
 import { useRef } from "react";
-import { OutroParallaxText } from "@/lib/data";
-import { useMediaQuery } from "@/lib/useMediaQuery";
+import { getImageProps } from "next/image";
+import { outroParallax } from "@/content/sections";
+import { gsap, useGSAP, MOTION_OK } from "@/lib/gsap";
 
 export default function OutroParallax() {
-  const isMobile = useMediaQuery("(max-width: 768px)");
   const container = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: container,
-    offset: ["start end", "end start"],
-  });
-  const y = useTransform(scrollYProgress, [0, 1], ["-10vh", "10vh"]);
+
+  useGSAP(
+    () => {
+      gsap.matchMedia().add(MOTION_OK, () => {
+        gsap.fromTo(
+          ".outro-image",
+          { y: () => window.innerHeight * -0.1 },
+          {
+            y: () => window.innerHeight * 0.1,
+            ease: "none",
+            scrollTrigger: {
+              trigger: container.current,
+              start: "top bottom",
+              end: "bottom top",
+              scrub: true,
+              invalidateOnRefresh: true,
+            },
+          }
+        );
+      });
+    },
+    { scope: container }
+  );
+
+  // Art direction: a landscape crop for desktop, a portrait crop for phones
+  const common = { alt: "", sizes: "100vw", quality: 75 };
+  const {
+    props: { srcSet: desktopSrcSet },
+  } = getImageProps({ ...common, ...outroParallax.desktop });
+  const {
+    props: { srcSet: mobileSrcSet, ...imageProps },
+  } = getImageProps({ ...common, ...outroParallax.mobile });
 
   return (
     <div
@@ -23,14 +48,22 @@ export default function OutroParallax() {
     >
       <div className="flex justify-center my-40 z-20">
         <p className="text-[5vw] text-white uppercase text-center max-w-[50vw] leading-none">
-          {OutroParallaxText}
+          {outroParallax.text}
         </p>
       </div>
 
       <div className="fixed top-[-10vh] left-0 h-[120vh] w-full">
-        <motion.div style={{ y }} className="relative w-full h-full">
-          <Image src={isMobile ? "/images/landscape-small.jpg" : "/images/landscape-big.jpg"} fill alt="image" style={{ objectFit: "cover" }} priority />
-        </motion.div>
+        <div className="outro-image relative w-full h-full">
+          <picture>
+            <source media="(min-width: 769px)" srcSet={desktopSrcSet} />
+            <source media="(max-width: 768px)" srcSet={mobileSrcSet} />
+            <img
+              {...imageProps}
+              alt=""
+              className="absolute inset-0 w-full h-full object-cover"
+            />
+          </picture>
+        </div>
       </div>
     </div>
   );

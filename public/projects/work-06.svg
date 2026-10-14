@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="1920" viewBox="0 0 1080 1920"><defs>
+  <radialGradient id="g06" cx="50%" cy="38%" r="75%">
+    <stop offset="0" stop-color="#2a2a2a"/><stop offset="1" stop-color="#0a0a0a"/>
+  </radialGradient>
+  <pattern id="p06" width="60" height="60" patternUnits="userSpaceOnUse">
+    <path d="M60 0H0V60" fill="none" stroke="#fff" stroke-opacity="0.035" stroke-width="1"/>
+  </pattern>
+</defs>
+<rect width="1080" height="1920" fill="url(#g06)"/>
+<rect width="1080" height="1920" fill="url(#p06)"/><circle cx="100.4" cy="100.4" r="14" fill="#fff" fill-opacity="0.5"/><rect x="853.6" y="84.4" width="140" height="32" rx="16" fill="#fff" fill-opacity="0.9"/><rect x="378" y="230.39999999999998" width="324" height="34" rx="17" fill="none" stroke="#fff" stroke-opacity="0.25" stroke-width="2"/><rect x="204.731625" y="300.4" width="670.53675" height="62" rx="14" fill="#fff" fill-opacity="0.72"/><rect x="241.50158333333337" y="384.4" width="596.9968333333333" height="62" rx="14" fill="#fff" fill-opacity="0.72"/><rect x="182.36404166666665" y="468.4" width="715.2719166666667" height="62" rx="14" fill="#fff" fill-opacity="0.72"/><rect x="223.29533333333325" y="572.4" width="633.4093333333335" height="16" rx="8" fill="#fff" fill-opacity="0.22"/><rect x="215.71236111111108" y="606.4" width="648.5752777777778" height="16" rx="8" fill="#fff" fill-opacity="0.22"/><rect x="328" y="682.4" width="200" height="64" rx="32" fill="#fff" fill-opacity="0.8"/><rect x="552" y="682.4" width="200" height="64" rx="32" fill="none" stroke="#fff" stroke-opacity="0.35" stroke-width="2"/><circle cx="540" cy="1303" r="290.30400000000003" fill="none" stroke="#fff" stroke-opacity="0.22" stroke-width="52.254720000000006"/>
+<circle cx="540" cy="1303" r="159.66720000000004" fill="none" stroke="#fff" stroke-opacity="0.08" stroke-width="2"/><text x="86.4" y="1876.8" fill="#fff" fill-opacity="0.35" font-family="ui-monospace, Menlo, monospace" font-size="26" letter-spacing="6">WORK 06 · PLACEHOLDER</text></svg>

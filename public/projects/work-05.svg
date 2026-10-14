@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="1920" viewBox="0 0 1080 1920"><defs>
+  <radialGradient id="g05" cx="50%" cy="38%" r="75%">
+    <stop offset="0" stop-color="#2a2a2a"/><stop offset="1" stop-color="#0a0a0a"/>
+  </radialGradient>
+  <pattern id="p05" width="60" height="60" patternUnits="userSpaceOnUse">
+    <path d="M60 0H0V60" fill="none" stroke="#fff" stroke-opacity="0.035" stroke-width="1"/>
+  </pattern>
+</defs>
+<rect width="1080" height="1920" fill="url(#g05)"/>
+<rect width="1080" height="1920" fill="url(#p05)"/><circle cx="100.4" cy="100.4" r="14" fill="#fff" fill-opacity="0.5"/><rect x="853.6" y="84.4" width="140" height="32" rx="16" fill="#fff" fill-opacity="0.9"/><rect x="378" y="230.39999999999998" width="324" height="34" rx="17" fill="none" stroke="#fff" stroke-opacity="0.25" stroke-width="2"/><rect x="178.8946666666667" y="300.4" width="722.2106666666666" height="62" rx="14" fill="#fff" fill-opacity="0.72"/><rect x="142.31212500000004" y="384.4" width="795.3757499999999" height="62" rx="14" fill="#fff" fill-opacity="0.72"/><rect x="175.57208333333335" y="468.4" width="728.8558333333333" height="62" rx="14" fill="#fff" fill-opacity="0.72"/><rect x="227.80563888888884" y="572.4" width="624.3887222222223" height="16" rx="8" fill="#fff" fill-opacity="0.22"/><rect x="253.42433333333327" y="606.4" width="573.1513333333335" height="16" rx="8" fill="#fff" fill-opacity="0.22"/><rect x="328" y="682.4" width="200" height="64" rx="32" fill="#fff" fill-opacity="0.8"/><rect x="552" y="682.4" width="200" height="64" rx="32" fill="none" stroke="#fff" stroke-opacity="0.35" stroke-width="2"/><g fill="none" stroke="#fff" stroke-opacity="0.3" stroke-width="4" stroke-linejoin="round">
+<rect x="349.488" y="1245.8464000000001" width="381.024" height="381.024"/><path d="M349.488 1245.8464000000001l133.3584 -133.3584h381.024l-133.3584 133.3584M730.512 1245.8464000000001l133.3584 -133.3584v381.024l-133.3584 133.3584"/></g><text x="86.4" y="1876.8" fill="#fff" fill-opacity="0.35" font-family="ui-monospace, Menlo, monospace" font-size="26" letter-spacing="6">WORK 05 · PLACEHOLDER</text></svg>

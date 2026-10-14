@@ -2,7 +2,7 @@
 
 import AnimatedHeaderSection from "@/components/ui/AnimatedHeaderSection";
 import { WorkParallax } from "../ui/WorkParallax";
-import { worksHeader } from "@/lib/data";
+import { worksHeader } from "@/content/sections";
 
 const Works = () => {
   return (

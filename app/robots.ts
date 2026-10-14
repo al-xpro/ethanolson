@@ -1,17 +1,15 @@
 import type { MetadataRoute } from "next";
+import { site } from "@/content/site";
 
 export default function robots(): MetadataRoute.Robots {
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://ethanolsonportfolio.vercel.app";
-
   return {
     rules: [
       {
         userAgent: "*",
         allow: "/",
-        disallow: [],
       },
     ],
-    sitemap: `${baseUrl}/sitemap.xml`,
-    host: baseUrl,
+    sitemap: `${site.url}/sitemap.xml`,
+    host: site.url,
   };
 }

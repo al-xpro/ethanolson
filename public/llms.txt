@@ -1,0 +1,20 @@
+# Ethan Olson | Design Engineer (concept portfolio)
+
+> A concept portfolio for Ethan Olson, a fictional design engineer. The site was designed and developed by Alex Prostamo (AlxPro, https://alxpro.com) to show a full-stack, motion-rich web build. Ethan Olson is not a real person, and the works shown are placeholders.
+
+## About the site
+
+- One page, statically prerendered with Next.js 16 (App Router), React 19, TypeScript and Tailwind CSS 4.
+- Scroll scenes are built with GSAP ScrollTrigger and Lenis smooth scrolling, and fall back to static layouts when the visitor prefers reduced motion.
+- The hero shows a real-time 3D figure rendered with React Three Fiber and three.js.
+
+## Sections
+
+- Home: introduction of Ethan Olson as a design engineer.
+- Services: product design and design systems, interactive front ends, back ends and APIs, performance and SEO.
+- Works: a gallery of placeholder projects. Case studies are coming soon.
+- Contact: e-mail.
+
+## Creator
+
+- Alex Prostamo, freelance full-stack developer: https://alxpro.com

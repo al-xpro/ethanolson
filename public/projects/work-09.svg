@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="1920" viewBox="0 0 1080 1920"><defs>
+  <radialGradient id="g09" cx="50%" cy="38%" r="75%">
+    <stop offset="0" stop-color="#2a2a2a"/><stop offset="1" stop-color="#0a0a0a"/>
+  </radialGradient>
+  <pattern id="p09" width="60" height="60" patternUnits="userSpaceOnUse">
+    <path d="M60 0H0V60" fill="none" stroke="#fff" stroke-opacity="0.035" stroke-width="1"/>
+  </pattern>
+</defs>
+<rect width="1080" height="1920" fill="url(#g09)"/>
+<rect width="1080" height="1920" fill="url(#p09)"/><circle cx="100.4" cy="100.4" r="14" fill="#fff" fill-opacity="0.5"/><rect x="853.6" y="84.4" width="140" height="32" rx="16" fill="#fff" fill-opacity="0.9"/><rect x="378" y="230.39999999999998" width="324" height="34" rx="17" fill="none" stroke="#fff" stroke-opacity="0.25" stroke-width="2"/><rect x="155.8825" y="300.4" width="768.235" height="62" rx="14" fill="#fff" fill-opacity="0.72"/><rect x="159.9899583333334" y="384.4" width="760.0200833333332" height="62" rx="14" fill="#fff" fill-opacity="0.72"/><rect x="230.95072222222217" y="488.4" width="618.0985555555557" height="16" rx="8" fill="#fff" fill-opacity="0.22"/><rect x="209.76441666666665" y="522.4" width="660.4711666666667" height="16" rx="8" fill="#fff" fill-opacity="0.22"/><rect x="328" y="598.4" width="200" height="64" rx="32" fill="#fff" fill-opacity="0.8"/><rect x="552" y="598.4" width="200" height="64" rx="32" fill="none" stroke="#fff" stroke-opacity="0.35" stroke-width="2"/><rect x="86.4" y="728.4" width="827.2" height="985.1999999999998" rx="28" fill="#fff" fill-opacity="0.024" stroke="#fff" stroke-opacity="0.1" stroke-width="2"/><rect x="126.4" y="768.4" width="827.2" height="985.1999999999998" rx="28" fill="#fff" fill-opacity="0.036" stroke="#fff" stroke-opacity="0.13" stroke-width="2"/><rect x="166.4" y="808.4" width="827.2" height="985.1999999999998" rx="28" fill="#fff" fill-opacity="0.048" stroke="#fff" stroke-opacity="0.16" stroke-width="2"/><text x="86.4" y="1876.8" fill="#fff" fill-opacity="0.35" font-family="ui-monospace, Menlo, monospace" font-size="26" letter-spacing="6">WORK 09 · PLACEHOLDER</text></svg>
