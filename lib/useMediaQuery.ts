@@ -1,34 +1,25 @@
-"use client"
+"use client";
 
-import { useState, useEffect, useCallback } from "react"
+import { useCallback, useSyncExternalStore } from "react";
 
 export function useMediaQuery(query: string): boolean {
-  // Initialize with a default value to avoid hydration mismatch
-  const [matches, setMatches] = useState(false)
+  const subscribe = useCallback(
+    (onChange: () => void) => {
+      const media = window.matchMedia(query);
+      media.addEventListener("change", onChange);
+      return () => media.removeEventListener("change", onChange);
+    },
+    [query]
+  );
 
-  // Use useCallback to ensure the listener doesn't change on every render
-  const handleChange = useCallback((event: MediaQueryListEvent) => {
-    setMatches(event.matches)
-  }, [])
+  return useSyncExternalStore(
+    subscribe,
+    () => window.matchMedia(query).matches,
+    // The server has no viewport, so it renders the default (false) state
+    () => false
+  );
+}
 
-  useEffect(() => {
-    // Check if window is defined (client-side only)
-    if (typeof window !== "undefined") {
-      const media = window.matchMedia(query)
-
-      // Set initial value
-      setMatches(media.matches)
-
-      // Use the stable callback for the event listener
-      media.addEventListener("change", handleChange)
-
-      // Clean up
-      return () => media.removeEventListener("change", handleChange)
-    }
-
-    // Default return for SSR
-    return undefined
-  }, [query, handleChange]) // Only re-run if query or handleChange changes
-
-  return matches
+export function usePrefersReducedMotion(): boolean {
+  return useMediaQuery("(prefers-reduced-motion: reduce)");
 }
