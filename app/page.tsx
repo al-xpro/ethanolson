@@ -1,59 +1,46 @@
-"use client";
-
-import { useEffect, useState } from "react";
+import SmoothScroll from "@/components/providers/SmoothScroll";
 import Navbar from "@/components/ui/Navbar";
 import Hero from "@/components/sections/Hero";
-import Services from "@/components/sections/Services";
-import ReactLenis from "lenis/react";
-import About from "@/components/sections/About";
-import Works from "@/components/sections/Works";
-import { IntroParallax } from "@/components/sections/IntroParallax";
-import Contact from "@/components/sections/Contact";
-import { useProgress } from "@react-three/drei";
-import CaseStudies from "@/components/sections/CaseStudies";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import ZoomParallax from "@/components/sections/ZoomParallax";
+import { IntroParallax } from "@/components/sections/IntroParallax";
+import Services from "@/components/sections/Services";
+import Works from "@/components/sections/Works";
 import { MiddleParallax } from "@/components/sections/MiddleParallax";
-import Stories from "@/components/sections/Stories";
 import OutroParallax from "@/components/sections/OutroParallax";
+import Contact from "@/components/sections/Contact";
+import { site } from "@/content/site";
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  name: site.title,
+  url: site.url,
+  description: site.description,
+  creator: {
+    "@type": "Person",
+    name: site.creator.name,
+    url: site.creator.url,
+  },
+};
 
 export default function Home() {
-  const { progress } = useProgress();
-  const [isReady, setIsReady] = useState(false);
-
-  useEffect(() => {
-    if (progress === 100) {
-      setIsReady(true);
-    }
-  }, [progress]);
-
-  ScrollTrigger.config({
-    ignoreMobileResize: true, // Prevents jumps when mobile address bar shows/hides
-  });
-
   return (
-    <ReactLenis root className="relative w-screen min-h-screen">
-      {!isReady && (
-        <div className="fixed inset-0 z-[999] flex flex-col items-center justify-center bg-black text-white transition-opacity duration-700 font-light">
-          <p className="mb-4 text-4xl xl:text-[2.5vw] tracking-widest animate-pulse">
-            Loading {Math.floor(progress)}%
-          </p>
-        </div>
-      )}
-      <div className={`${isReady ? "opacity-100" : "opacity-0"} transition-opacity duration-1000`}>
-        <Navbar />
+    <SmoothScroll>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }}
+      />
+      <Navbar />
+      <main className="relative w-full min-h-screen">
         <Hero />
         <ZoomParallax />
         <IntroParallax />
         <Services />
-        <About />
         <Works />
-        <CaseStudies />
         <MiddleParallax />
-        <Stories />
         <OutroParallax />
         <Contact />
-      </div>
-    </ReactLenis>
+      </main>
+    </SmoothScroll>
   );
 }

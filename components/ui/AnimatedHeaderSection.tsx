@@ -2,8 +2,7 @@
 
 import { useRef } from "react";
 import { AnimatedTextLines } from "@/components/ui/AnimatedTextLines";
-import { useGSAP } from "@gsap/react";
-import gsap from "gsap";
+import { gsap, useGSAP, MOTION_OK } from "@/lib/gsap";
 
 const AnimatedHeaderSection = ({
   subTitle,
@@ -11,41 +10,45 @@ const AnimatedHeaderSection = ({
   text,
   textColor,
   withScrollTrigger = false,
+  as: Heading = "h2",
 }: {
   subTitle: string;
   title: string;
   text: string;
   textColor: string;
   withScrollTrigger?: boolean;
+  as?: "h1" | "h2";
 }) => {
-  const contextRef = useRef(null);
-  const headerRef = useRef(null);
+  const contextRef = useRef<HTMLDivElement>(null);
+  const headerRef = useRef<HTMLDivElement>(null);
   const shouldSplitTitle = title.includes(" ");
   const titleParts = shouldSplitTitle ? title.split(" ") : [title];
 
   useGSAP(() => {
-    const tl = gsap.timeline({
-      scrollTrigger: withScrollTrigger
-        ? {
-            trigger: contextRef.current,
-          }
-        : undefined,
-    });
-    tl.from(contextRef.current, {
-      y: "50vh",
-      duration: 1,
-      ease: "circ.out",
-    });
-    tl.from(
-      headerRef.current,
-      {
-        opacity: 0,
-        y: "200",
+    gsap.matchMedia().add(MOTION_OK, () => {
+      const tl = gsap.timeline({
+        scrollTrigger: withScrollTrigger
+          ? {
+              trigger: contextRef.current,
+            }
+          : undefined,
+      });
+      tl.from(contextRef.current, {
+        y: "50vh",
         duration: 1,
         ease: "circ.out",
-      },
-      "<+0.2"
-    );
+      });
+      tl.from(
+        headerRef.current,
+        {
+          opacity: 0,
+          y: "200",
+          duration: 1,
+          ease: "circ.out",
+        },
+        "<+0.2"
+      );
+    });
   }, []);
 
   return (
@@ -61,13 +64,13 @@ const AnimatedHeaderSection = ({
             {subTitle}
           </p>
           <div className="px-5 sm:px-10 xl:px-[1.5vw]">
-            <h1
+            <Heading
               className={`flex flex-col gap-4 text-5xl sm:text-7xl md:text-9xl xl:text-[5vw] max-w-md uppercase md:gap-16 xl:gap-[1.5vw] md:block ${textColor}`}
             >
               {titleParts.map((part, index) => (
                 <span key={index}>{part} </span>
               ))}
-            </h1>
+            </Heading>
           </div>
         </div>
       </div>

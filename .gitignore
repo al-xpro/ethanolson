@@ -39,3 +39,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# licensed videos are hosted outside the repository (see README)
+/public/videos/*.mp4
