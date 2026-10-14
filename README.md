@@ -1,36 +1,98 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Ethan Olson | Concept Portfolio
 
-## Getting Started
+> **Work in progress.** The full-stack features are being built in the open. See the
+> [roadmap](#roadmap).
 
-First, run the development server:
+[![CI](https://github.com/al-xpro/portfolio-project/actions/workflows/ci.yml/badge.svg)](https://github.com/al-xpro/portfolio-project/actions/workflows/ci.yml)
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+A one-page portfolio for **Ethan Olson, a fictional design engineer**, designed and
+developed by [AlxPro](https://alxpro.com). It's a concept build: the persona, works and
+copy are invented to show how a motion-rich, full-stack portfolio is made.
+
+**Live:** not deployed yet. It will be published once the full-stack features are in.
+
+![The hero section: "Design Engineer" next to a real-time 3D figure](.github/assets/hero.jpg)
+
+## What it does
+
+- Pinned scroll scenes: a zoom grid, an SVG mask reveal over video, a horizontal services
+  track and a column parallax gallery
+- A real-time 3D hero that fades in when ready and pauses when off-screen
+- Full `prefers-reduced-motion` support: every scene has a static fallback
+- An accessible menu: real links and buttons, a focus trap, Escape to close
+- SEO: metadata, canonical URL, generated Open Graph image and icons, JSON-LD,
+  `robots.txt`, `sitemap.xml` and `llms.txt`
+
+## Tech stack
+
+- [Next.js 16](https://nextjs.org) (App Router, statically prerendered) and React 19
+- TypeScript and Tailwind CSS 4
+- GSAP + ScrollTrigger for scroll scenes, Lenis for smooth scrolling
+- React Three Fiber, drei and three.js for the 3D hero
+
+Coming next (see the roadmap): Storyblok, project pages, a contact flow with Zod, Resend
+and Vercel BotID, Umami, self-built Web Vitals and Cal.com.
+
+## Architecture
+
+```text
+app/                  routes, metadata, icons, OG image, robots, sitemap
+components/sections/  one component per page section
+components/ui/        shared UI (header animation, navbar, gallery, 3D object)
+components/providers/ smooth scrolling (Lenis)
+content/              all copy and media paths (site.ts, sections.ts)
+lib/                  GSAP setup, animation helpers, media-query hooks
+docs/                 audit, roadmap, case study plan, workflow
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+The page is a Server Component that renders client sections. All scroll animation runs
+through `lib/gsap.ts`, inside `gsap.matchMedia()`, so it's skipped when the visitor
+prefers reduced motion. Copy and media paths live in `content/`, so the planned CMS
+replaces one layer.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Getting started
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Requires Node.js 20.9 or later.
 
-## Learn More
+```bash
+npm install
+npm run dev        # http://localhost:3000
+npm run typecheck
+npm run lint
+npm run build
+```
 
-To learn more about Next.js, take a look at the following resources:
+### Environment variables
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Copy them into `.env.local`. Names only. Never commit values.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+| Name | Purpose |
+| --- | --- |
+| `NEXT_PUBLIC_SITE_URL` | Canonical URL for metadata, sitemap and robots |
+| `NEXT_PUBLIC_INTRO_VIDEO_URL` | Direct MP4 link for the intro video |
+| `NEXT_PUBLIC_WATER_VIDEO_URL` | Direct MP4 link for the water video |
 
-## Deploy on Vercel
+The two videos are licensed footage, so they're hosted outside this repository. Without
+the URLs, the site shows a still frame instead. For local development, put the files in
+`public/videos/` (ignored by Git) and set the variables to `/videos/design.mp4` and
+`/videos/water-ripple.mp4`.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## How this was built
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+First version built from January to March 2026; cleaned up and published as `v1.0` in
+October 2026 (the clean-up was done with Claude Code); new features developed in the open
+since. Built with an agentic workflow: I write issues as specs, agents open the pull
+requests, and I review and merge every change. The rules are in
+[docs/project-workflow.md](docs/project-workflow.md).
+
+## Roadmap
+
+[Open issues](https://github.com/al-xpro/portfolio-project/issues) and the
+[improvement roadmap](docs/improvement-roadmap.md).
+
+## Credits and license
+
+Media sources are listed in [CREDITS.md](CREDITS.md).
+
+© Alex Prostamo. All rights reserved. The code is public so it can be read and reviewed.
+It is not licensed for reuse or redistribution.
