@@ -9,15 +9,16 @@ A one-page portfolio for **Ethan Olson, a fictional design engineer**, designed 
 developed by [AlxPro](https://alxpro.com). It's a concept build: the persona, works and
 copy are invented to show how a motion-rich, full-stack portfolio is made.
 
-**Live:** not deployed yet. It will be published once the full-stack features are in.
+**Live:** not deployed yet. It will be published at `ethanolson.dev`.
 
-![The hero section: "Design Engineer" next to a real-time 3D figure](.github/assets/hero.jpg)
+![The hero section: "Design Engineer" next to a 3D Penrose triangle](.github/assets/hero.jpg)
 
 ## What it does
 
+- A real-time 3D Penrose triangle in the hero: three straight beams that only look like a
+  closed, impossible triangle from one angle, which the intro animation rotates into
 - Pinned scroll scenes: a zoom grid, an SVG mask reveal over video, a horizontal services
   track and a column parallax gallery
-- A real-time 3D hero that fades in when ready and pauses when off-screen
 - Full `prefers-reduced-motion` support: every scene has a static fallback
 - An accessible menu: real links and buttons, a focus trap, Escape to close
 - SEO: metadata, canonical URL, generated Open Graph image and icons, JSON-LD,
@@ -30,19 +31,20 @@ copy are invented to show how a motion-rich, full-stack portfolio is made.
 - GSAP + ScrollTrigger for scroll scenes, Lenis for smooth scrolling
 - React Three Fiber, drei and three.js for the 3D hero
 
-Coming next (see the roadmap): Storyblok, project pages, a contact flow with Zod, Resend
-and Vercel BotID, Umami, self-built Web Vitals and Cal.com.
+Coming next (see the roadmap): Storyblok, project pages, Neon Postgres with Drizzle, a
+contact flow with Zod, Resend and Vercel BotID, Umami, self-built Web Vitals and Cal.com.
 
 ## Architecture
 
 ```text
 app/                  routes, metadata, icons, OG image, robots, sitemap
 components/sections/  one component per page section
-components/ui/        shared UI (header animation, navbar, gallery, 3D object)
+components/ui/        shared UI (header animation, navbar, gallery, Penrose triangle)
 components/providers/ smooth scrolling (Lenis)
 content/              all copy and media paths (site.ts, sections.ts)
 lib/                  GSAP setup, animation helpers, media-query hooks
-docs/                 audit, roadmap, case study plan, workflow
+docs/                 roadmap, decisions, issue drafts, case study plan
+docs/agents/          the workflow every contributor follows, and the case study guide
 ```
 
 The page is a Server Component that renders client sections. All scroll animation runs
@@ -64,18 +66,11 @@ npm run build
 
 ### Environment variables
 
-Copy them into `.env.local`. Names only. Never commit values.
+Put them in `.env.local`. Names only here. Never commit values.
 
 | Name | Purpose |
 | --- | --- |
-| `NEXT_PUBLIC_SITE_URL` | Canonical URL for metadata, sitemap and robots |
-| `NEXT_PUBLIC_INTRO_VIDEO_URL` | Direct MP4 link for the intro video |
-| `NEXT_PUBLIC_WATER_VIDEO_URL` | Direct MP4 link for the water video |
-
-The two videos are licensed footage, so they're hosted outside this repository. Without
-the URLs, the site shows a still frame instead. For local development, put the files in
-`public/videos/` (ignored by Git) and set the variables to `/videos/design.mp4` and
-`/videos/water-ripple.mp4`.
+| `NEXT_PUBLIC_SITE_URL` | Canonical URL for metadata, sitemap and robots. Defaults to `https://ethanolson.dev`. |
 
 ## How this was built
 
@@ -83,12 +78,13 @@ First version built from January to March 2026; cleaned up and published as `v1.
 October 2026 (the clean-up was done with Claude Code); new features developed in the open
 since. Built with an agentic workflow: I write issues as specs, agents open the pull
 requests, and I review and merge every change. The rules are in
-[docs/project-workflow.md](docs/project-workflow.md).
+[docs/agents/project-workflow.md](docs/agents/project-workflow.md).
 
 ## Roadmap
 
-[Open issues](https://github.com/al-xpro/portfolio-project/issues) and the
-[improvement roadmap](docs/improvement-roadmap.md).
+[Open issues](https://github.com/al-xpro/portfolio-project/issues), the
+[`v2.0 — Full stack` milestone](https://github.com/al-xpro/portfolio-project/milestones)
+and the [roadmap](docs/improvement-roadmap.md).
 
 ## Credits and license
 
