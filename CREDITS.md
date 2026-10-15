@@ -6,7 +6,8 @@ Ethan Olson is a fictional designer. This concept site was designed and develope
 ## Photography
 
 All photographs in `public/images/` are AI-generated stock images from
-[Lummi](https://www.lummi.ai), used under the Lummi license.
+[Lummi](https://www.lummi.ai). Lummi's license allows them to be used and kept in this
+repository. They are not for resale.
 
 - `draw.jpg`, `particles.jpg`, `interior.jpg`, `metro.jpg`, `laptop.jpg`, `pen.jpg`
 - `first-service.png`, `second-service.png`, `third-service.png`, `fourth-service.jpg`
@@ -15,20 +16,12 @@ All photographs in `public/images/` are AI-generated stock images from
 
 ## Video
 
-Footage from [Artgrid](https://artgrid.io), used under an Artgrid license. To respect its
-terms, the video files are **not** stored in this repository. They're hosted privately
-and loaded by URL (see the README).
-
-- Intro video: Artgrid footage, edited by Alex Prostamo in DaVinci Resolve
-- Water ripple video: Artgrid footage
-- `public/videos/design-poster.jpg`, `water-ripple-poster.jpg`: still frames from those
-  videos, used as posters
-
-## 3D
-
-- `public/models/Figure.glb`: "Optical Illusions" by Johanners R., a free model on
-  [Sketchfab](https://sketchfab.com)
+- `public/videos/design.mp4` and `water-ripple.mp4`: edited by Alex Prostamo from
+  royalty-free stock footage.
+- `public/videos/*-poster.jpg`: still frames from those two videos.
 
 ## Original work
 
-- `public/projects/work-*.svg`: wireframe placeholders, made for this project
+- The 3D Penrose triangle in the hero (`components/ui/OpticalIllusion.tsx`): built in code
+  for this project.
+- `public/projects/work-*.svg`: wireframe placeholders, made for this project.

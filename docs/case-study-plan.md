@@ -1,7 +1,7 @@
 # Case study plan: from this repo to alxpro.com
 
 How to turn this project into a **full-stack** case study at
-`alxpro.com/portfolio/<slug>`, following [case-study-guide.md](./case-study-guide.md). The
+`alxpro.com/portfolio/<slug>`, following [case-study-guide.md](./agents/case-study-guide.md). The
 final hand-back is a `lib/data/case-studies/<slug>.ts` file in the alxpro.com repo.
 
 > **Rule zero: the case study only claims what the live site does.** The outline below
@@ -91,9 +91,9 @@ widget, chapter 05 goes). Below 8 entries, split Contact flow or Performance fur
 
 | Metric | Before | After cleanup |
 | --- | --- | --- |
-| Client JS, gzipped | ≈ 615 KB | ≈ 508 KB |
-| 3D models | 15.3 MB | 16 KB |
-| `public/` folder | ≈ 22 MB | ≈ 4.1 MB |
+| Client JS, gzipped | ≈ 615 KB | ≈ 487 KB |
+| 3D models | 15.3 MB | 0 (the Penrose triangle is built in code) |
+| `public/` folder | ≈ 22 MB | ≈ 3.5 MB |
 | ESLint | 19 errors, 30 warnings | 0 |
 | Animation libraries | 3 (GSAP, Motion, Leva) | 1 (GSAP) |
 
@@ -144,7 +144,7 @@ Videos are 5–15 s, 16:9, muted, under 4 MB. Images are real UI at 2×, in WebP
 
 | Path | Kind | Must show |
 |------|------|-----------|
-| `cover.webp` | image | Hero with the 3D figure, desktop |
+| `cover.webp` | image | Hero with the Penrose triangle locking into place, desktop |
 | `cover-mobile.webp` | image | The same hero in a phone frame |
 | `cms-publish.mp4` | video | Editing a project in the CMS, publishing, then refreshing the live page |
 | `project-page.mp4` | video | Clicking a Works tile and landing on its project page |

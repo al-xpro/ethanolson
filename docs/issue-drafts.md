@@ -1,41 +1,40 @@
 # Issue drafts: v2.0 — Full stack
 
 Specs for the full-stack features, in the issue format from
-[project-workflow.md](./project-workflow.md) §3. Review them, edit what you disagree with,
-then create each one on GitHub (label + milestone `v2.0 — Full stack`). Delete this file
-once they all exist as issues.
+[project-workflow.md](./agents/project-workflow.md) §3. They're numbered S1–S15 because
+GitHub assigns its own issue numbers. When you create an issue, replace every "S" reference
+in it with the real `#number`. Walkthrough: [github-workflow.md, Part C](./github-workflow.md#part-c-the-team-loop-for-every-issue).
 
-**Chosen stack (2026-10-14):** Storyblok (headless CMS) · plain `/works/[slug]` route ·
-Zod · Resend · honeypot + Vercel BotID · rate limiting with a counter table · enquiries
-stored as a CMS collection · Umami · self-built Web Vitals · Cal.com. Videos hosted on
-Vimeo.
+Delete this file once every spec exists as an issue.
 
-## Decisions needed before starting
+**Stack** (see [full-stack-options.md](./full-stack-options.md)): Storyblok · plain
+`/works/[slug]` pages · Neon Postgres + Drizzle · Zod · Resend on `ethanolson.dev` ·
+honeypot + Vercel BotID · counter-table rate limiting · enquiries in a private Storyblok
+space · Umami · self-built Web Vitals · Cal.com.
 
-| # | Decision | Why it matters | Suggestion |
+## Still to decide (small)
+
+| # | Decision | Needed by | Suggestion |
 | --- | --- | --- | --- |
-| D1 | **A small Postgres database** | A counter table needs atomic increments, and Web Vitals need a table. Storyblok can do neither. | Neon (free tier) + Drizzle ORM |
-| D2 | Umami Cloud or self-hosted | Self-hosting needs its own database and server | Umami Cloud (free tier) |
-| D3 | A sending domain for Resend | Resend only sends from a verified domain; without one it can only e-mail your own account | Waits for the domain decision |
-| D4 | Storyblok region (EU or US) | Fixed when the space is created; it sets the API host | EU |
-| D5 | A Vimeo plan with **video file links** | The site plays `<video>` from a direct MP4 link. Without file links, #16 needs the Vimeo player instead. | Check your plan |
-| D6 | Cal.com event type | The embed needs a public booking link | A 30-minute "Project intro" event |
+| D1 | Umami Cloud or self-hosted | S12 | Cloud (free tier) |
+| D2 | Storyblok region, EU or US (fixed once the space exists) | S3 | EU |
+| D3 | Cal.com event type | S15 | A 30-minute "Project intro" |
+| D4 | E-mail forwarding for `hello@ethanolson.dev` | S10 | Cloudflare Email Routing or ImprovMX |
 
 ## Order
 
 ```text
-#1 tests ─┬─ #2 database ─┬─ #8 rate limit ─┐
-          │               └─ #13 vitals API ── #14 dashboard
-          ├─ #3 Storyblok ── #4 works gallery ── #5 project pages ── #6 revalidation
-          ├─ #7 contact form ── #8 ── #9 store enquiries ── #10 e-mail ── #11 BotID
-          ├─ #12 Umami
-          ├─ #15 Cal.com
-          └─ #16 Vimeo videos
+S1 tests ─┬─ S2 database ─┬─ S8 rate limit ──┐
+          │               └─ S13 vitals API ── S14 dashboard
+          ├─ S3 Storyblok ── S4 works gallery ── S5 project pages ── S6 revalidation
+          ├─ S7 contact form ── S8 ── S9 store enquiries ── S10 e-mail ── S11 BotID
+          ├─ S12 Umami
+          └─ S15 Cal.com
 ```
 
 ---
 
-## #1 chore(test): add Vitest and Playwright, and run them in CI
+## S1 chore(test): add Vitest and Playwright, and run them in CI
 
 **Label:** `chore`
 
@@ -60,12 +59,12 @@ No component refactors. Chromium only in CI to keep it fast.
 
 ---
 
-## #2 chore(db): add Postgres with Drizzle and a rate-limit counter table
+## S2 chore(db): add Postgres with Drizzle and a rate-limit counter table
 
-**Label:** `chore` · **Needs:** D1
+**Label:** `chore` · **Needs:** a Neon project
 
 ### Context
-Rate limiting (#8) and Web Vitals (#13) need a database. There's none today.
+Rate limiting (S8) and Web Vitals (S13) need a database. There's none today.
 
 ### Goal
 A typed database client and migrations, with a `rate_limits` table ready to use.
@@ -83,9 +82,9 @@ Server-only code (`import "server-only"`). No raw IP addresses stored anywhere.
 
 ---
 
-## #3 feat(cms): connect Storyblok
+## S3 feat(cms): connect Storyblok
 
-**Label:** `feature` · **Needs:** D4
+**Label:** `feature` · **Needs:** D2
 
 ### Context
 All copy and media paths live in `content/`. The plan is to edit Works and site settings in
@@ -109,9 +108,9 @@ Don't migrate the copy in `content/sections.ts` yet. This issue is the connectio
 
 ---
 
-## #4 feat(works): load the Works gallery from Storyblok
+## S4 feat(works): load the Works gallery from Storyblok
 
-**Label:** `feature` · **Needs:** #3
+**Label:** `feature` · **Needs:** S3
 
 ### Context
 `WorkParallax` shows 12 placeholder SVGs from `content/sections.ts`.
@@ -122,7 +121,7 @@ The gallery shows the published `works/` stories, newest first.
 ### Acceptance criteria
 - [ ] Gallery tiles come from Storyblok covers (via `next/image` with the Storyblok image
       service), with real alt text.
-- [ ] Each tile links to `/works/[slug]` (#5).
+- [ ] Each tile links to `/works/[slug]` (S5).
 - [ ] The parallax still works with fewer than 12 works (columns fill evenly).
 - [ ] Data is fetched with the cache tag `works`.
 - [ ] Tests cover the mapping from Storyblok stories to tiles.
@@ -132,9 +131,9 @@ Keep the placeholders as the fallback when the space has no works.
 
 ---
 
-## #5 feat(works): add project pages at `/works/[slug]`
+## S5 feat(works): add project pages at `/works/[slug]`
 
-**Label:** `feature` · **Needs:** #4
+**Label:** `feature` · **Needs:** S4
 
 ### Context
 Works tiles lead nowhere. The case study needs a page per project.
@@ -156,9 +155,9 @@ A plain route, no modal. Every work is labeled as part of the concept.
 
 ---
 
-## #6 feat(cms): revalidate pages when content is published
+## S6 feat(cms): revalidate pages when content is published
 
-**Label:** `feature` · **Needs:** #5
+**Label:** `feature` · **Needs:** S5
 
 ### Context
 Static pages need to refresh when content changes in Storyblok.
@@ -178,7 +177,7 @@ No time-based revalidation as a workaround.
 
 ---
 
-## #7 feat(contact): add the contact form with a server action and Zod
+## S7 feat(contact): add the contact form with a server action and Zod
 
 **Label:** `feature`
 
@@ -187,7 +186,7 @@ Contact only shows an e-mail address. "Start a project" should lead to a real fo
 
 ### Goal
 A validated, progressively enhanced form that returns clear states. Storage and e-mail
-come in #9 and #10.
+come in S9 and S10.
 
 ### Acceptance criteria
 - [ ] Fields: name, e-mail, budget (select), message. One Zod schema in
@@ -207,9 +206,9 @@ The e-mail address stays visible as an alternative to the form.
 
 ---
 
-## #8 feat(contact): rate-limit submissions with the counter table
+## S8 feat(contact): rate-limit submissions with the counter table
 
-**Label:** `feature` · **Needs:** #2, #7
+**Label:** `feature` · **Needs:** S2, S7
 
 ### Context
 The form must not be usable for flooding.
@@ -226,13 +225,13 @@ At most 5 submissions per visitor per hour.
 - [ ] Tests cover under the limit, at the limit and a new window.
 
 ### Constraints
-Reusable by the Web Vitals endpoint (#13).
+Reusable by the Web Vitals endpoint (S13).
 
 ---
 
-## #9 feat(contact): store enquiries in a private Storyblok space
+## S9 feat(contact): store enquiries in a private Storyblok space
 
-**Label:** `feature` · **Needs:** #7, #8
+**Label:** `feature` · **Needs:** S7, S8
 
 ### Context
 Enquiries are stored as a CMS collection, so nothing is lost if e-mail fails.
@@ -245,7 +244,7 @@ Every accepted submission becomes a story in a private enquiries space.
       and an `enquiries/` folder. The site's public and preview tokens have no access to it.
 - [ ] The server action creates the story with the Storyblok Management API
       (`STORYBLOK_MANAGEMENT_TOKEN`, `STORYBLOK_ENQUIRIES_SPACE_ID`), never published.
-- [ ] Stored before e-mail is sent (#10).
+- [ ] Stored before e-mail is sent (S10).
 - [ ] A failed write shows an error state asking the visitor to e-mail instead.
 - [ ] Tests mock the Management API (success and failure).
 
@@ -255,9 +254,9 @@ often expose it to the browser. Enquiries in the main space would leak personal 
 
 ---
 
-## #10 feat(contact): send enquiry e-mails with Resend
+## S10 feat(contact): send enquiry e-mails with Resend
 
-**Label:** `feature` · **Needs:** #9, D3
+**Label:** `feature` · **Needs:** S9, the `ethanolson.dev` domain, D4
 
 ### Context
 Stored enquiries should also reach Alex's inbox.
@@ -278,9 +277,9 @@ No marketing e-mails, no newsletter opt-in.
 
 ---
 
-## #11 feat(contact): add Vercel BotID to the contact form
+## S11 feat(contact): add Vercel BotID to the contact form
 
-**Label:** `feature` · **Needs:** #7
+**Label:** `feature` · **Needs:** S7
 
 ### Context
 The honeypot stops simple bots. BotID adds invisible bot detection.
@@ -300,9 +299,9 @@ Submissions classified as bots are rejected before rate limiting and storage.
 
 ---
 
-## #12 feat(analytics): add Umami
+## S12 feat(analytics): add Umami
 
-**Label:** `feature` · **Needs:** D2
+**Label:** `feature` · **Needs:** D1
 
 ### Context
 No analytics today.
@@ -320,9 +319,9 @@ Cookie-free page views and a few key events.
 
 ---
 
-## #13 feat(vitals): collect Core Web Vitals in Postgres
+## S13 feat(vitals): collect Core Web Vitals in Postgres
 
-**Label:** `feature` · **Needs:** #2, #8
+**Label:** `feature` · **Needs:** S2, S8
 
 ### Context
 The case study needs real-user performance numbers, built in-house.
@@ -333,16 +332,16 @@ Every page view reports LCP, INP, CLS, FCP and TTFB to our own endpoint.
 ### Acceptance criteria
 - [ ] A client component uses `useReportWebVitals` and sends batches with
       `navigator.sendBeacon` to `/api/vitals`.
-- [ ] The route handler validates with Zod, rate-limits with #8, and inserts into
+- [ ] The route handler validates with Zod, rate-limits with S8, and inserts into
       `web_vitals(id, name, value, rating, path, navigation_type, created_at)`.
 - [ ] No IPs, no user agents, no cookies stored.
 - [ ] Tests cover validation and the insert.
 
 ---
 
-## #14 feat(vitals): add a protected Web Vitals dashboard
+## S14 feat(vitals): add a protected Web Vitals dashboard
 
-**Label:** `feature` · **Needs:** #13
+**Label:** `feature` · **Needs:** S13
 
 ### Goal
 `/admin/vitals` shows p75 per metric and per page for the last 7 and 28 days.
@@ -357,9 +356,9 @@ Every page view reports LCP, INP, CLS, FCP and TTFB to our own endpoint.
 
 ---
 
-## #15 feat(booking): embed Cal.com in the contact section
+## S15 feat(booking): embed Cal.com in the contact section
 
-**Label:** `feature` · **Needs:** D6
+**Label:** `feature` · **Needs:** D3
 
 ### Goal
 Visitors can book a call next to the form.
@@ -370,24 +369,3 @@ Visitors can book a call next to the form.
 - [ ] The link comes from `NEXT_PUBLIC_CALCOM_LINK`. Without it, the button is hidden.
 - [ ] Clearly labeled: "Concept site: bookings reach the AlxPro studio".
 - [ ] Keyboard accessible, with focus returning to the button on close.
-
----
-
-## #16 chore(media): load the videos from Vimeo
-
-**Label:** `chore` · **Needs:** D5
-
-### Context
-The Artgrid videos were removed from the repository. The site shows poster frames until
-`NEXT_PUBLIC_INTRO_VIDEO_URL` and `NEXT_PUBLIC_WATER_VIDEO_URL` are set.
-
-### Goal
-Both videos play from Vimeo, privately hosted.
-
-### Acceptance criteria
-- [ ] With file links: the env vars point to Vimeo's direct MP4 links, and nothing else
-      changes.
-- [ ] Without file links: the two `<video>` elements become the Vimeo player in background
-      mode (muted, looping, no controls), cropped like `object-cover`.
-- [ ] Vimeo privacy: hidden from Vimeo, embeddable only on the site's domain.
-- [ ] Poster frames still show while loading and with reduced motion.
