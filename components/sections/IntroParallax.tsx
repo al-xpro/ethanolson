@@ -84,27 +84,17 @@ export const IntroParallax = () => {
       className="relative w-full h-screen overflow-hidden text-white bg-black"
     >
       <div className="media relative w-full h-full z-0">
-        {introVideo.src ? (
-          <video
-            src={introVideo.src}
-            poster={introVideo.poster}
-            loop
-            muted
-            autoPlay
-            playsInline
-            preload="metadata"
-            aria-hidden
-            className="w-full h-full object-cover opacity-80"
-          />
-        ) : (
-          <Image
-            src={introVideo.poster}
-            alt=""
-            fill
-            sizes="100vw"
-            className="object-cover opacity-80"
-          />
-        )}
+        <video
+          src={introVideo.src}
+          poster={introVideo.poster}
+          loop
+          muted
+          autoPlay
+          playsInline
+          preload="metadata"
+          aria-hidden
+          className="w-full h-full object-cover opacity-80"
+        />
 
         {/* Intro Text (Visible at start) */}
         <div className="intro-text absolute bottom-20 inset-x-0 z-20 flex flex-col items-center justify-end text-center pb-10 pointer-events-none motion-reduce:hidden">

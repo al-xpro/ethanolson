@@ -67,27 +67,17 @@ export const MiddleParallax = () => {
         <div className="flex flex-col justify-center items-start">
           <div className="flex items-center justify-center flex-col sm:px-10 gap-5 xl:gap-[1vw]">
             <div className="relative h-[50vh] w-full flex items-center min-h-[300px]">
-              {middleParallax.video.src ? (
-                <video
-                  playsInline
-                  className="w-full h-full object-cover object-center rounded-xl xl:rounded-[1.5vw] aspect-square"
-                  preload="none"
-                  poster={middleParallax.video.poster}
-                  muted
-                  aria-hidden
-                  ref={videoRef}
-                >
-                  <source src={middleParallax.video.src} type="video/mp4" />
-                </video>
-              ) : (
-                <Image
-                  src={middleParallax.video.poster}
-                  alt=""
-                  fill
-                  sizes="100vw"
-                  className="object-cover object-center rounded-xl xl:rounded-[1.5vw]"
-                />
-              )}
+              <video
+                playsInline
+                className="w-full h-full object-cover object-center rounded-xl xl:rounded-[1.5vw] aspect-square"
+                preload="none"
+                poster={middleParallax.video.poster}
+                muted
+                aria-hidden
+                ref={videoRef}
+              >
+                <source src={middleParallax.video.src} type="video/mp4" />
+              </video>
             </div>
 
             <div className="flex flex-col w-full relative">

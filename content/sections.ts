@@ -31,11 +31,9 @@ export const zoomPictures: (Picture & { scale: number; className: string })[] = 
 ];
 
 // Intro Parallax
-// Videos are licensed footage, so they're hosted outside the repository (see README).
-// Without a URL, the poster frame is shown instead.
 
 export const introVideo = {
-  src: process.env.NEXT_PUBLIC_INTRO_VIDEO_URL ?? "",
+  src: "/videos/design.mp4",
   poster: "/videos/design-poster.jpg",
 };
 
@@ -94,10 +92,7 @@ export const workImages: Picture[] = Array.from({ length: 12 }, (_, i) => {
 // Middle Parallax (decorative, so alt is empty)
 
 export const middleParallax = {
-  video: {
-    src: process.env.NEXT_PUBLIC_WATER_VIDEO_URL ?? "",
-    poster: "/videos/water-ripple-poster.jpg",
-  },
+  video: { src: "/videos/water-ripple.mp4", poster: "/videos/water-ripple-poster.jpg" },
   pictures: [
     { src: "/images/water-spray.jpg", alt: "" },
     { src: "/images/waving-water.jpg", alt: "" },
