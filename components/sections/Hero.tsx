@@ -1,19 +1,18 @@
 "use client";
 
-import { Suspense, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Canvas } from "@react-three/fiber";
-import { Environment, Float, Lightformer, useProgress } from "@react-three/drei";
+import { Environment, Float, Lightformer } from "@react-three/drei";
 import AnimatedHeaderSection from "@/components/ui/AnimatedHeaderSection";
 import { heroHeader } from "@/content/sections";
 import { usePrefersReducedMotion } from "@/lib/useMediaQuery";
-import { ObjectIllusionHero } from "../ui/ObjectIllustionHero";
+import { OpticalIllusion } from "../ui/OpticalIllusion";
 
 const Hero = () => {
   const figureRef = useRef<HTMLElement>(null);
   const [inView, setInView] = useState(true);
   const reduceMotion = usePrefersReducedMotion();
-  const { active, progress } = useProgress();
-  const modelReady = !active && progress === 100;
+  const [sceneReady, setSceneReady] = useState(false);
 
   // Stop rendering the scene once it scrolls out of view
   useEffect(() => {
@@ -41,23 +40,25 @@ const Hero = () => {
         ref={figureRef}
         aria-hidden
         className={`absolute inset-0 -z-50 min-h-[700px] transition-opacity duration-1000 ${
-          modelReady ? "opacity-100" : "opacity-0"
+          sceneReady ? "opacity-100" : "opacity-0"
         }`}
       >
         <Canvas
           frameloop={inView ? "always" : "never"}
-          camera={{ position: [0, 0, -10], fov: 17.5, near: 1, far: 20 }}
+          orthographic
+          // No perspective: the illusion only lines up in a parallel projection
+          camera={{ position: [0, 0, -10], zoom: 100, near: 0.1, far: 50 }}
+          onCreated={() => setSceneReady(true)}
         >
           <ambientLight intensity={1} />
-          <Suspense fallback={null}>
-            <Float
-              speed={reduceMotion ? 0 : 1}
-              rotationIntensity={reduceMotion ? 0 : 1}
-              floatIntensity={reduceMotion ? 0 : 1}
-            >
-              <ObjectIllusionHero reduceMotion={reduceMotion} />
-            </Float>
-          </Suspense>
+          {/* Low rotation keeps the illusion intact while the figure floats */}
+          <Float
+            speed={reduceMotion ? 0 : 1}
+            rotationIntensity={reduceMotion ? 0 : 0.15}
+            floatIntensity={reduceMotion ? 0 : 1}
+          >
+            <OpticalIllusion reduceMotion={reduceMotion} />
+          </Float>
           <Environment resolution={512}>
             <group rotation={[0, 0, 0]}>
               {/* Top strip light */}
