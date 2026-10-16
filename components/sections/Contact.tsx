@@ -4,6 +4,7 @@ import { useRef } from "react";
 import Link from "next/link";
 import AnimatedHeaderSection from "@/components/ui/AnimatedHeaderSection";
 import { SocialLinks, activeSocials } from "@/components/ui/SocialLinks";
+import { ContactForm } from "@/components/ui/ContactForm";
 import { contactHeader } from "@/content/sections";
 import { site } from "@/content/site";
 import { gsap, useGSAP, MOTION_OK } from "@/lib/gsap";
@@ -45,7 +46,9 @@ const Contact = () => {
           withScrollTrigger={true}
         />
 
-        <div className="flex flex-col px-5 sm:px-10 xl:px-[1.5vw] font-light text-white uppercase lg:text-[32px] text-[26px] leading-none mb-10">
+        <div className="grid lg:grid-cols-[3fr_2fr] gap-16 xl:gap-[4vw] px-5 sm:px-10 xl:px-[1.5vw] font-light text-white uppercase lg:text-[32px] text-[26px] leading-none mb-10">
+          <ContactForm />
+
           <div className="relative flex flex-col w-full gap-10 xl:gap-[1.5vw]">
             <div className="social-link">
               <h3 className="xl:text-[2vw]">E-mail</h3>
