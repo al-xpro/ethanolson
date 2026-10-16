@@ -51,10 +51,10 @@ const Hero = () => {
           onCreated={() => setSceneReady(true)}
         >
           <ambientLight intensity={1} />
-          {/* Low rotation keeps the illusion intact while the figure floats */}
+          {/* Float without rotating: any rotation would break the illusion's alignment */}
           <Float
             speed={reduceMotion ? 0 : 1}
-            rotationIntensity={reduceMotion ? 0 : 0.15}
+            rotationIntensity={0}
             floatIntensity={reduceMotion ? 0 : 1}
           >
             <OpticalIllusion reduceMotion={reduceMotion} />

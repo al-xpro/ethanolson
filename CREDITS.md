@@ -22,6 +22,6 @@ repository. They are not for resale.
 
 ## Original work
 
-- The 3D Penrose triangle in the hero (`components/ui/OpticalIllusion.tsx`): built in code
-  for this project.
+- The 3D impossible cube in the hero (`components/ui/OpticalIllusion.tsx`): built in code
+  for this project, after M. C. Escher's impossible cube.
 - `public/projects/work-*.svg`: wireframe placeholders, made for this project.

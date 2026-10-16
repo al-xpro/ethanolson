@@ -11,12 +11,12 @@ copy are invented to show how a motion-rich, full-stack portfolio is made.
 
 **Live:** not deployed yet. It will be published at `ethanolson.dev`.
 
-![The hero section: "Design Engineer" next to a 3D Penrose triangle](docs/images/hero.jpg)
+![The hero section: "Design Engineer" next to a 3D impossible cube](docs/images/hero.jpg)
 
 ## What it does
 
-- A real-time 3D Penrose triangle in the hero: three straight beams that only look like a
-  closed, impossible triangle from one angle, which the intro animation rotates into
+- A real-time 3D impossible cube in the hero, after Escher: one back edge passes in front of
+  a front edge. The trick only works from one angle, which the intro animation rotates into
 - Pinned scroll scenes: a zoom grid, an SVG mask reveal over video, a horizontal services
   track and a column parallax gallery
 - Full `prefers-reduced-motion` support: every scene has a static fallback
@@ -39,7 +39,7 @@ contact flow with Zod, Resend and Vercel BotID, Umami, self-built Web Vitals and
 ```text
 app/                  routes, metadata, icons, OG image, robots, sitemap
 components/sections/  one component per page section
-components/ui/        shared UI (header animation, navbar, gallery, Penrose triangle)
+components/ui/        shared UI (header animation, navbar, gallery, impossible cube)
 components/providers/ smooth scrolling (Lenis)
 content/              all copy and media paths (site.ts, sections.ts)
 lib/                  GSAP setup, animation helpers, media-query hooks

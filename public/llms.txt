@@ -6,7 +6,7 @@
 
 - One page, statically prerendered with Next.js 16 (App Router), React 19, TypeScript and Tailwind CSS 4.
 - Scroll scenes are built with GSAP ScrollTrigger and Lenis smooth scrolling, and fall back to static layouts when the visitor prefers reduced motion.
-- The hero shows a real-time 3D Penrose triangle, built in code with React Three Fiber and three.js.
+- The hero shows a real-time 3D impossible cube (after Escher), built in code with React Three Fiber and three.js.
 
 ## Sections
 

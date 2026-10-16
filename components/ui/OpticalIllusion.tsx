@@ -5,34 +5,65 @@ import * as THREE from "three";
 import { useThree } from "@react-three/fiber";
 import { gsap } from "@/lib/gsap";
 
-// A Penrose triangle: three perpendicular beams that only look like a closed triangle
-// when viewed along the (1, 1, 1) diagonal. The third beam is one block short, and from
-// that angle the first beam's end fills the gap.
-const LENGTH = 5;
-const VIEW_DIRECTION = new THREE.Vector3(1, 1, 1).normalize();
+// An impossible cube (after Escher): a cube frame where one back edge appears to pass in
+// front of a front edge. Seen from VIEW, the front-right edge crosses the back-bottom edge.
+// The part of the front edge around that crossing is pushed straight back along VIEW,
+// behind the back edge. In a parallel projection that move is invisible, so the frame
+// still looks continuous, but the crossing is now the wrong way round.
+const HALF = 2;
+const THICKNESS = 0.6;
+const VIEW = new THREE.Vector3(0.55, 0.45, 1).normalize();
 
-const beams: { size: [number, number, number]; center: [number, number, number] }[] = [
-  { size: [LENGTH, 1, 1], center: [LENGTH / 2, 0.5, 0.5] },
-  { size: [1, LENGTH - 1, 1], center: [LENGTH - 0.5, (LENGTH + 1) / 2, 0.5] },
-  { size: [1, 1, LENGTH - 2], center: [LENGTH - 0.5, LENGTH - 0.5, LENGTH / 2] },
-];
+type Beam = { size: [number, number, number]; position: [number, number, number] };
 
-// Centroid of the three corner blocks, so the visible triangle is centered
-const CENTER: [number, number, number] = [-(2 * LENGTH - 0.5) / 3, -(LENGTH + 0.5) / 3, -0.5];
+function impossibleCube(): Beam[] {
+  const full = 2 * HALF + THICKNESS;
+  const inner = 2 * HALF - THICKNESS;
+  const beams: Beam[] = [];
+
+  // Edges along x own the corners, so beams never overlap
+  for (const y of [-HALF, HALF])
+    for (const z of [-HALF, HALF]) beams.push({ size: [full, THICKNESS, THICKNESS], position: [0, y, z] });
+  for (const x of [-HALF, HALF])
+    for (const y of [-HALF, HALF]) beams.push({ size: [THICKNESS, THICKNESS, inner], position: [x, y, 0] });
+  for (const z of [-HALF, HALF]) beams.push({ size: [THICKNESS, inner, THICKNESS], position: [-HALF, 0, z] });
+  beams.push({ size: [THICKNESS, inner, THICKNESS], position: [HALF, 0, -HALF] });
+
+  // Where the front-right edge (x = HALF, z = HALF) crosses the back-bottom edge
+  // (y = -HALF, z = -HALF) on screen: the two points differ by exactly `depth` along VIEW.
+  const depth = (2 * HALF) / VIEW.z;
+  const crossingY = -HALF + depth * VIEW.y;
+  const splitY = crossingY + THICKNESS * 1.5;
+  const bottom = -HALF + THICKNESS / 2;
+  const top = HALF - THICKNESS / 2;
+
+  // Upper part of the front-right edge stays at the front
+  beams.push({
+    size: [THICKNESS, top - splitY, THICKNESS],
+    position: [HALF, (top + splitY) / 2, HALF],
+  });
+
+  // Lower part, moved behind the back edge along the line of sight
+  const behind = VIEW.clone().multiplyScalar(-(depth + 2 * THICKNESS));
+  beams.push({
+    size: [THICKNESS, splitY - bottom, THICKNESS],
+    position: [HALF + behind.x, (splitY + bottom) / 2 + behind.y, HALF + behind.z],
+  });
+
+  return beams;
+}
+
+const BEAMS = impossibleCube();
 
 const START_ROTATION = { x: -1.2, y: 0.8, z: 0.4 };
 
-// Turns the figure so its illusion diagonal points at a camera on the -z side,
-// with the first beam lying horizontally on screen and the triangle pointing up.
+// Turns the figure so VIEW points at a camera on the -z side, with the cube upright.
 function illusionQuaternion() {
-  const toCamera = new THREE.Quaternion().setFromUnitVectors(
-    VIEW_DIRECTION,
-    new THREE.Vector3(0, 0, -1)
-  );
-  const firstBeam = new THREE.Vector3(1, 0, 0).applyQuaternion(toCamera);
+  const toCamera = new THREE.Quaternion().setFromUnitVectors(VIEW, new THREE.Vector3(0, 0, -1));
+  const up = new THREE.Vector3(0, 1, 0).applyQuaternion(toCamera);
   const roll = new THREE.Quaternion().setFromAxisAngle(
     new THREE.Vector3(0, 0, 1),
-    Math.PI - Math.atan2(firstBeam.y, firstBeam.x)
+    Math.atan2(up.x, up.y)
   );
   return roll.multiply(toCamera);
 }
@@ -46,28 +77,26 @@ export function OpticalIllusion({
   const container = useRef<THREE.Group>(null);
   const { viewport } = useThree();
   // Sized and placed relative to the viewport, so it works for any camera zoom
-  const scale = Math.min(viewport.height * 0.11, viewport.width * 0.15);
+  const scale = Math.min(viewport.height * 0.085, viewport.width * 0.13);
   const wide = viewport.aspect > 1;
   // The camera looks along +z, so screen-right is world -x
   const offsetX = wide ? -viewport.width * 0.12 : 0;
   const offsetY = wide ? -viewport.height * 0.05 : -viewport.height * 0.2;
 
-  const material = useMemo(
-    () =>
-      new THREE.MeshPhysicalMaterial({
-        color: "#2B2B2B",
-        metalness: 1,
-        roughness: 0.25,
-        clearcoat: 0.1,
-        clearcoatRoughness: 0.1,
-        envMapIntensity: 2.2,
-      }),
-    []
-  );
+  // One tone per face direction (like an Escher drawing), so every crossing reads clearly.
+  // Box faces are ordered +x, -x, +y, -y, +z, -z.
+  const materials = useMemo(() => {
+    const tone = (color: string) =>
+      new THREE.MeshStandardMaterial({ color, metalness: 0.35, roughness: 0.45, envMapIntensity: 1.2 });
+    const side = tone("#6E6E6E");
+    const top = tone("#B4B4B4");
+    const front = tone("#2E2E2E");
+    return [side, side, top, top, front, front];
+  }, []);
 
-  useEffect(() => () => material.dispose(), [material]);
+  useEffect(() => () => new Set(materials).forEach((material) => material.dispose()), [materials]);
 
-  // Rotate into the one angle where the triangle closes
+  // Rotate into the one angle where the cube becomes impossible
   useEffect(() => {
     const group = container.current;
     if (!group) return;
@@ -98,13 +127,11 @@ export function OpticalIllusion({
       rotation={[START_ROTATION.x, START_ROTATION.y, START_ROTATION.z]}
     >
       <group quaternion={ORIENTATION}>
-        <group position={CENTER}>
-          {beams.map(({ size, center }, index) => (
-            <mesh key={index} position={center} material={material}>
-              <boxGeometry args={size} />
-            </mesh>
-          ))}
-        </group>
+        {BEAMS.map(({ size, position }, index) => (
+          <mesh key={index} position={position} material={materials}>
+            <boxGeometry args={size} />
+          </mesh>
+        ))}
       </group>
     </group>
   );
