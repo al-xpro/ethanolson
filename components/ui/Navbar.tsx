@@ -164,11 +164,22 @@ const Navbar = () => {
   const closeMenu = (onClosed?: () => void) => {
     lenis?.start();
     iconTl.current?.reverse();
-    tl.current?.reverse();
-    tl.current?.eventCallback("onReverseComplete", () => {
+
+    const finish = () => {
       setIsOpen(false);
       onClosed?.();
-    });
+    };
+    const timeline = tl.current;
+
+    // Closed before the opening animation rendered a frame: nothing to reverse
+    if (!timeline || timeline.time() === 0) {
+      timeline?.pause(0);
+      finish();
+      return;
+    }
+
+    timeline.eventCallback("onReverseComplete", finish);
+    timeline.reverse();
   };
 
   const toggleMenu = () => (isOpen ? closeMenu() : openMenu());
@@ -192,7 +203,10 @@ const Navbar = () => {
         (el) => el.offsetParent !== null
       );
 
-    linksRef.current[0]?.querySelector("a")?.focus();
+    // The links fade in on GSAP's next frames, and hidden elements can't take focus
+    const focusFirstLink = gsap.delayedCall(0.1, () =>
+      linksRef.current[0]?.querySelector("a")?.focus()
+    );
 
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
@@ -217,7 +231,10 @@ const Navbar = () => {
     };
 
     document.addEventListener("keydown", onKeyDown);
-    return () => document.removeEventListener("keydown", onKeyDown);
+    return () => {
+      focusFirstLink.kill();
+      document.removeEventListener("keydown", onKeyDown);
+    };
     // closeMenu only touches refs and stable setters
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen]);
