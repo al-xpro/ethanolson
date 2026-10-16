@@ -43,8 +43,6 @@ components/ui/        shared UI (header animation, navbar, gallery, Penrose tria
 components/providers/ smooth scrolling (Lenis)
 content/              all copy and media paths (site.ts, sections.ts)
 lib/                  GSAP setup, animation helpers, media-query hooks
-docs/                 roadmap, decisions, issue drafts, case study plan
-docs/agents/          the workflow every contributor follows, and the case study guide
 ```
 
 The page is a Server Component that renders client sections. All scroll animation runs
@@ -77,14 +75,12 @@ Put them in `.env.local`. Names only here. Never commit values.
 First version built from January to March 2026; cleaned up and published as `v1.0` in
 October 2026 (the clean-up was done with Claude Code); new features developed in the open
 since. Built with an agentic workflow: I write issues as specs, agents open the pull
-requests, and I review and merge every change. The rules are in
-[docs/agents/project-workflow.md](docs/agents/project-workflow.md).
+requests, and I review and merge every change.
 
 ## Roadmap
 
-[Open issues](https://github.com/al-xpro/portfolio-project/issues), the
-[`v2.0 — Full stack` milestone](https://github.com/al-xpro/portfolio-project/milestones)
-and the [roadmap](docs/improvement-roadmap.md).
+[Open issues](https://github.com/al-xpro/portfolio-project/issues) and the
+[`v2.0 — Full stack` milestone](https://github.com/al-xpro/portfolio-project/milestones).
 
 ## Credits and license
 
