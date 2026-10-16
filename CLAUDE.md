@@ -23,9 +23,11 @@ npm run dev
 npm run typecheck   # next typegen && tsc --noEmit
 npm run lint
 npm run build
+npm test            # Vitest unit tests (*.test.ts next to the code, or in __tests__)
+npm run test:e2e    # Playwright end-to-end tests in tests/e2e (first time: npx playwright install chromium)
 ```
 
-Run all three checks before opening a pull request.
+Run all of them before opening a pull request, and add tests for new behavior.
 
 ## Plans
 
