@@ -3,18 +3,19 @@
 What's left, in order. Day-to-day progress is tracked on GitHub (issues, the
 `v2.0 — Full stack` milestone and the project board). This file is the overview.
 
-## 1. Publish `v1.0` ← next
+## 1. `v1.0` ✅ and `v1.1 — Polish` ← now
 
-- [ ] Set up the repository: [github-workflow.md, Part A](./github-workflow.md#part-a-set-up-the-repository-once).
-- [ ] Publish the first release: [Part B](./github-workflow.md#part-b-publish-the-first-release).
-- [ ] Buy `ethanolson.dev` and set up e-mail forwarding for `hello@ethanolson.dev`.
+- [x] `v1.0` published (2026-10-16).
+- [ ] `v1.1`: the impossible cube (#11), community standards (#12), planning docs (#13),
+      the menu focus fix (#17). Then release it.
+- [ ] Buy `ethanolson.dev` and create the accounts in [planning.md §5](./planning.md#5-accounts-to-create-before-iteration-2).
 
 ## 2. Build `v2.0 — Full stack`
 
-Fifteen specs in [issue-drafts.md](./issue-drafts.md). Create them as issues, then work one
-pull request per issue ([Part C](./github-workflow.md#part-c-the-team-loop-for-every-issue)).
+Planned in [planning.md §4](./planning.md#4-the-plan-for-v11-and-v20), with specs in
+[issue-drafts.md](./issue-drafts.md). Tracked on the project board.
 
-- [ ] Foundations: tests (S1) and the Neon database (S2)
+- [ ] Foundations: tests (S1, #14) and the Neon database (S2)
 - [ ] Content: Storyblok, Works gallery, project pages, revalidation (S3–S6)
 - [ ] Contact: form, rate limit, private storage, Resend, BotID (S7–S11)
 - [ ] Insights: Umami, Web Vitals, dashboard (S12–S14)

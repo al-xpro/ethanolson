@@ -12,14 +12,18 @@ Delete this file once every spec exists as an issue.
 honeypot + Vercel BotID · counter-table rate limiting · enquiries in a private Storyblok
 space · Umami · self-built Web Vitals · Cal.com.
 
-## Still to decide (small)
+## Decisions
 
-| # | Decision | Needed by | Suggestion |
-| --- | --- | --- | --- |
-| D1 | Umami Cloud or self-hosted | S12 | Cloud (free tier) |
-| D2 | Storyblok region, EU or US (fixed once the space exists) | S3 | EU |
-| D3 | Cal.com event type | S15 | A 30-minute "Project intro" |
-| D4 | E-mail forwarding for `hello@ethanolson.dev` | S10 | Cloudflare Email Routing or ImprovMX |
+All settled (see [full-stack-options.md](./full-stack-options.md)): Umami Cloud, Storyblok
+EU, a 30-minute "Project intro" event on Cal.com, Cloudflare Email Routing for
+`hello@ethanolson.dev`. The accounts to create first are in
+[planning.md §5](./planning.md#5-accounts-to-create-before-iteration-2).
+
+## Status
+
+- **S1** is issue #14 (pull request #18).
+- Create the five epics and **S2, S3, S7** next. The plan is in
+  [planning.md §4](./planning.md#4-the-plan-for-v11-and-v20).
 
 ## Order
 
@@ -61,7 +65,7 @@ No component refactors. Chromium only in CI to keep it fast.
 
 ## S2 chore(db): add Postgres with Drizzle and a rate-limit counter table
 
-**Label:** `chore` · **Needs:** a Neon project
+**Label:** `chore` · **Needs:** the Neon project (planning §5)
 
 ### Context
 Rate limiting (S8) and Web Vitals (S13) need a database. There's none today.
@@ -84,7 +88,7 @@ Server-only code (`import "server-only"`). No raw IP addresses stored anywhere.
 
 ## S3 feat(cms): connect Storyblok
 
-**Label:** `feature` · **Needs:** D2
+**Label:** `feature` · **Needs:** the Storyblok spaces (planning §5)
 
 ### Context
 All copy and media paths live in `content/`. The plan is to edit Works and site settings in
@@ -256,7 +260,7 @@ often expose it to the browser. Enquiries in the main space would leak personal 
 
 ## S10 feat(contact): send enquiry e-mails with Resend
 
-**Label:** `feature` · **Needs:** S9, the `ethanolson.dev` domain, D4
+**Label:** `feature` · **Needs:** S9, the domain and Email Routing (planning §5)
 
 ### Context
 Stored enquiries should also reach Alex's inbox.
@@ -301,7 +305,7 @@ Submissions classified as bots are rejected before rate limiting and storage.
 
 ## S12 feat(analytics): add Umami
 
-**Label:** `feature` · **Needs:** D1
+**Label:** `feature` · **Needs:** the Umami Cloud website (planning §5)
 
 ### Context
 No analytics today.
@@ -358,7 +362,7 @@ Every page view reports LCP, INP, CLS, FCP and TTFB to our own endpoint.
 
 ## S15 feat(booking): embed Cal.com in the contact section
 
-**Label:** `feature` · **Needs:** D3
+**Label:** `feature` · **Needs:** the Cal.com event (planning §5)
 
 ### Goal
 Visitors can book a call next to the form.

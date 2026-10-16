@@ -20,6 +20,18 @@ Work in this order: **Part A** once, **Part B** once, then **Part C** for every 
 
 ## Part A: set up the repository (once)
 
+**Status, 2026-10-16:** A5, A6 and A7 are done (they were 4.2, 4.3 and 4.6 in the earlier
+numbering). On 2026-10-16, the label `features` was renamed to `feature` so the issue
+template applies it, and the `v1.1 — Polish` milestone was created. Still to do:
+
+- **A1:** the description (it's also on the Community Standards checklist).
+- **A3:** delete the duplicate milestone `v2.0 - Full Stack` and keep `v2.0 — Full stack`
+  (**Issues → Milestones → Edit → Delete**).
+- **A4:** finish the project board with [planning.md](./planning.md) §2.
+- **A6:** after #18 merges, add `Tests` to the ruleset's required checks.
+- **A8:** the agent.
+- **A9:** the Support request.
+
 ### A1. About and social preview
 
 1. Repository home page → ⚙️ next to **About**:
@@ -64,6 +76,9 @@ Work in this order: **Part A** once, **Part B** once, then **Part C** for every 
    - **Auto-add to project** → repository `portfolio-project`, filter `is:issue,pr is:open`
 4. Back in the repository: **Projects** tab → **Link a project** → `Ethan Olson portfolio`.
 
+Fields (Priority, Size, Iteration), views and the weekly planning routine are in
+[planning.md](./planning.md).
+
 ### A5. Pull request settings
 
 **Settings → General → Pull Requests:**
@@ -106,19 +121,33 @@ Work in this order: **Part A** once, **Part B** once, then **Part C** for every 
 
 ### A8. Give the agent its own identity
 
-Your workflow (§4) wants agent pull requests to be visibly opened by the agent. Install
-the Claude GitHub App: in the Claude Code terminal, inside this repository, run
-`/install-github-app` and follow the steps (it installs the app, adds the API secret and
-opens a pull request with `.github/workflows/claude.yml`). Review and merge that pull
-request with Part C, steps 4–6. It's a good first review.
+Your workflow (§4) wants agent work to be visibly done by the agent. The Claude GitHub App
+does that: you write `@claude` in an issue or pull request, and Claude works in GitHub
+Actions under its own name, `claude[bot]`.
 
-After that, writing `@claude` in an issue or a pull request comment starts the agent in
-GitHub Actions. It pushes a branch and opens the pull request as `claude[bot]`.
+1. In a terminal, inside this repository, start Claude Code: `claude`.
+2. Run `/install-github-app`. It uses the GitHub CLI you're already logged in to.
+3. Pick `al-xpro/portfolio-project`. Your browser opens the **Claude** GitHub App: choose
+   **Only select repositories → portfolio-project → Install**.
+4. Authentication: choose your **Claude subscription**. That creates the repository secret
+   `CLAUDE_CODE_OAUTH_TOKEN`, so runs use your plan, not API billing. Public repositories
+   get GitHub Actions minutes for free.
+5. Workflows: select the **`@claude` mentions** workflow (`claude.yml`). The automatic
+   **code review** workflow is optional: it posts Claude's own review on every pull
+   request, as a second pair of eyes before yours.
+6. It pushes a branch and opens a pull request page in your browser. **Create pull
+   request**, wait for CI, then review and merge it (Part C, steps 4–6).
+7. Test it on issue #17: comment
+   `@claude please fix this issue, following CLAUDE.md. Then open a pull request that closes #17.`
 
-Until then, Claude Code works locally: it pushes a branch under your Git identity, with a
-`Co-Authored-By: Claude` trailer on every commit, and you open the pull request from the
-yellow **Compare & pull request** banner. You're the author then, so you merge through the
-bypass from A6.
+What to expect: Claude replies in the issue with a progress checklist, pushes a branch,
+and either opens the pull request or replies with a link to open it. The commits are
+authored by `claude[bot]`. If you open the pull request from that link, you're its
+author, so you merge it through the bypass from A6. Your review still comes first.
+
+Without the app, Claude Code works locally. It pushes a branch under your Git identity,
+with a `Co-Authored-By: Claude` trailer on every commit, and opens the pull request from
+your account (as with #15, #16 and #18).
 
 ### A9. Remove the last copies of the old files
 

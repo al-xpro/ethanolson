@@ -68,11 +68,14 @@ the page. It's clearly labeled: Ethan is fictional, so bookings reach the AlxPro
 which suits a site that's always served over TLS. The footer, `llms.txt` and README say
 the persona is fictional.
 
-## Still open
+## Settled on 2026-10-16
 
-- Umami Cloud (free tier) or self-hosted. Suggested: Cloud.
-- Storyblok region, EU or US. It can't be changed after the space is created. Suggested: EU.
-- The Cal.com event type for the booking link. Suggested: a 30-minute "Project intro".
-- E-mail forwarding for `hello@ethanolson.dev` (the address the site shows). The domain
-  needs a forwarding service, for example Cloudflare Email Routing or ImprovMX, because
-  Resend only sends.
+- **Umami Cloud**, free tier.
+- **Storyblok region: EU.** It can't be changed after the space is created.
+- **Cal.com:** a 30-minute "Project intro" event.
+- **E-mail:** `hello@ethanolson.dev` forwards to Alex's inbox with **Cloudflare Email
+  Routing**. Buying the domain through Cloudflare Registrar keeps its DNS on Cloudflare,
+  which Email Routing needs.
+
+The accounts to create, and their environment variable names, are in
+[planning.md §5](./planning.md#5-accounts-to-create-before-iteration-2).
