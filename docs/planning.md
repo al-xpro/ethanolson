@@ -80,9 +80,9 @@ A blocked issue shows a "Blocked" icon on the board.
 
 | When | What | Time |
 | --- | --- | --- |
-| **Monday: plan** | Open **Backlog**. Move the top `P0`/`P1` items whose blockers are done into this week's **Iteration**, until the sizes add up to what you can review (start with about 3 `M` or 6 `S`). Hand each one to the agent. | 20 min |
+| **Monday: plan** | Open **Backlog**. Move the top `P0`/`P1` items whose blockers are done into this week's **Iteration**, until the sizes add up to what you can review (start with about 3 `M` or 6 `S`). Ask the agent to start them. | 20 min |
 | **Every day: flow** | Open **This week**. Review whatever is **In review** first: reviews unblock the most work. Keep at most 2 items **In Progress** at once. | 10 min |
-| **Friday: review** | Look at what moved to **Done**. Move unfinished items to next week: in the **This week** view, select them (Shift-click), then set **Iteration** for all of them at once. If a milestone is complete: changelog PR, then the release (playbook C7). Note one thing to do better. | 15 min |
+| **Friday: review** | Look at what moved to **Done**. Move unfinished items to next week: in the **This week** view, select them (Shift-click), then set **Iteration** for all of them at once. If a milestone is complete: the agent opens the changelog pull request and you publish the release. Note one thing to do better. | 15 min |
 
 Three habits that make planning work:
 
@@ -98,13 +98,11 @@ Sizes are estimates. Adjust them as you learn how fast the reviews go.
 
 | Item | Size | Notes |
 | --- | --- | --- |
-| Review and merge #15 (impossible cube) | S | Your first real review |
-| Review and merge #16 (community standards) | XS | Then the three manual settings in its description |
-| Review and merge #18 (tests in CI) | S | Then add `Tests` to the ruleset's required checks |
-| Install the Claude GitHub App ([playbook A8](./github-workflow.md#a8-give-the-agent-its-own-identity)) | XS | |
-| #17 focus bug: hand it to `@claude` | XS | The agent's first issue |
+| Change the ruleset settings ([playbook](./github-workflow.md#now-2-minutes)) | XS | Unblocks every pull request |
+| Merge the queue: #10, #15, #16, #18, #19 | XS | Fast lane, merged by the agent |
+| #17 focus bug | XS | Fast lane |
 | Create the accounts in §5 | S | Needed before Iteration 2 |
-| Release `v1.1` | XS | Changelog PR, then playbook Part B |
+| Release `v1.1` | XS | The agent prepares it; you click Publish |
 
 ### Iterations 2–5: `v2.0 — Full stack`
 

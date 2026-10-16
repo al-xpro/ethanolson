@@ -28,7 +28,7 @@ Planned in [planning.md §4](./planning.md#4-the-plan-for-v11-and-v20), with spe
 - [ ] Manual checks on the live site: Lighthouse, axe DevTools, and the whole page with the
       keyboard only.
 - [ ] Measure LCP, INP and CLS (PageSpeed Insights, mobile, median of 3).
-- [ ] Finish the GitHub About section and social preview (Part A, step 1).
+- [ ] Add the website and social preview on GitHub ([playbook, "At launch"](./github-workflow.md#at-launch)).
 - [ ] Release `v2.0`.
 
 ## 4. Case study

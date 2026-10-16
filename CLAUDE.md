@@ -1,8 +1,24 @@
 # Ethan Olson concept portfolio
 
-Follow the publishing and agent workflow in @docs/agents/project-workflow.md for every
-change: issues are specs, one branch and one pull request per issue, Conventional Commits
-with a `Co-Authored-By` trailer, and only Alex merges. Never force-push or rewrite `main`.
+General rules: @docs/agents/project-workflow.md. In this repository they're simplified by
+the two lanes below, which win where the two differ (details in `docs/github-workflow.md`).
+
+## How changes ship
+
+Alex asks in plain words; the agent handles issues, milestones, branches, commits and pull
+requests with the `gh` CLI. Commits use Conventional Commits with a `Co-Authored-By`
+trailer.
+
+- **Fast lane:** docs, copy, visual tweaks, refactors, tests, chores, minor and patch
+  dependency updates. No issue. Branch → pull request (small changes can share one) →
+  `gh pr merge --auto --squash`, so it merges itself when CI is green.
+- **Review lane:** integrations, features, anything touching data, auth, security, secrets,
+  CI or the database schema, major dependency updates. Create an issue in the spec format
+  (label + milestone), then one branch and one pull request with `Closes #n`. **Don't
+  merge it**: Alex reviews and merges. Answer review comments with new commits on the same
+  branch.
+- Never push to `main` directly, never force-push or rewrite `main`, and never change
+  repository settings, rulesets or secrets: Alex owns those.
 
 ## Project rules
 

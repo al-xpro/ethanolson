@@ -3,7 +3,7 @@
 Specs for the full-stack features, in the issue format from
 [project-workflow.md](./agents/project-workflow.md) §3. They're numbered S1–S15 because
 GitHub assigns its own issue numbers. When you create an issue, replace every "S" reference
-in it with the real `#number`. Walkthrough: [github-workflow.md, Part C](./github-workflow.md#part-c-the-team-loop-for-every-issue).
+in it with the real `#number`. The agent creates them on GitHub ([github-workflow.md](./github-workflow.md)).
 
 Delete this file once every spec exists as an issue.
 
