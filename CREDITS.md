@@ -20,8 +20,15 @@ repository. They are not for resale.
   royalty-free stock footage.
 - `public/videos/*-poster.jpg`: still frames from those two videos.
 
+## 3D model
+
+- `public/models/optical-illusion.glb`: modified from
+  ["Optical Illusions"](https://sketchfab.com/3d-models/optical-illusions-bd5b32c2851749a7abcdc66c92a95965)
+  by [Johannes R.](https://sketchfab.com/selkie3d), licensed under
+  [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). Changes: the edges were
+  reshaped (the uprights lean by about 12°, the figure is 15% taller and 15% shallower)
+  and the material was replaced.
+
 ## Original work
 
-- The 3D Penrose triangle in the hero (`components/ui/OpticalIllusion.tsx`): built in code
-  for this project.
 - `public/projects/work-*.svg`: wireframe placeholders, made for this project.
