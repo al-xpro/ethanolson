@@ -1,8 +1,8 @@
 import { expect, test, type Page } from "@playwright/test";
 
 async function openContact(page: Page) {
-  await page.goto("/#contact");
-  await page.locator("#contact form").scrollIntoViewIfNeeded();
+  await page.goto("/contact");
+  await page.locator("form").scrollIntoViewIfNeeded();
 }
 
 test("shows field errors and focuses the first one", async ({ page }) => {
@@ -36,7 +36,7 @@ test.describe("without JavaScript", () => {
   test.use({ javaScriptEnabled: false });
 
   test("the form still validates and sends", async ({ page }) => {
-    await page.goto("/");
+    await page.goto("/contact");
     await page.getByLabel("Name", { exact: true }).fill("Ada Lovelace");
     await page.getByRole("button", { name: "Send message" }).click();
     await expect(page.getByText("Please enter a valid e-mail address.")).toBeVisible();
