@@ -10,7 +10,7 @@ import {
 } from "@/lib/contact/schema";
 
 const fieldClass =
-  "w-full bg-transparent border-b border-white/30 py-3 text-lg xl:text-[1.3vw] text-white placeholder:text-white/40 focus:border-white focus:outline-none transition-colors aria-[invalid=true]:border-[#ff8a80]";
+  "w-full bg-transparent border-b border-white/30 py-3 text-lg xl:text-[1.3vw] text-white placeholder:text-white/40 focus:border-white transition-colors aria-[invalid=true]:border-[#ff8a80]";
 const labelClass = "text-xs xl:text-[0.8vw] tracking-[0.3rem] uppercase text-white/70";
 
 export function ContactForm() {

@@ -4,6 +4,39 @@ body {
   font-family: var(--font-playfair);
 }
 
+/* Selection: inverted, like the rest of the monochrome palette */
+::selection {
+  background-color: #fff;
+  color: #111;
+}
+
+[data-surface="light"] ::selection {
+  background-color: #111;
+  color: #fff;
+}
+
+/* One focus style for every link, button and control. currentColor keeps the ring
+   white on dark surfaces and black on the white menu. */
+@layer base {
+  :focus-visible {
+    outline: 2px solid currentColor;
+    outline-offset: 4px;
+  }
+
+  input:focus-visible,
+  textarea:focus-visible,
+  select:focus-visible {
+    outline: 1px solid rgb(255 255 255 / 0.6);
+    outline-offset: 8px;
+  }
+}
+
+/* Outlined display type, used for the large scrolling words */
+.text-outline {
+  color: transparent;
+  -webkit-text-stroke: 1px rgb(255 255 255 / 0.55);
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
