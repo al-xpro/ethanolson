@@ -65,7 +65,7 @@ const AnimatedHeaderSection = ({
           </p>
           <div className="px-5 sm:px-10 xl:px-[1.5vw]">
             <Heading
-              className={`flex flex-col gap-4 text-5xl sm:text-7xl md:text-9xl xl:text-[5vw] max-w-md uppercase md:gap-16 xl:gap-[1.5vw] md:block ${textColor}`}
+              className={`flex flex-col gap-4 text-5xl sm:text-7xl md:text-[min(8rem,12.5vw)] xl:text-[5vw] [@media(max-height:560px)]:text-6xl max-w-md uppercase md:gap-16 xl:gap-[1.5vw] md:block ${textColor}`}
             >
               {titleParts.map((part, index) => (
                 <span key={index}>{part} </span>

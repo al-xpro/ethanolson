@@ -30,7 +30,7 @@ const Hero = () => {
   return (
     <section
       id="home"
-      className="relative flex flex-col h-screen w-full justify-start min-h-[700px] overflow-hidden pt-14 md:pt-20 xl:pt-[4.5vw]"
+      className="relative flex flex-col min-h-[max(100svh,320px)] w-full justify-start overflow-hidden pt-14 md:pt-20 xl:pt-[4.5vw]"
     >
       <AnimatedHeaderSection
         subTitle={heroHeader.subTitle}
@@ -44,7 +44,7 @@ const Hero = () => {
         <figure
           ref={figureRef}
           aria-hidden
-          className={`absolute inset-0 -z-50 min-h-[700px] transition-opacity duration-1000 ${
+          className={`absolute inset-0 -z-50 transition-opacity duration-1000 ${
             sceneReady ? "opacity-100" : "opacity-0"
           }`}
         >
