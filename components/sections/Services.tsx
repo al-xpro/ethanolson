@@ -5,6 +5,7 @@ import Image from "next/image";
 import { servicesData, servicesHeader } from "@/content/sections";
 import { gsap, useGSAP, MOTION_OK } from "@/lib/gsap";
 import AnimatedHeaderSection from "../ui/AnimatedHeaderSection";
+import { PillLink } from "../ui/PillLink";
 
 const Services = () => {
   const contentRef = useRef<HTMLDivElement>(null);
@@ -111,6 +112,9 @@ const Services = () => {
             </div>
           ))}
         </div>
+      </div>
+      <div className="flex justify-center py-16 xl:py-[4vw]">
+        <PillLink href="/services">Explore the services →</PillLink>
       </div>
     </section>
   );
