@@ -4,7 +4,7 @@ import { useRef } from "react";
 import Image from "next/image";
 import AnimatedHeaderSection from "@/components/ui/AnimatedHeaderSection";
 import { PillLink } from "@/components/ui/PillLink";
-import { aboutHome, aboutPortrait } from "@/content/about";
+import { aboutHome, aboutHomePortrait } from "@/content/about";
 import { gsap, useGSAP, MOTION_OK } from "@/lib/gsap";
 
 export default function About() {
@@ -13,18 +13,6 @@ export default function About() {
   useGSAP(
     () => {
       gsap.matchMedia().add(MOTION_OK, () => {
-        // The portrait opens like a camera shutter: a thin slit that widens with the scroll
-        gsap
-          .timeline({
-            scrollTrigger: { trigger: ".about-portrait", start: "top 90%", end: "center 55%", scrub: true },
-          })
-          .fromTo(
-            ".about-portrait",
-            { clipPath: "inset(48% 0% 48% 0% round 1.5rem)" },
-            { clipPath: "inset(0% 0% 0% 0% round 1.5rem)", ease: "none" }
-          )
-          .fromTo(".about-portrait img", { scale: 1.3 }, { scale: 1, ease: "none" }, 0);
-
         gsap.from(".about-stat", {
           y: 40,
           opacity: 0,
@@ -49,13 +37,13 @@ export default function About() {
       />
 
       <div className="grid gap-12 lg:grid-cols-2 xl:gap-[4vw] px-5 sm:px-10 xl:px-[1.5vw] pb-24 xl:pb-[6vw] text-white">
-        <div className="about-portrait relative aspect-square overflow-hidden rounded-3xl xl:rounded-[2vw]">
+        <div className="relative aspect-square overflow-hidden rounded-3xl xl:rounded-[2vw]">
           <Image
-            src={aboutPortrait.src}
-            alt={aboutPortrait.alt}
-            fill
+            src={aboutHomePortrait.src}
+            alt={aboutHomePortrait.alt}
+            placeholder="blur"
             sizes="(min-width: 1024px) 50vw, 100vw"
-            className="object-cover grayscale contrast-125 brightness-90"
+            className="h-full w-full object-cover grayscale contrast-125 brightness-90"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
         </div>

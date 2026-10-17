@@ -15,17 +15,6 @@ export function AboutView() {
   useGSAP(
     () => {
       gsap.matchMedia().add(MOTION_OK, () => {
-        // Portrait: an aperture that opens from the center as the page scrolls
-        gsap.fromTo(
-          ".about-aperture",
-          { clipPath: "circle(14% at 50% 50%)" },
-          {
-            clipPath: "circle(100% at 50% 50%)",
-            ease: "none",
-            scrollTrigger: { trigger: ".about-aperture", start: "top 85%", end: "bottom 60%", scrub: true },
-          }
-        );
-
         // Story: each line slides up out of its own mask
         gsap.utils.toArray<HTMLElement>(".about-story p").forEach((paragraph) => {
           const split = SplitText.create(paragraph, { type: "lines", mask: "lines" });
@@ -90,16 +79,17 @@ export function AboutView() {
   return (
     <div ref={container} className="text-white">
       <section className="grid gap-12 lg:grid-cols-[1fr_1.15fr] xl:gap-[5vw] px-5 sm:px-10 xl:px-[1.5vw] pb-24 xl:pb-[6vw]">
-        <div className="about-aperture relative aspect-[4/5] overflow-hidden rounded-3xl xl:rounded-[2vw] lg:sticky lg:top-24 self-start">
+        {/* 16:9, so the crop keeps Ethan at his desk, coding */}
+        <div className="relative aspect-video overflow-hidden rounded-3xl xl:rounded-[2vw] self-start">
           <Image
             src={aboutPortrait.src}
             alt={aboutPortrait.alt}
-            fill
+            placeholder="blur"
             priority
             sizes="(min-width: 1024px) 45vw, 100vw"
-            className="object-cover grayscale contrast-125 brightness-90"
+            className="h-full w-full object-cover object-[center_55%] grayscale contrast-125 brightness-90"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
         </div>
         <div className="about-story flex flex-col gap-8 xl:gap-[2vw] text-xl sm:text-2xl xl:text-[1.8vw] leading-snug text-white/85 text-pretty">
           {aboutPage.story.map((paragraph) => (

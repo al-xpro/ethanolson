@@ -1,8 +1,14 @@
-export const aboutPortrait = {
-  src: "/images/hero.avif",
+import heroPortrait from "@/public/images/hero.jpg";
+import codingPortrait from "@/public/images/about.jpg";
+
+export const aboutHomePortrait = {
+  src: heroPortrait,
   alt: "Ethan Olson, smiling, in a sunlit studio",
-  width: 1200,
-  height: 1200,
+};
+
+export const aboutPortrait = {
+  src: codingPortrait,
+  alt: "Ethan Olson coding at his desk",
 };
 
 // Home page section
