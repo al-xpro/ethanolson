@@ -1,5 +1,3 @@
-import type { Picture } from "@/content/sections";
-
 export type Service = {
   slug: string;
   title: string;
@@ -9,7 +7,7 @@ export type Service = {
   process: { title: string; text: string }[];
   stack: string[];
   timeline: string;
-  visual: Picture;
+  schema: "system" | "motion" | "architecture" | "vitals";
 };
 
 export const servicesPage = {
@@ -18,6 +16,9 @@ export const servicesPage = {
   text: `Four ways I help teams ship,
   from the first interface
   to the last server request.`,
+  timelineLabel: "Services",
+  stepLabel: "Step",
+  durationLabel: "Typical timeline",
   deliverablesLabel: "What you get",
   processLabel: "How I work",
   cta: { title: "Not sure which one you need?", link: "Tell me about your project" },
@@ -44,7 +45,7 @@ export const services: Service[] = [
     ],
     stack: ["Figma", "Storybook", "Tailwind CSS", "Design tokens"],
     timeline: "3–8 weeks",
-    visual: { src: "/images/first-service.png", alt: "" },
+    schema: "system",
   },
   {
     slug: "interactive-front-ends",
@@ -66,7 +67,7 @@ export const services: Service[] = [
     ],
     stack: ["Next.js", "React", "GSAP", "Three.js", "React Three Fiber"],
     timeline: "4–10 weeks",
-    visual: { src: "/images/second-service.png", alt: "" },
+    schema: "motion",
   },
   {
     slug: "back-ends-apis",
@@ -88,7 +89,7 @@ export const services: Service[] = [
     ],
     stack: ["Node.js", "PostgreSQL", "Drizzle", "Zod", "Storyblok", "Stripe"],
     timeline: "4–12 weeks",
-    visual: { src: "/images/third-service.png", alt: "" },
+    schema: "architecture",
   },
   {
     slug: "performance-seo",
@@ -110,6 +111,6 @@ export const services: Service[] = [
     ],
     stack: ["Lighthouse", "PageSpeed Insights", "Schema.org", "Next.js"],
     timeline: "2–6 weeks",
-    visual: { src: "/images/fourth-service.jpg", alt: "" },
+    schema: "vitals",
   },
 ];
