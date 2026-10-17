@@ -1,8 +1,9 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { legalLabels, type LegalPage } from "@/content/legal";
-import { gsap, useGSAP, MOTION_OK, ScrollTrigger } from "@/lib/gsap";
+import { SectionStripe } from "@/components/ui/SectionStripe";
+import { gsap, useGSAP, MOTION_OK } from "@/lib/gsap";
 
 const slugify = (text: string) =>
   text
@@ -13,31 +14,32 @@ const slugify = (text: string) =>
 
 export function LegalView({ page }: { page: LegalPage }) {
   const container = useRef<HTMLDivElement>(null);
-  const [current, setCurrent] = useState(slugify(page.sections[0].heading));
+  const items = page.sections.map((section) => ({ id: slugify(section.heading), label: section.heading }));
+  const [visible, setVisible] = useState<string[]>([items[0].id]);
+
+  // Every section that's on screen lights up in the table of contents
+  useEffect(() => {
+    const onScreen = new Set<string>();
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) =>
+          entry.isIntersecting ? onScreen.add(entry.target.id) : onScreen.delete(entry.target.id)
+        );
+        const ordered = items.map((item) => item.id).filter((id) => onScreen.has(id));
+        if (ordered.length) setVisible(ordered);
+      },
+      // Ignore the strip hidden under the sticky stripe at the top
+      { rootMargin: "-72px 0px 0px 0px" }
+    );
+    container.current?.querySelectorAll(".legal-section").forEach((section) => observer.observe(section));
+    return () => observer.disconnect();
+    // The sections come from static content
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useGSAP(
     () => {
-      // The table of contents follows the reader (no motion involved, so always on)
-      gsap.utils.toArray<HTMLElement>(".legal-section").forEach((section) => {
-        ScrollTrigger.create({
-          trigger: section,
-          start: "top 40%",
-          end: "bottom 40%",
-          onToggle: (self) => self.isActive && setCurrent(section.id),
-        });
-      });
-
       gsap.matchMedia().add(MOTION_OK, () => {
-        gsap.fromTo(
-          ".legal-progress",
-          { scaleX: 0 },
-          {
-            scaleX: 1,
-            ease: "none",
-            scrollTrigger: { trigger: ".legal-body", start: "top 30%", end: "bottom bottom", scrub: true },
-          }
-        );
-
         gsap.utils.toArray<HTMLElement>(".legal-heading").forEach((heading) => {
           gsap.from(heading, {
             x: -40,
@@ -53,32 +55,28 @@ export function LegalView({ page }: { page: LegalPage }) {
   );
 
   return (
-    <div ref={container} className="text-white">
-      <div
-        aria-hidden
-        className="legal-progress fixed left-0 top-0 z-150 h-[3px] w-full origin-left scale-x-0 bg-white motion-reduce:hidden"
-      />
+    <div ref={container} className="px-5 sm:px-10 xl:px-[1.5vw] pb-24 xl:pb-[6vw] text-white">
+      <SectionStripe items={items} current={visible[0]} label={legalLabels.onThisPage} />
 
-      <div className="px-5 sm:px-10 xl:px-[1.5vw] pb-24 xl:pb-[6vw] grid gap-12 lg:grid-cols-[1fr_2.4fr] xl:gap-[5vw]">
+      <div className="grid gap-12 pt-10 lg:pt-0 lg:grid-cols-[1fr_2.4fr] xl:gap-[5vw]">
         <aside className="lg:sticky lg:top-32 xl:top-[8vw] self-start">
           <p className="text-xs xl:text-[0.8vw] tracking-[0.3rem] uppercase text-white/50">
             {legalLabels.updated} {page.updated}
           </p>
           <nav aria-label={legalLabels.onThisPage} className="mt-8 hidden lg:block">
             <ol className="flex flex-col gap-3 xl:gap-[0.7vw] border-l border-white/15">
-              {page.sections.map((section) => {
-                const id = slugify(section.heading);
-                const active = id === current;
+              {items.map((item) => {
+                const active = visible.includes(item.id);
                 return (
-                  <li key={id}>
+                  <li key={item.id}>
                     <a
-                      href={`#${id}`}
+                      href={`#${item.id}`}
                       aria-current={active ? "location" : undefined}
-                      className={`-ml-px block border-l pl-4 xl:pl-[1vw] text-sm xl:text-[0.95vw] transition-colors duration-300 ${
-                        active ? "border-white text-white" : "border-transparent text-white/50 hover:text-white"
+                      className={`-ml-px block border-l pl-4 xl:pl-[1vw] text-sm xl:text-[0.95vw] transition-colors duration-500 ${
+                        active ? "border-white text-white" : "border-transparent text-white/45 hover:text-white"
                       }`}
                     >
-                      {section.heading}
+                      {item.label}
                     </a>
                   </li>
                 );
@@ -87,7 +85,7 @@ export function LegalView({ page }: { page: LegalPage }) {
           </nav>
         </aside>
 
-        <div className="legal-body flex flex-col gap-14 xl:gap-[3.5vw] max-w-3xl xl:max-w-[48vw]">
+        <div className="flex flex-col gap-14 xl:gap-[3.5vw] max-w-3xl xl:max-w-[48vw]">
           <p className="text-xl sm:text-2xl xl:text-[1.8vw] leading-snug text-white/85 text-pretty">
             {page.intro}
           </p>
@@ -95,7 +93,7 @@ export function LegalView({ page }: { page: LegalPage }) {
             <section
               key={section.heading}
               id={slugify(section.heading)}
-              className="legal-section scroll-mt-32 flex flex-col gap-4 xl:gap-[1vw]"
+              className="legal-section scroll-mt-24 lg:scroll-mt-32 flex flex-col gap-4 xl:gap-[1vw]"
             >
               <h2 className="legal-heading text-2xl sm:text-3xl xl:text-[2.2vw] uppercase leading-none">
                 {section.heading}
