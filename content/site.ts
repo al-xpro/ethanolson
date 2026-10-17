@@ -8,7 +8,7 @@ export const site = {
   role: "Design Engineer",
   title: "Ethan Olson | Design Engineer",
   description:
-    "Concept portfolio of Ethan Olson, a fictional design engineer. Designed and developed by AlxPro.",
+    "Ethan Olson, design engineer: full-stack web products, from the first sketch to the database. Designed and developed by AlxPro.",
   url: process.env.NEXT_PUBLIC_SITE_URL || "https://ethanolson.dev",
   email: "hello@ethanolson.dev",
   creator: {
@@ -18,6 +18,7 @@ export const site = {
   },
   navigation: [
     { href: "/", label: "Home" },
+    { href: "/about", label: "About" },
     { href: "/services", label: "Services" },
     { href: "/works", label: "Works" },
     { href: "/contact", label: "Contact" },

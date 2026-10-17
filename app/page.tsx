@@ -6,6 +6,7 @@ import Works from "@/components/sections/Works";
 import { MiddleParallax } from "@/components/sections/MiddleParallax";
 import OutroParallax from "@/components/sections/OutroParallax";
 import Testimonials from "@/components/sections/Testimonials";
+import About from "@/components/sections/About";
 import { site } from "@/content/site";
 
 const jsonLd = {
@@ -36,6 +37,7 @@ export default function Home() {
       <MiddleParallax />
       <Testimonials />
       <OutroParallax />
+      <About />
     </>
   );
 }
