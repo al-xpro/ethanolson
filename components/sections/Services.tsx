@@ -43,7 +43,7 @@ const Services = () => {
   return (
     <section
       id="services"
-      className="relative bg-black text-white overflow-hidden rounded-t-4xl xl:rounded-t-[2.5vw]"
+      className="relative bg-black text-white overflow-hidden"
     >
       {/* HEADER SECTION: shrink-0 prevents it from being crushed by the flex column */}
       <div className="shrink-0">

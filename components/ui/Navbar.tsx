@@ -308,7 +308,7 @@ const Navbar = () => {
       </nav>
 
       <div className="fixed z-200 top-4 xl:top-[0.5vw] inset-x-0 pointer-events-none min-w-[320px]">
-        <div className="mx-auto w-full px-10 xl:px-[2.5vw] flex items-center justify-end gap-4">
+        <div className="mx-auto w-full px-6 xl:px-[2.5vw] flex items-center justify-end gap-4">
           <div className="flex items-center gap-3 xl:gap-[1vw]">
             <Link
               href="/contact"

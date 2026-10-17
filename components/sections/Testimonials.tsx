@@ -27,7 +27,9 @@ export default function Testimonials() {
         });
 
         // Fanned like a hand of cards: each one behind is smaller and turned
-        cards.forEach((card, index) => gsap.set(card, { zIndex: cards.length - index, ...fan(index) }));
+        cards.forEach((card, index) =>
+          gsap.set(card, { zIndex: cards.length - index, ...fan(index) }),
+        );
         gsap.set(".testimonials-closing", { opacity: 0, scale: 0.92 });
 
         const tl = gsap.timeline({
@@ -53,13 +55,21 @@ export default function Testimonials() {
             duration: 1,
           });
           cards.slice(index + 1).forEach((next, offset) => {
-            tl.to(next, { ...fan(offset), ease: "power2.out", duration: 1 }, "<");
+            tl.to(
+              next,
+              { ...fan(offset), ease: "power2.out", duration: 1 },
+              "<",
+            );
           });
         });
-        tl.to(".testimonials-closing", { opacity: 1, scale: 1, ease: "power2.out", duration: 0.8 }, "-=0.6");
+        tl.to(
+          ".testimonials-closing",
+          { opacity: 1, scale: 1, ease: "power2.out", duration: 0.8 },
+          "-=0.6",
+        );
       });
     },
-    { scope: deck }
+    { scope: deck },
   );
 
   return (
@@ -77,7 +87,7 @@ export default function Testimonials() {
         className="relative flex h-[100svh] min-h-[320px] items-center justify-center overflow-hidden px-5 motion-reduce:h-auto motion-reduce:flex-col motion-reduce:gap-6 motion-reduce:py-10"
       >
         <div className="testimonials-closing absolute inset-0 flex flex-col items-center justify-center gap-6 xl:gap-[2vw] px-5 text-center text-white motion-reduce:relative motion-reduce:order-last motion-reduce:py-10">
-          <p className="text-4xl sm:text-6xl xl:text-[5vw] uppercase leading-none max-w-4xl xl:max-w-[60vw]">
+          <p className="text-4xl sm:text-6xl xl:text-[5vw] uppercase leading-none text-balance max-w-4xl xl:max-w-[60vw]">
             {testimonialsHeader.closing.title}
           </p>
           <PillLink href="/contact">{testimonialsHeader.closing.link}</PillLink>
@@ -102,7 +112,7 @@ export default function Testimonials() {
               <div className="flex items-center gap-4 xl:gap-[1vw]">
                 <span
                   aria-hidden
-                  className="flex h-12 w-12 xl:h-[3.2vw] xl:w-[3.2vw] items-center justify-center rounded-full border border-white/30 text-sm xl:text-[0.9vw] tracking-widest [@media(max-height:560px)]:h-9 [@media(max-height:560px)]:w-9 [@media(max-height:560px)]:text-xs"
+                  className="flex h-12 w-12 shrink-0 xl:h-[3.2vw] xl:w-[3.2vw] items-center justify-center rounded-full border border-white/30 text-sm xl:text-[0.9vw] tracking-widest [@media(max-height:560px)]:h-9 [@media(max-height:560px)]:w-9 [@media(max-height:560px)]:text-xs"
                 >
                   {initials(item.name)}
                 </span>

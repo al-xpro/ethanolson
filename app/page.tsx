@@ -32,12 +32,12 @@ export default function Home() {
       <Hero />
       <ZoomParallax />
       <IntroParallax />
+      <About />
       <Services />
       <Works />
       <MiddleParallax />
       <Testimonials />
       <OutroParallax />
-      <About />
     </>
   );
 }
