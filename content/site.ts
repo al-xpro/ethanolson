@@ -16,6 +16,16 @@ export const site = {
     brand: "AlxPro",
     url: "https://alxpro.com",
   },
+  navigation: [
+    { href: "/", label: "Home" },
+    { href: "/services", label: "Services" },
+    { href: "/works", label: "Works" },
+    { href: "/contact", label: "Contact" },
+  ],
+  legal: [
+    { href: "/privacy", label: "Privacy Policy" },
+    { href: "/terms", label: "Terms & Conditions" },
+  ],
   // Links with an empty href are not rendered.
   socials: [
     { name: "Instagram", href: "" },
