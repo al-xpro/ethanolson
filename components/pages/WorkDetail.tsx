@@ -3,7 +3,7 @@
 import { useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { type Work, workCover, workLabels } from "@/content/works";
+import { type Work, workCover, workLabels, coverSize, darkBlur } from "@/content/works";
 import { WorkFeature } from "@/components/ui/WorkFeature";
 import { ProjectTemplates } from "@/components/ui/ProjectTemplates";
 import { gsap, useGSAP, MOTION_OK, SplitText } from "@/lib/gsap";
@@ -28,23 +28,16 @@ export function WorkDetail({ work, next }: { work: Work; next: Work }) {
           .from(title.chars, { yPercent: 100, stagger: 0.03, duration: 0.9, ease: "power4.out" })
           .from(".work-intro > *", { y: 30, opacity: 0, stagger: 0.08, duration: 0.7, ease: "power2.out" }, "<+0.3");
 
-        // Cover, small screens: an inset card that opens up as it scrolls into view
-        mm.add(`${MOTION_OK} and (max-width: 1023px)`, () => {
-          gsap
-            .timeline({ scrollTrigger: { trigger: ".work-cover", start: "top 85%", end: "top 25%", scrub: true } })
-            .fromTo(".work-cover", { clipPath: "inset(4% 6% 4% 6% round 1.5rem)" }, { clipPath: "inset(0% 0% 0% 0% round 0rem)", ease: "none" })
-            .fromTo(".work-cover-image", { scale: 1.1 }, { scale: 1, ease: "none" }, 0);
-        });
-
-        // Cover, large screens: it pins while it opens, so it never runs off the screen
-        mm.add(`${MOTION_OK} and (min-width: 1024px)`, () => {
-          gsap
-            .timeline({
-              scrollTrigger: { trigger: ".work-cover", start: "top top", end: "+=90%", pin: true, scrub: true },
-            })
-            .fromTo(".work-cover", { clipPath: "inset(10% 14% 10% 14% round 2.5vw)" }, { clipPath: "inset(0% 0% 0% 0% round 0vw)", ease: "none" })
-            .fromTo(".work-cover-image", { scale: 1.15 }, { scale: 1, ease: "none" }, 0);
-        });
+        // Cover: the artwork drifts slowly inside its frame while the page scrolls
+        gsap.fromTo(
+          ".work-cover-image",
+          { yPercent: -6 },
+          {
+            yPercent: 6,
+            ease: "none",
+            scrollTrigger: { trigger: ".work-cover", start: "top bottom", end: "bottom top", scrub: true },
+          }
+        );
 
         // Challenge: each word lights up as it's read
         const words = SplitText.create(".work-challenge", { type: "words" });
@@ -156,15 +149,19 @@ export function WorkDetail({ work, next }: { work: Work; next: Work }) {
         </div>
       </header>
 
-      <div className="work-cover relative h-[60vh] sm:h-[80vh] lg:h-screen min-h-[320px] overflow-hidden">
-        <Image
-          src={workCover(work.slug)}
-          alt={`${work.title}, cover`}
-          fill
-          priority
-          sizes="100vw"
-          className="work-cover-image object-cover"
-        />
+      <div className="px-5 sm:px-10 xl:px-[1.5vw]">
+        <div className="work-cover relative aspect-[16/10] overflow-hidden rounded-3xl xl:rounded-[2vw] border border-white/10">
+          <Image
+            src={workCover(work.slug)}
+            alt={`${work.title}, cover`}
+            {...coverSize}
+            placeholder="blur"
+            blurDataURL={darkBlur}
+            priority
+            sizes="100vw"
+            className="work-cover-image absolute inset-x-0 -top-[8%] h-[116%] w-full object-cover"
+          />
+        </div>
       </div>
 
       <section className="px-5 sm:px-10 xl:px-[1.5vw] py-24 xl:py-[7vw] grid gap-12 lg:grid-cols-[1fr_2.2fr] xl:gap-[5vw]">
