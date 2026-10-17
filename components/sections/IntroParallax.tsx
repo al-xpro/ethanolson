@@ -2,6 +2,7 @@
 
 import { useRef } from "react";
 import Image from "next/image";
+import mask from "@/public/images/mask.svg";
 import { introVideo } from "@/content/sections";
 import { gsap, useGSAP } from "@/lib/gsap";
 
@@ -108,7 +109,7 @@ export const IntroParallax = () => {
 
         {/* Mask */}
         <div className="mask absolute inset-0 flex items-center justify-center pointer-events-none z-30">
-          <Image src="/images/mask.svg" alt="" fill className="object-cover" />
+          <Image src={mask} alt="" className="h-full w-full object-cover" />
         </div>
 
         {/* Flow Text (appears after the mask closes, above the mask layer) */}

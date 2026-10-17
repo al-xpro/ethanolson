@@ -82,8 +82,8 @@ const Services = () => {
                 <Image
                   src={service.visual.src}
                   alt={service.visual.alt}
-                  fill
-                  className="object-cover transition-transform duration-700"
+                  placeholder="blur"
+                  className="h-full w-full object-cover transition-transform duration-700"
                   sizes="(max-width: 1024px) 100vw, 50vw"
                 />
 

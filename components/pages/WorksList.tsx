@@ -3,7 +3,7 @@
 import { useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { works, workCover } from "@/content/works";
+import { works, workCover, coverSize, darkBlur } from "@/content/works";
 import { gsap, useGSAP, MOTION_OK, SplitText } from "@/lib/gsap";
 
 export function WorksList() {
@@ -101,9 +101,11 @@ export function WorksList() {
                 <Image
                   src={workCover(work.slug)}
                   alt=""
-                  fill
+                  {...coverSize}
+                  placeholder="blur"
+                  blurDataURL={darkBlur}
                   sizes="100vw"
-                  className="object-cover"
+                  className="h-full w-full object-cover"
                 />
               </span>
             </Link>
@@ -124,7 +126,15 @@ export function WorksList() {
         >
           {works.map((work) => (
             <div key={work.slug} className="relative h-full w-full">
-              <Image src={workCover(work.slug)} alt="" fill sizes="30vw" className="object-cover" />
+              <Image
+                src={workCover(work.slug)}
+                alt=""
+                {...coverSize}
+                placeholder="blur"
+                blurDataURL={darkBlur}
+                sizes="30vw"
+                className="h-full w-full object-cover"
+              />
             </div>
           ))}
         </div>

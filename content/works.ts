@@ -192,6 +192,13 @@ export const worksPage = {
   Each one, in detail.`,
 };
 
+// The artwork is SVG, so its size is declared here and a dark blur stands in while it loads
+export const coverSize = { width: 1600, height: 1000 };
+export const screenSize = { width: 900, height: 1600 };
+export const darkBlur = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(
+  '<svg xmlns="http://www.w3.org/2000/svg" width="8" height="5"><rect width="8" height="5" fill="#161616"/><rect x="2" y="1" width="4" height="3" fill="#222"/></svg>'
+)}`;
+
 export const workCover = (slug: string) => `/works/${slug}/cover.svg`;
 export const workScreens = (slug: string) =>
   [1, 2, 3].map((n) => `/works/${slug}/screen-${n}.svg`);
