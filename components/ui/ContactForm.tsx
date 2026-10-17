@@ -40,6 +40,8 @@ export function ContactForm() {
   const [clientErrors, setClientErrors] = useState<Errors>({});
   const [touched, setTouched] = useState<Set<ContactField>>(new Set());
   const [typing, setTyping] = useState<ContactField | null>(null);
+  // Set when Send is pressed on an incomplete form: every error shows, and focus moves
+  const [attempts, setAttempts] = useState(0);
 
   const serverErrors: Errors = state.status === "error" ? state.fieldErrors : {};
   const values = state.status === "error" ? state.values : {};
@@ -51,11 +53,11 @@ export function ContactForm() {
     if (formRef.current) setClientErrors(validate(formRef.current));
   }, [state]);
 
-  // After a failed server submit, take the visitor to the first problem
+  // After a failed submit (server or client), take the visitor to the first problem
   useEffect(() => {
-    if (state.status !== "error") return;
+    if (state.status !== "error" && attempts === 0) return;
     formRef.current?.querySelector<HTMLElement>('[aria-invalid="true"]')?.focus();
-  }, [state]);
+  }, [state, attempts]);
 
   if (state.status === "success") {
     return (
@@ -66,10 +68,11 @@ export function ContactForm() {
     );
   }
 
-  // A field shows its error after it's been left, never while it's being typed in
+  // A field shows its error once something was typed in it and it was left, or after Send
+  // is pressed; never while it's being typed in
   const errorFor = (field: ContactField) => {
     if (typing === field) return undefined;
-    if (touched.has(field)) return clientErrors[field];
+    if (attempts > 0 || touched.has(field)) return clientErrors[field];
     return hydrated ? undefined : serverErrors[field] ?? clientErrors[field];
   };
 
@@ -78,10 +81,14 @@ export function ContactForm() {
     if (formRef.current) setClientErrors(validate(formRef.current));
   };
 
-  const handleBlur = (field: ContactField) => () => {
-    setTyping(null);
-    setTouched((current) => new Set(current).add(field));
-  };
+  const handleBlur =
+    (field: ContactField) =>
+    (event: React.FocusEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+      setTyping(null);
+      // Leaving an empty field isn't a mistake yet
+      if (event.currentTarget.value.trim() === "") return;
+      setTouched((current) => new Set(current).add(field));
+    };
 
   const fieldProps = (field: ContactField) => {
     const error = errorFor(field);
@@ -109,6 +116,15 @@ export function ContactForm() {
   };
 
   const isValid = Object.keys(clientErrors).length === 0;
+  const locked = hydrated && !isValid;
+
+  // Looks disabled until the form is valid, but stays clickable to explain what's missing
+  const handleSend = (event: React.MouseEvent<HTMLButtonElement>) => {
+    if (!locked) return;
+    event.preventDefault();
+    setTyping(null);
+    setAttempts((count) => count + 1);
+  };
 
   return (
     <form
@@ -175,8 +191,10 @@ export function ContactForm() {
 
       <button
         type="submit"
-        disabled={pending || (hydrated && !isValid)}
-        className="self-start rounded-full bg-white px-8 py-4 xl:px-[2vw] xl:py-[1vw] text-sm xl:text-[0.9vw] uppercase tracking-widest text-black transition-opacity duration-300 hover:opacity-80 disabled:cursor-not-allowed disabled:opacity-40"
+        disabled={pending}
+        aria-disabled={locked}
+        onClick={handleSend}
+        className="self-start rounded-full bg-white px-8 py-4 xl:px-[2vw] xl:py-[1vw] text-sm xl:text-[0.9vw] uppercase tracking-widest text-black transition-opacity duration-300 hover:opacity-80 disabled:opacity-40 aria-disabled:cursor-not-allowed aria-disabled:opacity-40"
       >
         {pending ? "Sending…" : "Send message"}
       </button>
