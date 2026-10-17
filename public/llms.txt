@@ -1,19 +1,21 @@
 # Ethan Olson | Design Engineer (concept portfolio)
 
-> A concept portfolio for Ethan Olson, a fictional design engineer. The site was designed and developed by Alex Prostamo (AlxPro, https://alxpro.com) to show a full-stack, motion-rich web build. Ethan Olson is not a real person, and the works shown are placeholders.
+> A concept portfolio for Ethan Olson, a fictional design engineer. The site was designed and developed by Alex Prostamo (AlxPro, https://alxpro.com) to show a full-stack, motion-rich web build. Ethan Olson is not a real person, and the projects, clients and testimonials are illustrative.
 
 ## About the site
 
-- One page, statically prerendered with Next.js 16 (App Router), React 19, TypeScript and Tailwind CSS 4.
+- Statically prerendered with Next.js 16 (App Router), React 19, TypeScript and Tailwind CSS 4.
 - Scroll scenes are built with GSAP ScrollTrigger and Lenis smooth scrolling, and fall back to static layouts when the visitor prefers reduced motion.
 - The hero shows a real-time 3D optical illusion (modified from "Optical Illusions" by Johannes R., CC BY 4.0), rendered with React Three Fiber and three.js.
 
-## Sections
+## Pages
 
-- Home: introduction of Ethan Olson as a design engineer.
-- Services: product design and design systems, interactive front ends, back ends and APIs, performance and SEO.
-- Works: a gallery of placeholder projects. Case studies are coming soon.
-- Contact: e-mail.
+- Home (/): introduction, services, works, testimonials and a short about.
+- About (/about): experience, technical and soft skills, and interests.
+- Services (/services): product design and design systems, interactive front ends, back ends and APIs, performance and SEO.
+- Works (/works): five illustrative projects, each with its own page (/works/[slug]).
+- Contact (/contact): a contact form and an e-mail address.
+- Privacy policy (/privacy) and terms (/terms).
 
 ## Creator
 

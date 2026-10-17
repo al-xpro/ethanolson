@@ -31,4 +31,4 @@ repository. They are not for resale.
 
 ## Original work
 
-- `public/projects/work-*.svg`: wireframe placeholders, made for this project.
+- `public/works/`: project covers and screens, made for this project.
