@@ -11,6 +11,20 @@ test("the menu links to every page, and marks the current one", async ({ page })
   await expect(page.getByRole("heading", { level: 1 })).toContainText("Services");
 });
 
+test("the home works gallery links to the projects", async ({ page }) => {
+  await page.goto("/");
+  await page.getByRole("link", { name: /^Fieldbook, Editorial platform/ }).first().click();
+  await expect(page).toHaveURL(/\/works\/fieldbook$/);
+});
+
+test("the about page is in the menu", async ({ page }) => {
+  await page.goto("/");
+  await page.getByRole("button", { name: "Open menu" }).click();
+  await page.getByRole("navigation", { name: "Main" }).getByRole("link", { name: "About" }).click();
+  await expect(page).toHaveURL(/\/about$/);
+  await expect(page.getByRole("heading", { level: 2, name: "Experience" })).toBeVisible();
+});
+
 test("a project opens from the works list, and links back", async ({ page }) => {
   await page.goto("/works");
   await page.getByRole("link", { name: /Mirelle Health/ }).click();
