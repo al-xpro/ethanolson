@@ -21,9 +21,15 @@ export function OpticalIllusion({
   const { scene } = useGLTF(MODEL);
 
   const { viewport } = useThree();
-  // Fit narrow screens, and sit below the hero text on phones
-  const fit = Math.min(1, viewport.width / 2.6);
-  const offsetY = viewport.aspect < 1 ? -viewport.height * 0.16 : 0;
+  // At full size the figure spans about 2.6 × 3 scene units, float and rotation included.
+  // It's fitted into the area left for it: the lower 55% of portrait screens (under the
+  // hero text), or 86% of the height elsewhere, so it never touches the edges.
+  const portrait = viewport.aspect < 1;
+  const area = portrait
+    ? { width: viewport.width * 0.92, height: viewport.height * 0.55 }
+    : { width: viewport.width * 0.9, height: viewport.height * 0.86 };
+  const fit = Math.min(1, area.width / 2.6, area.height / 3);
+  const offsetY = portrait ? -viewport.height * 0.2 : 0;
 
   // Polished gunmetal: dark where it faces the room, white where it mirrors a softbox
   const material = useMemo(
