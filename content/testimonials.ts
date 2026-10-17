@@ -15,7 +15,7 @@ export const testimonialsHeader = {
   text: `What working with Ethan
   feels like, in the words
   of the people he built for.`,
-  note: "Sample testimonials: the people and companies are fictional, like this concept site.",
+  closing: { title: "Your product could be next.", link: "Start a project" },
 };
 
 export const testimonials: Testimonial[] = [
