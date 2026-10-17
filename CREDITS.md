@@ -13,6 +13,7 @@ repository. They are not for resale.
 - `first-service.png`, `second-service.png`, `third-service.png`, `fourth-service.jpg`
 - `water-spray.jpg`, `waving-water.jpg`
 - `landscape-desktop.jpg`, `landscape-mobile.jpg`
+- `hero.jpg`, `about.jpg` (portraits on the home and about pages)
 
 ## Video
 
