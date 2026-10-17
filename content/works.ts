@@ -13,7 +13,16 @@ export type Work = {
   challenge: string;
   solution: string[];
   results: { value: number; prefix?: string; suffix?: string; label: string }[];
+  feature: WorkFeature;
 };
+
+// One simple, project-specific section per work
+export type WorkFeature =
+  | { kind: "compare"; title: string; before: string[]; after: string }
+  | { kind: "collapse"; title: string; from: number; steps: string[] }
+  | { kind: "swatches"; title: string; swatches: { name: string; tone: string }[] }
+  | { kind: "blocks"; title: string; blocks: string[] }
+  | { kind: "sequence"; title: string; steps: { time: string; label: string }[] };
 
 export const works: Work[] = [
   {
@@ -39,6 +48,12 @@ export const works: Work[] = [
       { value: 4, label: "tools replaced by one" },
       { value: 1.2, suffix: " s", label: "dashboard load at peak" },
     ],
+    feature: {
+      kind: "compare",
+      title: "From four tools to one",
+      before: ["Fleet tracker", "Route planner", "Delivery spreadsheet", "Group chat"],
+      after: "One live map",
+    },
   },
   {
     slug: "mirelle-health",
@@ -63,6 +78,12 @@ export const works: Work[] = [
       { value: 52, suffix: "%", label: "fewer calls to the front desk" },
       { value: 100, label: "Lighthouse accessibility score" },
     ],
+    feature: {
+      kind: "collapse",
+      title: "Eleven steps became three",
+      from: 11,
+      steps: ["Choose a service", "Pick a time", "Confirm"],
+    },
   },
   {
     slug: "tenebre-audio",
@@ -87,6 +108,17 @@ export const works: Work[] = [
       { value: 22, suffix: "%", label: "fewer returns for finish mismatch" },
       { value: 1.8, suffix: " s", label: "Largest Contentful Paint on mobile" },
     ],
+    feature: {
+      kind: "swatches",
+      title: "Every finish, in 3D",
+      swatches: [
+        { name: "Smoked oak", tone: "#5c5c5c" },
+        { name: "Walnut", tone: "#363636" },
+        { name: "Brushed steel", tone: "#c4c4c4" },
+        { name: "Black anodised", tone: "#141414" },
+        { name: "Braided cable", tone: "#8c8c8c" },
+      ],
+    },
   },
   {
     slug: "fieldbook",
@@ -111,6 +143,11 @@ export const works: Work[] = [
       { value: 64, suffix: "%", label: "longer average reading time" },
       { value: 12, suffix: "k", label: "newsletter subscribers in six months" },
     ],
+    feature: {
+      kind: "blocks",
+      title: "A library of story blocks",
+      blocks: ["Map", "Timeline", "Scroll scene", "Pull quote", "Gallery", "Data chart", "Audio", "Footnotes"],
+    },
   },
   {
     slug: "ardent-ledger",
@@ -135,6 +172,15 @@ export const works: Work[] = [
       { value: 7, suffix: " min", label: "from sign-up to first forecast" },
       { value: 0, label: "rounding errors in production" },
     ],
+    feature: {
+      kind: "sequence",
+      title: "Value before paperwork",
+      steps: [
+        { time: "Minute 1", label: "Connect a bank" },
+        { time: "Minute 3", label: "See the cash-flow forecast" },
+        { time: "Day 2", label: "Verify documents" },
+      ],
+    },
   },
 ];
 
@@ -143,7 +189,7 @@ export const worksPage = {
   title: "Works",
   text: `Five products I designed and built,
   from the first sketch to production.
-  Concept projects: the clients are fictional.`,
+  Each one, in detail.`,
 };
 
 export const workCover = (slug: string) => `/works/${slug}/cover.svg`;
@@ -152,7 +198,6 @@ export const workScreens = (slug: string) =>
 
 export const workLabels = {
   back: "All works",
-  concept: "Concept project",
   client: "Client",
   duration: "Duration",
   role: "Role",
@@ -160,6 +205,6 @@ export const workLabels = {
   challenge: "The challenge",
   solution: "What I built",
   results: "Results",
-  resultsNote: "Simulated results for a concept project.",
   next: "Next project",
+  templates: "Templates",
 };

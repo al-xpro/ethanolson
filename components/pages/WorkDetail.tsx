@@ -3,7 +3,9 @@
 import { useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { type Work, workCover, workScreens, workLabels } from "@/content/works";
+import { type Work, workCover, workLabels } from "@/content/works";
+import { WorkFeature } from "@/components/ui/WorkFeature";
+import { ProjectTemplates } from "@/components/ui/ProjectTemplates";
 import { gsap, useGSAP, MOTION_OK, SplitText } from "@/lib/gsap";
 
 const label = "text-xs xl:text-[0.8vw] tracking-[0.3rem] uppercase text-white/50";
@@ -16,7 +18,9 @@ export function WorkDetail({ work, next }: { work: Work; next: Work }) {
 
   useGSAP(
     () => {
-      gsap.matchMedia().add(MOTION_OK, () => {
+      const mm = gsap.matchMedia();
+
+      mm.add(MOTION_OK, () => {
         // Title: letters rise from a mask on load
         const title = SplitText.create(".work-heading", { type: "chars,words", mask: "words" });
         gsap
@@ -24,17 +28,23 @@ export function WorkDetail({ work, next }: { work: Work; next: Work }) {
           .from(title.chars, { yPercent: 100, stagger: 0.03, duration: 0.9, ease: "power4.out" })
           .from(".work-intro > *", { y: 30, opacity: 0, stagger: 0.08, duration: 0.7, ease: "power2.out" }, "<+0.3");
 
-        // Cover: an inset card that opens up into a full-bleed image
-        gsap
-          .timeline({
-            scrollTrigger: { trigger: ".work-cover", start: "top 85%", end: "top 10%", scrub: true },
-          })
-          .fromTo(
-            ".work-cover",
-            { clipPath: "inset(5% 9% 5% 9% round 2.5vw)" },
-            { clipPath: "inset(0% 0% 0% 0% round 0vw)", ease: "none" }
-          )
-          .fromTo(".work-cover-image", { scale: 1.1 }, { scale: 1, ease: "none" }, 0);
+        // Cover, small screens: an inset card that opens up as it scrolls into view
+        mm.add(`${MOTION_OK} and (max-width: 1023px)`, () => {
+          gsap
+            .timeline({ scrollTrigger: { trigger: ".work-cover", start: "top 85%", end: "top 25%", scrub: true } })
+            .fromTo(".work-cover", { clipPath: "inset(4% 6% 4% 6% round 1.5rem)" }, { clipPath: "inset(0% 0% 0% 0% round 0rem)", ease: "none" })
+            .fromTo(".work-cover-image", { scale: 1.1 }, { scale: 1, ease: "none" }, 0);
+        });
+
+        // Cover, large screens: it pins while it opens, so it never runs off the screen
+        mm.add(`${MOTION_OK} and (min-width: 1024px)`, () => {
+          gsap
+            .timeline({
+              scrollTrigger: { trigger: ".work-cover", start: "top top", end: "+=90%", pin: true, scrub: true },
+            })
+            .fromTo(".work-cover", { clipPath: "inset(10% 14% 10% 14% round 2.5vw)" }, { clipPath: "inset(0% 0% 0% 0% round 0vw)", ease: "none" })
+            .fromTo(".work-cover-image", { scale: 1.15 }, { scale: 1, ease: "none" }, 0);
+        });
 
         // Challenge: each word lights up as it's read
         const words = SplitText.create(".work-challenge", { type: "words" });
@@ -65,18 +75,26 @@ export function WorkDetail({ work, next }: { work: Work; next: Work }) {
           });
         });
 
-        // Screens drift at three different speeds
-        gsap.utils.toArray<HTMLElement>(".work-screen").forEach((screen, index) => {
-          gsap.fromTo(
-            screen,
-            { y: () => window.innerHeight * [0.12, 0.3, 0.05][index] },
-            {
-              y: () => window.innerHeight * [-0.08, -0.2, -0.15][index],
-              ease: "none",
-              scrollTrigger: { trigger: ".work-screens", start: "top bottom", end: "bottom top", scrub: true },
-            }
-          );
-        });
+        // Project feature: items rise in, strike lines draw, old steps shrink away
+        const feature = { trigger: ".work-feature", start: "top 75%" };
+        gsap.from(".feature-item", { y: 40, opacity: 0, stagger: 0.08, duration: 0.8, ease: "power3.out", scrollTrigger: feature });
+        gsap.from(".feature-strike", { scaleX: 0, stagger: 0.12, duration: 0.8, delay: 0.5, ease: "power3.inOut", scrollTrigger: feature });
+        gsap.to(".feature-dot", { scale: 0.6, opacity: 0.35, stagger: 0.04, duration: 0.5, delay: 0.3, ease: "power2.out", scrollTrigger: feature });
+
+        // Templates drift at three different speeds, side by side (stacked on phones, they stay put)
+        if (window.matchMedia("(min-width: 640px)").matches) {
+          gsap.utils.toArray<HTMLElement>(".work-template").forEach((template, index) => {
+            gsap.fromTo(
+              template,
+              { y: () => window.innerHeight * [0.1, 0.22, 0.04][index] },
+              {
+                y: () => window.innerHeight * [-0.06, -0.14, -0.1][index],
+                ease: "none",
+                scrollTrigger: { trigger: ".work-templates", start: "top bottom", end: "bottom top", scrub: true },
+              }
+            );
+          });
+        }
 
         // Next project slides in from the right
         gsap.from(".next-title", {
@@ -99,7 +117,7 @@ export function WorkDetail({ work, next }: { work: Work; next: Work }) {
           ← {workLabels.back}
         </Link>
         <p className={`${label} mt-10 xl:mt-[2.5vw]`}>
-          {work.category} · {work.year} · <span className="text-white/80">{workLabels.concept}</span>
+          {work.category} · {work.year}
         </p>
         <h1 className="work-heading mt-4 text-6xl sm:text-8xl xl:text-[9vw] uppercase leading-[0.85]">
           {work.title}
@@ -138,7 +156,7 @@ export function WorkDetail({ work, next }: { work: Work; next: Work }) {
         </div>
       </header>
 
-      <div className="work-cover relative h-[60vh] sm:h-[80vh] lg:h-screen overflow-hidden">
+      <div className="work-cover relative h-[60vh] sm:h-[80vh] lg:h-screen min-h-[320px] overflow-hidden">
         <Image
           src={workCover(work.slug)}
           alt={`${work.title}, cover`}
@@ -171,6 +189,10 @@ export function WorkDetail({ work, next }: { work: Work; next: Work }) {
         </ol>
       </section>
 
+      <section className="work-feature px-5 sm:px-10 xl:px-[1.5vw] pb-24 xl:pb-[7vw]">
+        <WorkFeature feature={work.feature} />
+      </section>
+
       <section
         aria-label={workLabels.results}
         className="mx-5 sm:mx-10 xl:mx-[1.5vw] grid gap-px overflow-hidden rounded-3xl xl:rounded-[2vw] border border-white/15 bg-white/15 sm:grid-cols-3"
@@ -195,25 +217,12 @@ export function WorkDetail({ work, next }: { work: Work; next: Work }) {
           );
         })}
       </section>
-      <p className="px-5 sm:px-10 xl:px-[1.5vw] mt-4 text-xs xl:text-[0.8vw] tracking-widest uppercase text-white/40">
-        {workLabels.resultsNote}
-      </p>
 
-      <section className="work-screens grid grid-cols-3 gap-3 sm:gap-6 xl:gap-[2vw] px-5 sm:px-10 xl:px-[1.5vw] py-24 xl:py-[8vw] overflow-hidden">
-        {workScreens(work.slug).map((src, index) => (
-          <div
-            key={src}
-            className="work-screen relative aspect-[9/16] overflow-hidden rounded-xl sm:rounded-3xl xl:rounded-[2vw] border border-white/15"
-          >
-            <Image
-              src={src}
-              alt={`${work.title}, screen ${index + 1}`}
-              fill
-              sizes="33vw"
-              className="object-cover"
-            />
-          </div>
-        ))}
+      <section
+        aria-label={workLabels.templates}
+        className="work-templates grid gap-4 sm:grid-cols-3 sm:gap-6 xl:gap-[2vw] items-start px-5 sm:px-10 xl:px-[1.5vw] py-24 xl:py-[8vw] overflow-hidden"
+      >
+        <ProjectTemplates slug={work.slug} />
       </section>
 
       <Link
@@ -225,7 +234,7 @@ export function WorkDetail({ work, next }: { work: Work; next: Work }) {
           {next.title}
           <span
             aria-hidden
-            className="transition-transform duration-500 group-hover:translate-x-4 xl:group-hover:translate-x-[2vw]"
+            className="transition-[translate] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-4 xl:group-hover:translate-x-[2vw]"
           >
             →
           </span>
