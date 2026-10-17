@@ -112,6 +112,19 @@ const Navbar = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  // Sticky elements (section stripes) sit below the header while it's visible
+  useEffect(() => {
+    const publish = () => {
+      const bottom = (burgerRef.current?.getBoundingClientRect().bottom ?? 0) + 8;
+      const root = document.documentElement.style;
+      root.setProperty("--header-height", `${bottom}px`);
+      root.setProperty("--header-offset", showHeader ? `${bottom}px` : "0px");
+    };
+    publish();
+    window.addEventListener("resize", publish);
+    return () => window.removeEventListener("resize", publish);
+  }, [showHeader]);
+
   useEffect(() => {
     if (!isOpen) return;
 

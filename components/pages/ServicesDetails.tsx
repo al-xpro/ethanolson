@@ -5,6 +5,7 @@ import { services, servicesPage } from "@/content/services";
 import { PillLink } from "@/components/ui/PillLink";
 import { SectionStripe } from "@/components/ui/SectionStripe";
 import { ServiceSchema } from "@/components/ui/ServiceSchema";
+import { useSmoothAnchor } from "@/lib/useSmoothAnchor";
 import { gsap, useGSAP, MOTION_OK, ScrollTrigger, SplitText } from "@/lib/gsap";
 
 const label = "text-xs xl:text-[0.8vw] tracking-[0.3rem] uppercase text-white/50";
@@ -13,6 +14,7 @@ const number = (index: number) => String(index + 1).padStart(2, "0");
 export function ServicesDetails() {
   const container = useRef<HTMLDivElement>(null);
   const [current, setCurrent] = useState(0);
+  const goTo = useSmoothAnchor();
 
   useGSAP(
     () => {
@@ -120,6 +122,7 @@ export function ServicesDetails() {
                       </span>
                       <a
                         href={`#${service.slug}`}
+                        onClick={(event) => goTo(event, service.slug)}
                         aria-current={active ? "step" : undefined}
                         className={`block text-lg xl:text-[1.3vw] leading-tight transition-colors duration-500 ${
                           active ? "text-white" : "text-white/45 hover:text-white"

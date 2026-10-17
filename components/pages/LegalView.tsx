@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { legalLabels, type LegalPage } from "@/content/legal";
 import { SectionStripe } from "@/components/ui/SectionStripe";
+import { useSmoothAnchor } from "@/lib/useSmoothAnchor";
 import { gsap, useGSAP, MOTION_OK } from "@/lib/gsap";
 
 const slugify = (text: string) =>
@@ -16,6 +17,7 @@ export function LegalView({ page }: { page: LegalPage }) {
   const container = useRef<HTMLDivElement>(null);
   const items = page.sections.map((section) => ({ id: slugify(section.heading), label: section.heading }));
   const [visible, setVisible] = useState<string[]>([items[0].id]);
+  const goTo = useSmoothAnchor();
 
   // Every section that's on screen lights up in the table of contents
   useEffect(() => {
@@ -64,15 +66,17 @@ export function LegalView({ page }: { page: LegalPage }) {
             {legalLabels.updated} {page.updated}
           </p>
           <nav aria-label={legalLabels.onThisPage} className="mt-8 hidden lg:block">
-            <ol className="flex flex-col gap-3 xl:gap-[0.7vw] border-l border-white/15">
+            {/* No gap between entries: their borders touch, so active ones form one line */}
+            <ol className="flex flex-col border-l border-white/15">
               {items.map((item) => {
                 const active = visible.includes(item.id);
                 return (
                   <li key={item.id}>
                     <a
                       href={`#${item.id}`}
+                      onClick={(event) => goTo(event, item.id)}
                       aria-current={active ? "location" : undefined}
-                      className={`-ml-px block border-l pl-4 xl:pl-[1vw] text-sm xl:text-[0.95vw] transition-colors duration-500 ${
+                      className={`-ml-px block border-l py-1.5 xl:py-[0.35vw] pl-4 xl:pl-[1vw] text-sm xl:text-[0.95vw] transition-colors duration-500 ${
                         active ? "border-white text-white" : "border-transparent text-white/45 hover:text-white"
                       }`}
                     >

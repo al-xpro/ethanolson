@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useId, useRef, useState } from "react";
+import { useSmoothAnchor } from "@/lib/useSmoothAnchor";
 
 type Item = { id: string; label: string };
 
@@ -17,6 +18,7 @@ export function SectionStripe({
   label: string;
 }) {
   const [open, setOpen] = useState(false);
+  const goTo = useSmoothAnchor();
   const panelId = useId();
   const root = useRef<HTMLDivElement>(null);
   const currentItem = items.find((item) => item.id === current) ?? items[0];
@@ -38,13 +40,18 @@ export function SectionStripe({
   }, [open]);
 
   return (
-    <div ref={root} className="sticky top-0 z-100 -mx-5 sm:-mx-10 lg:hidden">
+    <div
+      ref={root}
+      data-section-stripe
+      // Below the navbar while it's visible, at the very top once it hides
+      className="sticky top-(--header-offset,0px) z-100 -mx-5 sm:-mx-10 transition-[top] duration-300 lg:hidden"
+    >
       <button
         type="button"
         aria-expanded={open}
         aria-controls={panelId}
         onClick={() => setOpen((value) => !value)}
-        className="flex w-full items-center gap-3 border-y border-white/15 bg-[#111] py-4 pl-5 pr-24 sm:pl-10 text-left text-white"
+        className="flex w-full items-center gap-3 border-y border-white/15 bg-[#111] py-4 px-5 sm:px-10 text-left text-white"
       >
         <span className="text-xs tracking-[0.25rem] uppercase text-white/50 tabular-nums">
           {String(index + 1).padStart(2, "0")}/{String(items.length).padStart(2, "0")}
@@ -62,7 +69,9 @@ export function SectionStripe({
         id={panelId}
         aria-label={label}
         hidden={!open}
-        className="absolute inset-x-0 top-full max-h-[75svh] overflow-y-auto border-b border-white/15 bg-[#161616] shadow-2xl"
+        // Lenis would otherwise take the wheel and touch scroll away from the panel
+        data-lenis-prevent
+        className="absolute inset-x-0 top-full max-h-[75svh] overflow-y-auto overscroll-contain border-b border-white/15 bg-[#161616] shadow-2xl"
       >
         <ol className="flex flex-col py-2">
           {items.map((item, itemIndex) => (
@@ -70,7 +79,10 @@ export function SectionStripe({
               <a
                 href={`#${item.id}`}
                 aria-current={item.id === current ? "location" : undefined}
-                onClick={() => setOpen(false)}
+                onClick={(event) => {
+                  setOpen(false);
+                  goTo(event, item.id);
+                }}
                 className={`flex gap-4 px-5 sm:px-10 py-3 text-base transition-colors duration-300 ${
                   item.id === current ? "text-white" : "text-white/60 hover:text-white"
                 }`}
