@@ -28,7 +28,7 @@ export default async function OpengraphImage({ params }: { params: Promise<{ slu
         }}
       >
         <div style={{ fontSize: 22, letterSpacing: 10, textTransform: "uppercase", opacity: 0.7 }}>
-          {`${work.category} · Concept project`}
+          {`${work.category} · ${work.year}`}
         </div>
         <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
           <div style={{ fontSize: 112, textTransform: "uppercase", lineHeight: 1 }}>

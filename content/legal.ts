@@ -25,7 +25,7 @@ export const privacyPolicy: LegalPage = {
   and what you can do about it.`,
   updated: "17 October 2026",
   intro:
-    "This page explains what personal data this website collects, why, and what you can do about it. Ethan Olson is a fictional design engineer: the site is a concept project designed and developed by Alex Prostamo (AlxPro), who is responsible for the data described here.",
+    "This page explains what personal data this website collects, why, and what you can do about it. The website is designed and developed by Alex Prostamo (AlxPro), who is responsible for the data described here.",
   sections: [
     {
       heading: "Who is responsible",
@@ -103,9 +103,9 @@ export const termsPage: LegalPage = {
     "These terms apply to your use of this website. By using it, you agree to them. If you don't agree, please don't use the site.",
   sections: [
     {
-      heading: "A concept website",
+      heading: "About this website",
       paragraphs: [
-        "Ethan Olson is a fictional design engineer. This website is a concept project designed and developed by Alex Prostamo (AlxPro) to show how a portfolio like this is built. The projects, clients, testimonials and figures shown are fictional and for illustration only.",
+        "This website is designed and developed by Alex Prostamo (AlxPro). The projects, clients, testimonials and figures shown on it are illustrative.",
       ],
     },
     {

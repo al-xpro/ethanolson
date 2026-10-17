@@ -6,7 +6,7 @@ import { worksPage } from "@/content/works";
 export const metadata: Metadata = {
   title: "Works",
   description:
-    "Five concept projects by Ethan Olson: a logistics dashboard, healthcare booking, headless e-commerce, an editorial platform and fintech onboarding.",
+    "Five projects by Ethan Olson: a logistics dashboard, healthcare booking, headless e-commerce, an editorial platform and fintech onboarding.",
   alternates: { canonical: "/works" },
 };
 

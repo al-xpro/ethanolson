@@ -5,7 +5,7 @@ import { termsPage } from "@/content/legal";
 
 export const metadata: Metadata = {
   title: termsPage.title,
-  description: "The terms for using this concept website.",
+  description: "The terms for using this website.",
   alternates: { canonical: "/terms" },
 };
 

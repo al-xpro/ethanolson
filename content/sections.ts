@@ -84,10 +84,6 @@ export const worksHeader: SectionHeader = {
   Five of them, in detail, on the works page.`,
 };
 
-export const workImages: Picture[] = Array.from({ length: 12 }, (_, i) => {
-  const n = String(i + 1).padStart(2, "0");
-  return { src: `/projects/work-${n}.svg`, alt: `Placeholder wireframe for work ${n}` };
-});
 
 // Middle Parallax (decorative, so alt is empty)
 
@@ -118,7 +114,7 @@ export const contactPage = {
   emailLabel: "E-mail",
   replyLabel: "Replies",
   replyText:
-    "Every message is read and answered personally. Concept site: messages reach the AlxPro studio.",
+    "Every message is read and answered personally.",
   socialLabel: "Social media",
 };
 
