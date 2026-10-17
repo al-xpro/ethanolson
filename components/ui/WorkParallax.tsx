@@ -3,7 +3,7 @@
 import { useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { works, workScreens, type Work } from "@/content/works";
+import { works, workScreens, screenSize, darkBlur, type Work } from "@/content/works";
 import { gsap, useGSAP, MOTION_OK } from "@/lib/gsap";
 
 type Tile = { work: Work; src: string };
@@ -78,13 +78,18 @@ const Column = ({ tiles }: { tiles: Tile[] }) => {
           <Image
             src={src}
             alt=""
-            fill
+            {...screenSize}
+            placeholder="blur"
+            blurDataURL={darkBlur}
             sizes="(min-width: 1024px) 25vw, (min-width: 768px) 33vw, 50vw"
-            className="object-cover transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-105"
+            className="h-full w-full object-cover transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-105"
           />
-          <span className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-2 bg-gradient-to-t from-black/80 to-transparent p-4 xl:p-[1.2vw] pt-16 text-white opacity-0 translate-y-2 transition-all duration-500 group-hover:opacity-100 group-hover:translate-y-0 group-focus-visible:opacity-100 group-focus-visible:translate-y-0">
-            <span className="text-base xl:text-[1.2vw] uppercase leading-none">{work.title}</span>
-            <span aria-hidden>→</span>
+          {/* Hover: a black backdrop with the project's name and an arrow in the center */}
+          <span className="absolute inset-0 flex items-center justify-center gap-3 bg-black/75 px-4 text-center text-white opacity-0 transition-opacity duration-500 group-hover:opacity-100 group-focus-visible:opacity-100">
+            <span className="text-lg xl:text-[1.5vw] uppercase leading-none">{work.title}</span>
+            <span aria-hidden className="text-lg xl:text-[1.5vw] transition-[translate] duration-500 group-hover:translate-x-1">
+              →
+            </span>
           </span>
         </Link>
       ))}
