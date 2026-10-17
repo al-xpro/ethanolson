@@ -81,7 +81,7 @@ export const worksHeader: SectionHeader = {
   title: "Works",
   text: `Products I designed and built,
   from first sketch to production.
-  Case studies are coming soon.`,
+  Five of them, in detail, on the works page.`,
 };
 
 export const workImages: Picture[] = Array.from({ length: 12 }, (_, i) => {
@@ -111,7 +111,16 @@ export const outroParallax = {
   mobile: { src: "/images/landscape-mobile.jpg", width: 1440, height: 2560 },
 };
 
-// Contact section
+// Contact page
+
+export const contactPage = {
+  marquee: "Let's build it",
+  emailLabel: "E-mail",
+  replyLabel: "Replies",
+  replyText:
+    "Every message is read and answered personally. Concept site: messages reach the AlxPro studio.",
+  socialLabel: "Social media",
+};
 
 export const contactHeader: SectionHeader = {
   subTitle: "Get in touch",
@@ -119,4 +128,14 @@ export const contactHeader: SectionHeader = {
   text: `Have a product in mind?
   Tell me about it, and let's
   build it together.`,
+};
+
+// 404 page
+
+export const notFoundPage = {
+  subTitle: "Error 404",
+  title: "Lost in the grid",
+  text: "This page doesn't exist, or it moved somewhere else.",
+  primary: { href: "/", label: "Back home" },
+  secondary: { href: "/works", label: "See the works" },
 };
