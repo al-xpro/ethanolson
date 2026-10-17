@@ -89,7 +89,7 @@ export function WorksList() {
               <span className="work-meta text-sm xl:text-[1vw] text-white/50 tabular-nums">
                 {String(index + 1).padStart(2, "0")}
               </span>
-              <span className="work-title text-4xl sm:text-6xl xl:text-[6vw] uppercase leading-[0.9] transition-[transform,color] duration-500 group-hover:translate-x-3 xl:group-hover:translate-x-[1.5vw] lg:[ul:hover_&]:text-white/35 lg:group-hover:text-white!">
+              <span className="work-title text-4xl sm:text-6xl xl:text-[6vw] uppercase leading-[0.9] transition-[translate,color] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-3 xl:group-hover:translate-x-[1.5vw] lg:[ul:hover_&]:text-white/35 lg:group-hover:text-white!">
                 {work.title}
               </span>
               <span className="work-meta col-start-2 lg:col-start-3 flex flex-col lg:items-end gap-1 text-sm xl:text-[1vw] text-white/60">
