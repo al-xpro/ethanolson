@@ -36,9 +36,9 @@ export function ContactView() {
 
   return (
     <div ref={container} className="text-white">
-      <div aria-hidden className="contact-marquee overflow-hidden py-6 xl:py-[2vw] uppercase leading-none whitespace-nowrap">
-        <p className="marquee-left text-outline text-[14vw]">{words}</p>
-        <p className="marquee-right text-[14vw]">{words}</p>
+      <div aria-hidden className="contact-marquee min-w-[320px] overflow-hidden py-6 xl:py-[2vw] uppercase leading-none whitespace-nowrap">
+        <p className="marquee-left text-outline text-[max(14vw,2.8rem)]">{words}</p>
+        <p className="marquee-right text-[max(14vw,2.8rem)]">{words}</p>
       </div>
 
       <div className="contact-grid grid lg:grid-cols-[3fr_2fr] gap-16 xl:gap-[4vw] px-5 sm:px-10 xl:px-[1.5vw] pt-16 xl:pt-[4vw] pb-24 xl:pb-[6vw] font-light uppercase lg:text-[32px] text-[26px] leading-none">

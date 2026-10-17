@@ -48,12 +48,12 @@ export function NotFoundView() {
   return (
     <section
       ref={container}
-      className="flex min-h-screen flex-col items-center justify-center gap-8 xl:gap-[2vw] px-5 pt-24 pb-16 text-center text-white"
+      className="flex min-h-screen min-w-[320px] flex-col items-center justify-center gap-8 xl:gap-[2vw] px-5 pt-24 pb-16 text-center text-white"
     >
       <p className="text-xs md:text-sm xl:text-[1vw] font-light tracking-[0.5rem] uppercase">
         {notFoundPage.subTitle}
       </p>
-      <p aria-hidden className="flex text-[34vw] sm:text-[26vw] leading-[0.8]">
+      <p aria-hidden className="flex text-[max(34vw,6.8rem)] sm:text-[26vw] leading-[0.8]">
         {["4", "0", "4"].map((digit, index) => (
           <span key={index} className={`digit inline-block ${index === 1 ? "text-outline" : ""}`}>
             {digit}
