@@ -79,6 +79,19 @@ Put them in `.env.local`. Names only here. Never commit values.
 | Name | Purpose |
 | --- | --- |
 | `NEXT_PUBLIC_SITE_URL` | Canonical URL for metadata, sitemap and robots. Defaults to `https://ethanolson.alxpro.com`. |
+| `STORYBLOK_PUBLIC_TOKEN` | Storyblok public token, for published content (server only). |
+| `STORYBLOK_PREVIEW_TOKEN` | Storyblok preview token, for drafts in draft mode (server only). |
+| `STORYBLOK_DRAFT_SECRET` | Protects `/api/draft`, the Visual Editor's entry point. |
+| `STORYBLOK_SPACE_ID` | The content space, for `npm run storyblok:setup`. |
+| `STORYBLOK_MANAGEMENT_TOKEN` | Personal access token, for `npm run storyblok:setup`. |
+
+### Storyblok
+
+`npm run storyblok:setup` creates the content model (`work`, `result`, `solution_step`,
+`site_settings`) and the five projects in the content space. To edit a project in the
+Visual Editor, run `npm run preview:storyblok`: it serves the production build on
+`https://localhost:3010` (draft mode needs HTTPS and a production server). The space's
+preview location is `https://localhost:3010/api/draft?secret=<STORYBLOK_DRAFT_SECRET>&slug=`.
 
 ## How this was built
 

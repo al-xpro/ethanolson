@@ -1,8 +1,13 @@
 import type { Metadata } from "next";
+import { draftMode } from "next/headers";
 import { notFound } from "next/navigation";
+import { StoryblokStory } from "@storyblok/react/rsc";
 import { WorkDetail } from "@/components/pages/WorkDetail";
 import { works } from "@/content/works";
 import { site } from "@/content/site";
+import { getStory } from "@/lib/storyblok/client";
+import type { WorkBlok } from "@/lib/storyblok/work";
+import "@/lib/storyblok/components";
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -31,6 +36,12 @@ export default async function WorkPage({ params }: Props) {
   const work = works[index];
   const next = works[(index + 1) % works.length];
 
+  // In draft mode (opened from Storyblok's Visual Editor), the page shows the draft from
+  // Storyblok and updates live while it's edited. Published pages still come from
+  // content/works.ts until the works are read from Storyblok (#22, #23).
+  const { isEnabled: draft } = await draftMode();
+  const story = draft ? await getStory<WorkBlok>(`works/${slug}`, { draft: true }) : null;
+
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "CreativeWork",
@@ -48,7 +59,11 @@ export default async function WorkPage({ params }: Props) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }}
       />
-      <WorkDetail work={work} next={next} />
+      {story ? (
+        <StoryblokStory story={story} slug={slug} next={next} />
+      ) : (
+        <WorkDetail work={work} next={next} />
+      )}
     </>
   );
 }
