@@ -74,6 +74,22 @@ test("focusing a testimonial link brings its card to the front", async ({ page }
   }).toPass();
 });
 
+test.describe("on phones", () => {
+  test.use({ viewport: { width: 390, height: 844 } });
+
+  test("the minimap opens the headings and jumps to one", async ({ page }) => {
+    await page.goto("/privacy");
+    await page.locator("#who-processes-the-data-for-me").scrollIntoViewIfNeeded();
+    await page.getByRole("button", { name: "On this page" }).click();
+
+    const panel = page.getByRole("navigation", { name: "On this page" });
+    await panel.getByRole("link", { name: "Cookies" }).click();
+    await expect(page).toHaveURL(/#cookies$/);
+    await expect(page.locator("#cookies")).toBeInViewport();
+    await expect(panel).toBeHidden();
+  });
+});
+
 test.describe("reduced motion", () => {
   test.use({ reducedMotion: "reduce" });
 

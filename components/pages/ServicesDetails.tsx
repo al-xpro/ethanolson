@@ -3,7 +3,7 @@
 import { useRef, useState } from "react";
 import { services, servicesPage } from "@/content/services";
 import { PillLink } from "@/components/ui/PillLink";
-import { SectionStripe } from "@/components/ui/SectionStripe";
+import { SectionMinimap } from "@/components/ui/SectionMinimap";
 import { ServiceSchema } from "@/components/ui/ServiceSchema";
 import { useSmoothAnchor } from "@/lib/useSmoothAnchor";
 import { gsap, useGSAP, MOTION_OK, ScrollTrigger, SplitText } from "@/lib/gsap";
@@ -13,6 +13,7 @@ const number = (index: number) => String(index + 1).padStart(2, "0");
 
 export function ServicesDetails() {
   const container = useRef<HTMLDivElement>(null);
+  const body = useRef<HTMLDivElement>(null);
   const [current, setCurrent] = useState(0);
   const goTo = useSmoothAnchor();
 
@@ -86,10 +87,11 @@ export function ServicesDetails() {
 
   return (
     <div ref={container} className="px-5 sm:px-10 xl:px-[1.5vw] text-white">
-      <SectionStripe
+      <SectionMinimap
         items={services.map((service) => ({ id: service.slug, label: service.title }))}
-        current={services[current].slug}
+        active={[services[current].slug]}
         label={servicesPage.timelineLabel}
+        region={body}
       />
 
       <div className="grid lg:grid-cols-[minmax(240px,0.75fr)_2.25fr] lg:gap-[4vw]">
@@ -145,7 +147,7 @@ export function ServicesDetails() {
           </nav>
         </aside>
 
-        <div className="services-body flex min-w-0 flex-col">
+        <div ref={body} className="services-body flex min-w-0 flex-col">
           {services.map((service, index) => (
             <article
               key={service.slug}

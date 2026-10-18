@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { legalLabels, type LegalPage } from "@/content/legal";
-import { SectionStripe } from "@/components/ui/SectionStripe";
+import { SectionMinimap } from "@/components/ui/SectionMinimap";
 import { useSmoothAnchor } from "@/lib/useSmoothAnchor";
 import { gsap, useGSAP, MOTION_OK } from "@/lib/gsap";
 
@@ -15,6 +15,7 @@ const slugify = (text: string) =>
 
 export function LegalView({ page }: { page: LegalPage }) {
   const container = useRef<HTMLDivElement>(null);
+  const body = useRef<HTMLDivElement>(null);
   const items = page.sections.map((section) => ({ id: slugify(section.heading), label: section.heading }));
   const [visible, setVisible] = useState<string[]>([items[0].id]);
   const goTo = useSmoothAnchor();
@@ -29,9 +30,7 @@ export function LegalView({ page }: { page: LegalPage }) {
         );
         const ordered = items.map((item) => item.id).filter((id) => onScreen.has(id));
         if (ordered.length) setVisible(ordered);
-      },
-      // Ignore the strip hidden under the sticky stripe at the top
-      { rootMargin: "-72px 0px 0px 0px" }
+      }
     );
     container.current?.querySelectorAll(".legal-section").forEach((section) => observer.observe(section));
     return () => observer.disconnect();
@@ -58,9 +57,9 @@ export function LegalView({ page }: { page: LegalPage }) {
 
   return (
     <div ref={container} className="px-5 sm:px-10 xl:px-[1.5vw] pb-24 xl:pb-[6vw] text-white">
-      <SectionStripe items={items} current={visible[0]} label={legalLabels.onThisPage} />
+      <SectionMinimap items={items} active={visible} label={legalLabels.onThisPage} region={body} />
 
-      <div className="grid gap-12 pt-10 lg:pt-0 lg:grid-cols-[1fr_2.4fr] xl:gap-[5vw]">
+      <div className="grid gap-12 lg:grid-cols-[1fr_2.4fr] xl:gap-[5vw]">
         <aside className="lg:sticky lg:top-32 xl:top-[8vw] self-start">
           <p className="text-xs xl:text-[0.8vw] tracking-[0.3rem] uppercase text-white/50">
             {legalLabels.updated} {page.updated}
@@ -89,7 +88,7 @@ export function LegalView({ page }: { page: LegalPage }) {
           </nav>
         </aside>
 
-        <div className="flex flex-col gap-14 xl:gap-[3.5vw] max-w-3xl xl:max-w-[48vw]">
+        <div ref={body} className="flex flex-col gap-14 xl:gap-[3.5vw] max-w-3xl xl:max-w-[48vw]">
           <p className="text-xl sm:text-2xl xl:text-[1.8vw] leading-snug text-white/85 text-pretty">
             {page.intro}
           </p>

@@ -5,8 +5,8 @@ import { usePrefersReducedMotion } from "@/lib/useMediaQuery";
 
 const easeOutQuart = (t: number) => 1 - Math.pow(1 - t, 4);
 
-// In-page links (tables of contents, timelines): a smooth Lenis scroll to the section,
-// stopping clear of the sticky section stripe and, when scrolling up, of the navbar
+// In-page links (tables of contents, minimaps): a smooth Lenis scroll to the section,
+// stopping at its scroll margin, and clear of the navbar when scrolling up (it reappears)
 export function useSmoothAnchor() {
   const lenis = useLenis();
   const reduceMotion = usePrefersReducedMotion();
@@ -16,14 +16,11 @@ export function useSmoothAnchor() {
     if (!target) return;
     event.preventDefault();
 
-    const stripe = document.querySelector<HTMLElement>("[data-section-stripe]");
-    // A stripe hidden with display:none (large screens) has no offsetParent
-    const stripeHeight = stripe?.offsetParent ? stripe.offsetHeight : 0;
     const goingUp = target.getBoundingClientRect().top < 0;
     const rootStyle = getComputedStyle(document.documentElement);
     const headerHeight = goingUp ? parseFloat(rootStyle.getPropertyValue("--header-height")) || 0 : 0;
     const scrollMargin = parseFloat(getComputedStyle(target).scrollMarginTop) || 0;
-    const offset = stripeHeight ? stripeHeight + headerHeight + 16 : scrollMargin;
+    const offset = Math.max(scrollMargin, headerHeight ? headerHeight + 16 : 0);
 
     if (lenis) {
       // Lenis already stops short of the target's scroll-margin, so only the rest is added
