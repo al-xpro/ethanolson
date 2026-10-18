@@ -92,7 +92,7 @@ export function SectionMinimap({
         aria-label={label}
         // Lenis would otherwise take the wheel and touch scroll away from the panel
         data-lenis-prevent
-        className={`absolute left-full top-1/2 ml-3 max-h-[75svh] w-[min(18rem,calc(100vw-3.5rem))] -translate-y-1/2 overflow-y-auto overscroll-contain rounded-2xl border border-white/15 bg-[#161616] p-5 text-white shadow-2xl transition-[opacity,translate,visibility] duration-300 motion-reduce:transition-none ${
+        className={`absolute left-full top-1/2 ml-3 max-h-[75svh] w-[min(18rem,calc(100vw-3.5rem))] -translate-y-1/2 overflow-y-auto overscroll-contain min-w-66 rounded-2xl border border-white/15 bg-[#161616] p-5 text-white shadow-2xl transition-[opacity,translate,visibility] duration-300 motion-reduce:transition-none ${
           open ? "visible opacity-100" : "invisible -translate-x-2 opacity-0"
         }`}
       >
