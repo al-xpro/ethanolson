@@ -84,3 +84,17 @@ test.describe("without JavaScript", () => {
     await expect(page.getByRole("status")).toContainText("your message is on its way");
   });
 });
+
+test("the availability calendar shows the times of a free day", async ({ page }) => {
+  await page.goto("/contact");
+  const calendar = page.getByRole("heading", { name: "Availability" }).locator("..");
+  await calendar.scrollIntoViewIfNeeded();
+
+  // The pattern changes every month, so look at next month: it's always fully ahead
+  await calendar.getByRole("button", { name: "Next month" }).click();
+  const free = calendar.locator("ol").getByRole("button");
+  await expect(free.first()).toBeVisible();
+  await free.last().click();
+  await expect(free.last()).toHaveAttribute("aria-pressed", "true");
+  await expect(calendar.locator("[aria-live] li").first()).toHaveText(/\d{2}:\d{2}–\d{2}:\d{2}/);
+});
