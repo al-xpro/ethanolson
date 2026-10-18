@@ -135,6 +135,10 @@ export const contactPage = {
   replyText:
     "Every message is read and answered personally.",
   socialLabel: "Social media",
+  privacy: {
+    text: "I only use your details to reply to your message. More in the",
+    link: "privacy policy",
+  },
 };
 
 export const contactHeader: SectionHeader = {

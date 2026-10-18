@@ -7,6 +7,12 @@ async function openContact(page: Page) {
   await page.locator("form").scrollIntoViewIfNeeded();
 }
 
+test("the form links to the privacy policy", async ({ page }) => {
+  await openContact(page);
+  await page.locator("form").getByRole("link", { name: "privacy policy" }).click();
+  await expect(page).toHaveURL(/\/privacy$/);
+});
+
 test("errors show after leaving a field, and clear while typing", async ({ page }) => {
   await openContact(page);
   const name = page.getByLabel("Name", { exact: true });

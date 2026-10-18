@@ -1,6 +1,8 @@
 "use client";
 
 import { useActionState, useEffect, useRef, useState } from "react";
+import Link from "next/link";
+import { contactPage } from "@/content/sections";
 import { submitContact } from "@/app/actions/contact";
 import {
   BUDGETS,
@@ -134,7 +136,7 @@ export function ContactForm() {
       ref={formRef}
       action={formAction}
       noValidate
-      className="relative flex flex-col gap-8 xl:gap-[1.5vw] normal-case leading-normal"
+      className="group relative flex flex-col gap-8 xl:gap-[1.5vw] normal-case leading-normal"
     >
       <div className="grid gap-8 xl:gap-[1.5vw] md:grid-cols-2">
         <div>
@@ -189,13 +191,23 @@ export function ContactForm() {
         <input id={HONEYPOT_FIELD} name={HONEYPOT_FIELD} tabIndex={-1} autoComplete="off" />
       </div>
 
+      <p className="text-sm xl:text-[0.9vw] text-white/60">
+        {contactPage.privacy.text}{" "}
+        <Link href="/privacy" className="text-white underline underline-offset-4 hover:text-white/80">
+          {contactPage.privacy.link}
+        </Link>
+        .
+      </p>
+
+      {/* Until React runs, the browser's own checks (required, e-mail) dim the button, so it
+          never flashes as ready on load. It still submits: the server validates too. */}
       <button
         type="submit"
         disabled={pending}
         tabIndex={locked ? -1 : 0}
         aria-disabled={locked}
         onClick={handleSend}
-        className="self-start rounded-full bg-white px-8 py-4 xl:px-[2vw] xl:py-[1vw] cursor-pointer text-sm xl:text-[0.9vw] uppercase tracking-widest text-black transition-opacity duration-300 hover:opacity-80 disabled:opacity-40 aria-disabled:cursor-not-allowed aria-disabled:opacity-40"
+        className="self-start rounded-full bg-white px-8 py-4 xl:px-[2vw] xl:py-[1vw] cursor-pointer text-sm xl:text-[0.9vw] uppercase tracking-widest text-black transition-opacity duration-300 hover:opacity-80 disabled:opacity-40 aria-disabled:cursor-not-allowed aria-disabled:opacity-40 group-invalid:cursor-not-allowed group-invalid:opacity-40"
       >
         {pending ? "Sending…" : "Send message"}
       </button>
