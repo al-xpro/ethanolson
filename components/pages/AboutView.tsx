@@ -79,7 +79,7 @@ export function AboutView() {
   return (
     <div ref={container} className="text-white">
       <section className="grid gap-12 lg:grid-cols-[1fr_1.15fr] xl:gap-[5vw] px-5 sm:px-10 xl:px-[1.5vw] pb-24 xl:pb-[6vw]">
-        {/* 16:9, so the crop keeps Ethan at his desk, coding */}
+        {/* Square crop of Ethan at his desk, coding */}
         <div className="relative aspect-square overflow-hidden rounded-3xl xl:rounded-[2vw] self-start">
           <Image
             src={aboutPortrait.src}

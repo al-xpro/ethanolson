@@ -10,7 +10,7 @@ All photographs in `public/images/` are AI-generated stock images from
 repository. They are not for resale.
 
 - `draw.jpg`, `particles.jpg`, `interior.jpg`, `metro.jpg`, `laptop.jpg`, `pen.jpg`
-- `first-service.png`, `second-service.png`, `third-service.png`, `fourth-service.jpg`
+- `first-service.webp`, `second-service.png`, `third-service.webp`, `fourth-service.webp`
 - `water-spray.jpg`, `waving-water.jpg`
 - `landscape-desktop.jpg`, `landscape-mobile.jpg`
 - `hero.jpg`, `about.jpg` (portraits on the home and about pages)
