@@ -9,8 +9,8 @@ export const site = {
   title: "Ethan Olson | Design Engineer",
   description:
     "Ethan Olson, design engineer: full-stack web products, from the first sketch to the database. Designed and developed by AlxPro.",
-  url: process.env.NEXT_PUBLIC_SITE_URL || "https://ethanolson.dev",
-  email: "hello@ethanolson.dev",
+  url: process.env.NEXT_PUBLIC_SITE_URL || "https://ethanolson.alxpro.com",
+  email: "hello@ethanolson.alxpro.com",
   creator: {
     name: "Alex Prostamo",
     brand: "AlxPro",
