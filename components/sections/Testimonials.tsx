@@ -2,6 +2,7 @@
 
 import { useRef } from "react";
 import Link from "next/link";
+import { useLenis } from "lenis/react";
 import AnimatedHeaderSection from "@/components/ui/AnimatedHeaderSection";
 import { PillLink } from "@/components/ui/PillLink";
 import { testimonials, testimonialsHeader } from "@/content/testimonials";
@@ -15,6 +16,8 @@ const initials = (name: string) =>
 
 export default function Testimonials() {
   const deck = useRef<HTMLDivElement>(null);
+  const timeline = useRef<gsap.core.Timeline | null>(null);
+  const lenis = useLenis();
 
   useGSAP(
     () => {
@@ -32,7 +35,7 @@ export default function Testimonials() {
         );
         gsap.set(".testimonials-closing", { opacity: 0, scale: 0.92 });
 
-        const tl = gsap.timeline({
+        const tl = (timeline.current = gsap.timeline({
           scrollTrigger: {
             trigger: deck.current,
             start: "top top",
@@ -41,11 +44,13 @@ export default function Testimonials() {
             scrub: 0.6,
             invalidateOnRefresh: true,
           },
-        });
+        }));
 
         // Every card peels away with a twist, the deck steps forward, and the last one
         // uncovers the closing line behind it
         cards.forEach((card, index) => {
+          // The moment this card is at the front, for keyboard focus
+          tl.addLabel(`card-${index}`);
           // Half the viewport plus the card's own height takes it fully off screen, at any size
           tl.to(card, {
             y: () => -window.innerHeight / 2,
@@ -67,10 +72,27 @@ export default function Testimonials() {
           { opacity: 1, scale: 1, ease: "power2.out", duration: 0.8 },
           "-=0.6",
         );
+        tl.addLabel("closing");
+
+        return () => {
+          timeline.current = null;
+        };
       });
     },
     { scope: deck },
   );
+
+  // Cards behind the first one are covered, so focusing a link scrolls the deck to the
+  // moment its card is at the front (or to the closing line)
+  const showFocusedCard = (event: React.FocusEvent<HTMLDivElement>) => {
+    const trigger = timeline.current?.scrollTrigger;
+    if (!trigger) return;
+    const card = (event.target as HTMLElement).closest(".testimonial-card");
+    const cards = Array.from(deck.current?.querySelectorAll(".testimonial-card") ?? []);
+    const top = trigger.labelToScroll(card ? `card-${cards.indexOf(card)}` : "closing");
+    if (lenis) lenis.scrollTo(top, { immediate: true, force: true });
+    else window.scrollTo(0, top);
+  };
 
   return (
     <section id="testimonials" className="relative">
@@ -84,15 +106,9 @@ export default function Testimonials() {
 
       <div
         ref={deck}
-        className="relative flex h-[100svh] min-h-[320px] items-center justify-center overflow-hidden px-5 motion-reduce:h-auto motion-reduce:flex-col motion-reduce:gap-6 motion-reduce:py-10"
+        onFocus={showFocusedCard}
+        className="relative flex h-[100svh] min-h-[320px] items-center justify-center overflow-clip px-5 motion-reduce:h-auto motion-reduce:flex-col motion-reduce:gap-6 motion-reduce:py-10"
       >
-        <div className="testimonials-closing absolute inset-0 flex flex-col items-center justify-center gap-6 xl:gap-[2vw] px-5 text-center text-white motion-reduce:relative motion-reduce:order-last motion-reduce:py-10">
-          <p className="text-4xl sm:text-6xl xl:text-[5vw] uppercase leading-none text-balance max-w-4xl xl:max-w-[60vw]">
-            {testimonialsHeader.closing.title}
-          </p>
-          <PillLink href="/contact">{testimonialsHeader.closing.link}</PillLink>
-        </div>
-
         {/* Short screens (phones in landscape) get a compact card, so the whole quote fits */}
         {testimonials.map((item) => (
           <figure
@@ -132,6 +148,14 @@ export default function Testimonials() {
             </figcaption>
           </figure>
         ))}
+
+        {/* After the cards, so it's last in the tab order; the cards' z-index keeps it behind */}
+        <div className="testimonials-closing absolute inset-0 flex flex-col items-center justify-center gap-6 xl:gap-[2vw] px-5 text-center text-white motion-reduce:relative motion-reduce:order-last motion-reduce:py-10">
+          <p className="text-4xl sm:text-6xl xl:text-[5vw] uppercase leading-none text-balance max-w-4xl xl:max-w-[60vw]">
+            {testimonialsHeader.closing.title}
+          </p>
+          <PillLink href="/contact">{testimonialsHeader.closing.link}</PillLink>
+        </div>
       </div>
     </section>
   );

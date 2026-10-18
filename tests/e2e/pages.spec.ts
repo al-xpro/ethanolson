@@ -60,6 +60,20 @@ test("the footer links to the legal pages", async ({ page }) => {
   await expect(page).toHaveURL(/\/terms$/);
 });
 
+test("focusing a testimonial link brings its card to the front", async ({ page }) => {
+  await page.goto("/");
+  const link = page.locator(".testimonial-card").nth(2).getByRole("link");
+  await link.focus();
+  await expect(async () => {
+    const onTop = await link.evaluate((element) => {
+      const box = element.getBoundingClientRect();
+      const hit = document.elementFromPoint(box.x + box.width / 2, box.y + box.height / 2);
+      return element === hit || element.contains(hit);
+    });
+    expect(onTop).toBe(true);
+  }).toPass();
+});
+
 test.describe("reduced motion", () => {
   test.use({ reducedMotion: "reduce" });
 
