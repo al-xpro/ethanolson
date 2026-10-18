@@ -128,6 +128,13 @@ export function ContactForm() {
     setAttempts((count) => count + 1);
   };
 
+  // Enter in a field doesn't send: only the button does (a new line still works in the message)
+  const blockEnter = (event: React.KeyboardEvent<HTMLFormElement>) => {
+    if (event.key === "Enter" && !(event.target instanceof HTMLTextAreaElement || event.target instanceof HTMLButtonElement)) {
+      event.preventDefault();
+    }
+  };
+
   return (
     <form
       // React resets the form after every submit, and a <select> would fall back to its
@@ -135,6 +142,7 @@ export function ContactForm() {
       key={state.status === "error" ? JSON.stringify(state.values) : "empty"}
       ref={formRef}
       action={formAction}
+      onKeyDown={blockEnter}
       noValidate
       className="group relative flex flex-col gap-8 xl:gap-[1.5vw] normal-case leading-normal"
     >

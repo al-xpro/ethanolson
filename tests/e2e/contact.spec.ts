@@ -13,6 +13,15 @@ test("the form links to the privacy policy", async ({ page }) => {
   await expect(page).toHaveURL(/\/privacy$/);
 });
 
+test("pressing Enter in a field doesn't send the form", async ({ page }) => {
+  await openContact(page);
+  const name = page.getByLabel("Name", { exact: true });
+  await name.fill("Ada");
+  await name.press("Enter");
+  await expect(name).toBeFocused();
+  await expect(page.getByText("Please enter a valid e-mail address.")).toBeHidden();
+});
+
 test("errors show after leaving a field, and clear while typing", async ({ page }) => {
   await openContact(page);
   const name = page.getByLabel("Name", { exact: true });
