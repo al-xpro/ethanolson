@@ -217,7 +217,7 @@ export function ServicesDetails() {
       </div>
 
       <div className="flex flex-col items-center gap-6 py-24 xl:py-[6vw] text-center">
-        <p className="text-3xl sm:text-5xl xl:text-[3.5vw] uppercase leading-none">{servicesPage.cta.title}</p>
+        <p className="text-3xl sm:text-5xl xl:text-[3.5vw] uppercase text-balance leading-none">{servicesPage.cta.title}</p>
         <PillLink href="/contact">{servicesPage.cta.link}</PillLink>
       </div>
     </div>

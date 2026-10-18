@@ -192,9 +192,10 @@ export function ContactForm() {
       <button
         type="submit"
         disabled={pending}
+        tabIndex={locked ? -1 : 0}
         aria-disabled={locked}
         onClick={handleSend}
-        className="self-start rounded-full bg-white px-8 py-4 xl:px-[2vw] xl:py-[1vw] text-sm xl:text-[0.9vw] uppercase tracking-widest text-black transition-opacity duration-300 hover:opacity-80 disabled:opacity-40 aria-disabled:cursor-not-allowed aria-disabled:opacity-40"
+        className="self-start rounded-full bg-white px-8 py-4 xl:px-[2vw] xl:py-[1vw] cursor-pointer text-sm xl:text-[0.9vw] uppercase tracking-widest text-black transition-opacity duration-300 hover:opacity-80 disabled:opacity-40 aria-disabled:cursor-not-allowed aria-disabled:opacity-40"
       >
         {pending ? "Sending…" : "Send message"}
       </button>

@@ -3,15 +3,25 @@
 import { useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { type Work, workCover, workLabels, coverSize, darkBlur } from "@/content/works";
+import {
+  type Work,
+  workCover,
+  workLabels,
+  coverSize,
+  darkBlur,
+} from "@/content/works";
 import { WorkFeature } from "@/components/ui/WorkFeature";
 import { ProjectTemplates } from "@/components/ui/ProjectTemplates";
 import { gsap, useGSAP, MOTION_OK, SplitText } from "@/lib/gsap";
 
-const label = "text-xs xl:text-[0.8vw] tracking-[0.3rem] uppercase text-white/50";
+const label =
+  "text-xs xl:text-[0.8vw] tracking-[0.3rem] uppercase text-white/50";
 
 const formatResult = (value: number, decimals: number) =>
-  value.toLocaleString("en-US", { minimumFractionDigits: decimals, maximumFractionDigits: decimals });
+  value.toLocaleString("en-US", {
+    minimumFractionDigits: decimals,
+    maximumFractionDigits: decimals,
+  });
 
 export function WorkDetail({ work, next }: { work: Work; next: Work }) {
   const container = useRef<HTMLDivElement>(null);
@@ -22,11 +32,29 @@ export function WorkDetail({ work, next }: { work: Work; next: Work }) {
 
       mm.add(MOTION_OK, () => {
         // Title: letters rise from a mask on load
-        const title = SplitText.create(".work-heading", { type: "chars,words", mask: "words" });
+        const title = SplitText.create(".work-heading", {
+          type: "chars,words",
+          mask: "words",
+        });
         gsap
           .timeline({ delay: 0.15 })
-          .from(title.chars, { yPercent: 100, stagger: 0.03, duration: 0.9, ease: "power4.out" })
-          .from(".work-intro > *", { y: 30, opacity: 0, stagger: 0.08, duration: 0.7, ease: "power2.out" }, "<+0.3");
+          .from(title.chars, {
+            yPercent: 100,
+            stagger: 0.03,
+            duration: 0.9,
+            ease: "power4.out",
+          })
+          .from(
+            ".work-intro > *",
+            {
+              y: 30,
+              opacity: 0,
+              stagger: 0.08,
+              duration: 0.7,
+              ease: "power2.out",
+            },
+            "<+0.3",
+          );
 
         // Cover: the artwork drifts slowly inside its frame while the page scrolls
         gsap.fromTo(
@@ -35,8 +63,13 @@ export function WorkDetail({ work, next }: { work: Work; next: Work }) {
           {
             yPercent: 6,
             ease: "none",
-            scrollTrigger: { trigger: ".work-cover", start: "top bottom", end: "bottom top", scrub: true },
-          }
+            scrollTrigger: {
+              trigger: ".work-cover",
+              start: "top bottom",
+              end: "bottom top",
+              scrub: true,
+            },
+          },
         );
 
         // Challenge: each word lights up as it's read
@@ -48,8 +81,13 @@ export function WorkDetail({ work, next }: { work: Work; next: Work }) {
             opacity: 1,
             stagger: 0.1,
             ease: "none",
-            scrollTrigger: { trigger: ".work-challenge", start: "top 80%", end: "bottom 45%", scrub: true },
-          }
+            scrollTrigger: {
+              trigger: ".work-challenge",
+              start: "top 80%",
+              end: "bottom 45%",
+              scrub: true,
+            },
+          },
         );
 
         // Results count up once
@@ -70,34 +108,68 @@ export function WorkDetail({ work, next }: { work: Work; next: Work }) {
 
         // Project feature: items rise in, strike lines draw, old steps shrink away
         const feature = { trigger: ".work-feature", start: "top 75%" };
-        gsap.from(".feature-item", { y: 40, opacity: 0, stagger: 0.08, duration: 0.8, ease: "power3.out", scrollTrigger: feature });
-        gsap.from(".feature-strike", { scaleX: 0, stagger: 0.12, duration: 0.8, delay: 0.5, ease: "power3.inOut", scrollTrigger: feature });
-        gsap.to(".feature-dot", { scale: 0.6, opacity: 0.35, stagger: 0.04, duration: 0.5, delay: 0.3, ease: "power2.out", scrollTrigger: feature });
+        gsap.from(".feature-item", {
+          y: 40,
+          opacity: 0,
+          stagger: 0.08,
+          duration: 0.8,
+          ease: "power3.out",
+          scrollTrigger: feature,
+        });
+        gsap.from(".feature-strike", {
+          scaleX: 0,
+          stagger: 0.12,
+          duration: 0.8,
+          delay: 0.5,
+          ease: "power3.inOut",
+          scrollTrigger: feature,
+        });
+        gsap.to(".feature-dot", {
+          scale: 0.6,
+          opacity: 0.35,
+          stagger: 0.04,
+          duration: 0.5,
+          delay: 0.3,
+          ease: "power2.out",
+          scrollTrigger: feature,
+        });
 
         // Templates drift at three different speeds, side by side (stacked on phones, they stay put)
         if (window.matchMedia("(min-width: 640px)").matches) {
-          gsap.utils.toArray<HTMLElement>(".work-template").forEach((template, index) => {
-            gsap.fromTo(
-              template,
-              { y: () => window.innerHeight * [0.1, 0.22, 0.04][index] },
-              {
-                y: () => window.innerHeight * [-0.06, -0.14, -0.1][index],
-                ease: "none",
-                scrollTrigger: { trigger: ".work-templates", start: "top bottom", end: "bottom top", scrub: true },
-              }
-            );
-          });
+          gsap.utils
+            .toArray<HTMLElement>(".work-template")
+            .forEach((template, index) => {
+              gsap.fromTo(
+                template,
+                { y: () => window.innerHeight * [0.1, 0.22, 0.04][index] },
+                {
+                  y: () => window.innerHeight * [-0.06, -0.14, -0.1][index],
+                  ease: "none",
+                  scrollTrigger: {
+                    trigger: ".work-templates",
+                    start: "top bottom",
+                    end: "bottom top",
+                    scrub: true,
+                  },
+                },
+              );
+            });
         }
 
         // Next project slides in from the right
         gsap.from(".next-title", {
           xPercent: 25,
           ease: "none",
-          scrollTrigger: { trigger: ".next-project", start: "top bottom", end: "bottom bottom", scrub: true },
+          scrollTrigger: {
+            trigger: ".next-project",
+            start: "top bottom",
+            end: "bottom bottom",
+            scrub: true,
+          },
         });
       });
     },
-    { scope: container, dependencies: [work.slug], revertOnUpdate: true }
+    { scope: container, dependencies: [work.slug], revertOnUpdate: true },
   );
 
   return (
@@ -179,7 +251,9 @@ export function WorkDetail({ work, next }: { work: Work; next: Work }) {
               key={step}
               className="grid grid-cols-[3rem_1fr] xl:grid-cols-[4vw_1fr] gap-4 border-t border-white/20 py-6 xl:py-[1.6vw] text-lg xl:text-[1.4vw] leading-relaxed text-white/80"
             >
-              <span className="text-white/40 tabular-nums">{String(index + 1).padStart(2, "0")}</span>
+              <span className="text-white/40 tabular-nums">
+                {String(index + 1).padStart(2, "0")}
+              </span>
               {step}
             </li>
           ))}
@@ -197,7 +271,10 @@ export function WorkDetail({ work, next }: { work: Work; next: Work }) {
         {work.results.map((result) => {
           const decimals = Number.isInteger(result.value) ? 0 : 1;
           return (
-            <div key={result.label} className="flex flex-col gap-3 bg-[#111] p-8 xl:p-[2.5vw]">
+            <div
+              key={result.label}
+              className="flex flex-col gap-3 bg-[#111] p-8 xl:p-[2.5vw]"
+            >
               <span className="text-6xl xl:text-[5.5vw] leading-none tabular-nums">
                 {result.prefix}
                 <span
@@ -209,7 +286,9 @@ export function WorkDetail({ work, next }: { work: Work; next: Work }) {
                 </span>
                 {result.suffix}
               </span>
-              <span className="text-base xl:text-[1.1vw] text-white/65">{result.label}</span>
+              <span className="text-base xl:text-[1.1vw] text-white/65">
+                {result.label}
+              </span>
             </div>
           );
         })}
@@ -224,10 +303,10 @@ export function WorkDetail({ work, next }: { work: Work; next: Work }) {
 
       <Link
         href={`/works/${next.slug}`}
-        className="next-project group block overflow-hidden border-t border-white/20 px-5 sm:px-10 xl:px-[1.5vw] py-16 xl:py-[5vw]"
+        className="relative next-project group block border-t border-white/20 px-5 sm:px-10 xl:px-[1.5vw] py-16 xl:py-[5vw] focus-visible:z-10"
       >
         <span className={label}>{workLabels.next}</span>
-        <span className="next-title mt-4 flex items-center gap-6 xl:gap-[2vw] text-5xl sm:text-7xl xl:text-[8vw] uppercase leading-none whitespace-nowrap">
+        <span className="next-title mt-4 flex items-center gap-6 xl:gap-[2vw] text-5xl sm:text-7xl xl:text-[8vw] uppercase leading-none break-all">
           {next.title}
           <span
             aria-hidden

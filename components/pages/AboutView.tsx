@@ -80,7 +80,7 @@ export function AboutView() {
     <div ref={container} className="text-white">
       <section className="grid gap-12 lg:grid-cols-[1fr_1.15fr] xl:gap-[5vw] px-5 sm:px-10 xl:px-[1.5vw] pb-24 xl:pb-[6vw]">
         {/* 16:9, so the crop keeps Ethan at his desk, coding */}
-        <div className="relative aspect-video overflow-hidden rounded-3xl xl:rounded-[2vw] self-start">
+        <div className="relative aspect-square overflow-hidden rounded-3xl xl:rounded-[2vw] self-start">
           <Image
             src={aboutPortrait.src}
             alt={aboutPortrait.alt}
@@ -179,7 +179,7 @@ export function AboutView() {
       </section>
 
       <div className="flex flex-col items-center gap-6 pb-24 xl:pb-[6vw] px-5 text-center">
-        <p className="text-3xl sm:text-5xl xl:text-[3.5vw] uppercase leading-none">{aboutPage.cta.title}</p>
+        <p className="text-3xl sm:text-5xl xl:text-[3.5vw] uppercase text-balance leading-none">{aboutPage.cta.title}</p>
         <PillLink href="/contact">{aboutPage.cta.link}</PillLink>
       </div>
     </div>
