@@ -4,8 +4,8 @@
 //
 //   npm run preview:storyblok
 //
-// The certificate comes from mkcert, trusted by your browser (brew install mkcert, then
-// mkcert -install once).
+// The certificate comes from mkcert. Browsers only trust it after `mkcert -install` (once
+// per Mac: it adds mkcert's root certificate to the keychain and asks for your password).
 import { execFileSync, spawn } from "node:child_process";
 import { existsSync, mkdirSync, readFileSync } from "node:fs";
 import http from "node:http";
@@ -18,14 +18,22 @@ if (!existsSync(cert)) {
   execFileSync("mkcert", ["-key-file", key, "-cert-file", cert, "localhost"], { stdio: "inherit" });
 }
 
-const site = spawn("npx", ["next", "start", "-p", "3000"], { stdio: "inherit" });
+// mkcert -CAROOT points to the root certificate; the keychain must contain it
+const caRoot = execFileSync("mkcert", ["-CAROOT"]).toString().trim();
+try {
+  execFileSync("security", ["verify-cert", "-c", `${caRoot}/rootCA.pem`], { stdio: "ignore" });
+} catch {
+  console.warn("\n⚠ Browsers don't trust the local certificate yet. Run once: mkcert -install\n");
+}
+
+const site = spawn("npx", ["next", "start", "-p", "3011"], { stdio: "inherit" });
 
 https
   .createServer({ key: readFileSync(key), cert: readFileSync(cert) }, (request, response) => {
     const upstream = http.request(
       {
         host: "localhost",
-        port: 3000,
+        port: 3011, // not 3000, so it runs next to npm run dev
         path: request.url,
         method: request.method,
         headers: { ...request.headers, "x-forwarded-proto": "https" },
