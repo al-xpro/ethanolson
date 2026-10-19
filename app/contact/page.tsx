@@ -6,7 +6,7 @@ import { contactHeader } from "@/content/sections";
 export const metadata: Metadata = {
   title: "Contact",
   description: "Tell Ethan Olson about your product: a short form, or an e-mail.",
-  alternates: { canonical: "/contact" },
+  alternates: { canonical: "/contact", types: { "text/markdown": "/contact.md" } },
 };
 
 export default function ContactPage() {

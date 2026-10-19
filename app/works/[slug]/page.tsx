@@ -24,7 +24,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title: work.title,
     description: work.summary,
-    alternates: { canonical: `/works/${work.slug}` },
+    alternates: {
+      canonical: `/works/${work.slug}`,
+      types: { "text/markdown": `/works/${work.slug}.md` },
+    },
   };
 }
 

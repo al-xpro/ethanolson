@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Playfair } from "next/font/google";
 import { site } from "@/content/site";
+import { llmsIndex } from "@/lib/llms";
 import SmoothScroll from "@/components/providers/SmoothScroll";
 import Navbar from "@/components/ui/Navbar";
 import Footer from "@/components/ui/Footer";
@@ -18,7 +19,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(site.url),
   title: { default: site.title, template: `%s | ${site.name}` },
   description: site.description,
-  alternates: { canonical: "/" },
+  alternates: { canonical: "/", types: { "text/markdown": "/index.md" } },
   creator: site.creator.name,
   openGraph: {
     type: "website",
@@ -44,6 +45,12 @@ export default function RootLayout({
       <body
         className={`${playfair.variable} antialiased bg-[#111111] min-w-[320px] overflow-x-clip`}
       >
+        {/* Inline llms.txt (browsers ignore unknown script types): agents on any page get the
+            map of the site, generated from content/, with a Markdown link for every page */}
+        <script
+          type="text/llms.txt"
+          dangerouslySetInnerHTML={{ __html: llmsIndex().replace(/<\/script/gi, "<\\/script") }}
+        />
         <a
           href="#main"
           className="fixed left-4 top-4 z-300 -translate-y-24 rounded-full bg-white px-6 py-3 text-sm uppercase tracking-widest text-black focus-visible:translate-y-0"

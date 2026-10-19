@@ -7,7 +7,7 @@ export const metadata: Metadata = {
   title: "Services",
   description:
     "Product design, interactive front ends, back ends and APIs, and performance: what Ethan Olson offers, and how he works.",
-  alternates: { canonical: "/services" },
+  alternates: { canonical: "/services", types: { "text/markdown": "/services.md" } },
 };
 
 export default function ServicesPage() {

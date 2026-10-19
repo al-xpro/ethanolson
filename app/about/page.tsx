@@ -7,7 +7,7 @@ export const metadata: Metadata = {
   title: "About",
   description:
     "Ethan Olson, design engineer: ten years of design and full-stack development, his experience, skills and what he does away from the screen.",
-  alternates: { canonical: "/about" },
+  alternates: { canonical: "/about", types: { "text/markdown": "/about.md" } },
 };
 
 export default function AboutPage() {
