@@ -54,6 +54,7 @@ export const contactLabels = {
     times: "Times",
     none: "No free days left this month: try the next one.",
     clear: "Clear",
+    close: "Done",
     note: "Central European Time. I'll confirm the call by e-mail.",
     weekdays: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
   },

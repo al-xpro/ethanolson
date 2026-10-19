@@ -120,3 +120,28 @@ test("the date picker chooses a free call slot with the keyboard", async ({ page
   await page.keyboard.press("Escape");
   await expect(dialog).toBeHidden();
 });
+
+test.describe("on phones", () => {
+  test.use({ viewport: { width: 390, height: 844 }, hasTouch: true });
+
+  test("the date picker opens as a drawer that picks a slot and closes", async ({ page }) => {
+    await openContact(page);
+    const trigger = page.getByRole("button", { name: /Preferred call/ });
+    await trigger.click();
+    const drawer = page.getByRole("dialog", { name: "Preferred call" });
+    await expect(drawer).toBeVisible();
+
+    await page.keyboard.press("Escape");
+    await expect(drawer).toBeHidden();
+    await expect(trigger).toBeFocused();
+
+    await trigger.click();
+    await page.keyboard.press("PageDown");
+    await drawer.getByRole("gridcell").getByRole("button", { name: /, free$/ }).first().tap();
+    const time = drawer.getByRole("group").getByRole("button").first();
+    const slot = (await time.textContent())!;
+    await time.tap();
+    await expect(drawer).toBeHidden();
+    await expect(trigger).toContainText(slot);
+  });
+});

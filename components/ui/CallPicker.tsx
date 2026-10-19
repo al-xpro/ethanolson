@@ -3,6 +3,8 @@
 import { useEffect, useId, useRef, useState, useSyncExternalStore } from "react";
 import { contactLabels } from "@/content/ui";
 import { monthAvailability, slotValue } from "@/lib/availability";
+import { useMediaQuery } from "@/lib/useMediaQuery";
+import { Drawer } from "@/components/ui/Drawer";
 
 const copy = contactLabels.callPicker;
 const monthName = new Intl.DateTimeFormat("en-GB", { month: "long", year: "numeric" });
@@ -42,6 +44,8 @@ export function CallPicker({
   onChange?: () => void;
 }) {
   const key = useSyncExternalStore(subscribe, todayKey, () => null);
+  // Phones get a bottom drawer instead of the popover
+  const phone = useMediaQuery("(max-width: 639px)");
   const [value, setValue] = useState(defaultValue);
   const [open, setOpen] = useState(false);
   const [offset, setOffset] = useState(0);
@@ -80,13 +84,13 @@ export function CallPicker({
   }, [open, focused, offset]);
 
   useEffect(() => {
-    if (!open) return;
+    if (!open || phone) return;
     const close = (event: PointerEvent) => {
       if (!root.current?.contains(event.target as Node)) setOpen(false);
     };
     document.addEventListener("pointerdown", close);
     return () => document.removeEventListener("pointerdown", close);
-  }, [open]);
+  }, [open, phone]);
 
   const show = (nextOffset: number, day: number) => {
     const length = new Date(year, month + nextOffset + 1, 0).getDate();
@@ -156,6 +160,124 @@ export function CallPicker({
   const weeks = Array.from({ length: Math.ceil(cells.length / 7) }, (_, row) => cells.slice(row * 7, row * 7 + 7));
   const describedBy = error ? `${id}-error` : undefined;
 
+  // The month, the days and the times: in a popover, or in a drawer on phones
+  const panel = (
+    <>
+      <div className="flex items-center justify-between">
+        <p aria-live="polite" className="text-lg xl:text-[1.2vw]">
+          {monthName.format(first)}
+        </p>
+        <div className="flex gap-2">
+          {[
+            { label: copy.previous, arrow: "←", to: 0 },
+            { label: copy.next, arrow: "→", to: 1 },
+          ].map((button) => (
+            <button
+              key={button.to}
+              type="button"
+              aria-label={button.label}
+              disabled={offset === button.to}
+              onClick={() => {
+                setPicked(null);
+                show(button.to, 1);
+              }}
+              className="flex h-7 w-7 xl:h-[1.7vw] xl:w-[1.7vw] cursor-pointer items-center justify-center rounded-full border border-white/30 text-xs xl:text-[0.8vw] transition-colors duration-300 hover:border-white disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:border-white/30"
+            >
+              <span aria-hidden>{button.arrow}</span>
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <table ref={grid} role="grid" aria-label={monthName.format(first)} className="mt-4 w-full table-fixed" onKeyDown={onGridKey}>
+        <thead>
+          <tr>
+            {copy.weekdays.map((weekday) => (
+              <th key={weekday} scope="col" abbr={weekday} className="pb-2 text-center text-xs xl:text-[0.75vw] font-normal tracking-widest text-white/40">
+                {weekday[0]}
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {weeks.map((week, row) => (
+            <tr key={row}>
+              {week.map((day, column) =>
+                day ? (
+                  <td key={column} role="gridcell" aria-selected={day.day === pickedDay?.day} className="p-0.5 text-center">
+                    <button
+                      type="button"
+                      data-day={day.day}
+                      tabIndex={day.day === focused ? 0 : -1}
+                      aria-disabled={!day.slots.length}
+                      aria-label={`${longDate.format(day.date)}, ${day.slots.length ? copy.free : copy.booked}`}
+                      onClick={() => day.slots.length && pickDay(day.day)}
+                      onFocus={() => setFocused(day.day)}
+                      className={`mx-auto flex h-9 w-9 xl:h-[2.4vw] xl:w-[2.4vw] items-center justify-center rounded-full text-sm xl:text-[0.9vw] tabular-nums transition-colors duration-300 ${
+                        day.today ? "underline underline-offset-4" : ""
+                      } ${
+                        day.day === pickedDay?.day
+                          ? "cursor-pointer border border-white bg-white text-black"
+                          : day.slots.length
+                            ? "cursor-pointer border border-white/45 hover:border-white"
+                            : `cursor-default ${day.past ? "text-white/15" : day.weekday > 4 ? "text-white/25" : "text-white/40"}`
+                      }`}
+                    >
+                      {day.day}
+                    </button>
+                  </td>
+                ) : (
+                  <td key={column} />
+                )
+              )}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+
+      <div className="mt-4 border-t border-white/15 pt-4 min-h-24">
+        {pickedDay ? (
+          <div ref={times} role="group" aria-label={`${copy.times}, ${longDate.format(pickedDay.date)}`}>
+            <p className="text-sm xl:text-[0.9vw] text-white/60">{longDate.format(pickedDay.date)}</p>
+            <div className="mt-2 flex flex-wrap gap-2">
+              {pickedDay.slots.map((slot) => {
+                const chosen = value === slotValue(pickedDay.date, slot);
+                return (
+                  <button
+                    key={slot}
+                    type="button"
+                    aria-pressed={chosen}
+                    onClick={() => pickTime(slot)}
+                    className={`cursor-pointer rounded-full border px-3 py-1.5 text-sm xl:text-[0.9vw] tabular-nums transition-colors duration-300 ${
+                      chosen ? "border-white bg-white text-black" : "border-white/30 hover:border-white"
+                    }`}
+                  >
+                    {slot}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        ) : (
+          <p className="text-sm xl:text-[0.9vw] text-white/60">{free.length ? copy.note : copy.none}</p>
+        )}
+      </div>
+
+      {value && (
+        <button
+          type="button"
+          onClick={() => {
+            setValue("");
+            close();
+          }}
+          className="mt-3 cursor-pointer text-xs xl:text-[0.8vw] uppercase tracking-[0.25rem] text-white/60 hover:text-white"
+        >
+          {copy.clear}
+        </button>
+      )}
+    </>
+  );
+
   return (
     <div
       ref={root}
@@ -198,125 +320,21 @@ export function CallPicker({
         </p>
       )}
 
-      {open && key && (
+      {/* Rendered while closed too, so it can slide away */}
+      {key && phone && (
+        <Drawer open={open} onClose={close} title={copy.label} closeLabel={copy.close}>
+          {panel}
+        </Drawer>
+      )}
+
+      {open && key && !phone && (
         <div
           role="dialog"
           aria-modal="false"
           aria-label={copy.dialog}
           className="absolute left-0 top-full z-30 mt-3 w-full max-w-[22rem] xl:max-w-[24vw] rounded-2xl xl:rounded-[1.2vw] border border-white/15 bg-[#161616] p-5 xl:p-[1.4vw] text-white shadow-2xl"
         >
-          <div className="flex items-center justify-between">
-            <p aria-live="polite" className="text-lg xl:text-[1.2vw]">
-              {monthName.format(first)}
-            </p>
-            <div className="flex gap-2">
-              {[
-                { label: copy.previous, arrow: "←", to: 0 },
-                { label: copy.next, arrow: "→", to: 1 },
-              ].map((button) => (
-                <button
-                  key={button.to}
-                  type="button"
-                  aria-label={button.label}
-                  disabled={offset === button.to}
-                  onClick={() => {
-                    setPicked(null);
-                    show(button.to, 1);
-                  }}
-                  className="flex h-9 w-9 xl:h-[2.4vw] xl:w-[2.4vw] cursor-pointer items-center justify-center rounded-full border border-white/30 transition-colors duration-300 hover:border-white disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:border-white/30"
-                >
-                  <span aria-hidden>{button.arrow}</span>
-                </button>
-              ))}
-            </div>
-          </div>
-
-          <table ref={grid} role="grid" aria-label={monthName.format(first)} className="mt-4 w-full table-fixed" onKeyDown={onGridKey}>
-            <thead>
-              <tr>
-                {copy.weekdays.map((weekday) => (
-                  <th key={weekday} scope="col" abbr={weekday} className="pb-2 text-center text-xs xl:text-[0.75vw] font-normal tracking-widest text-white/40">
-                    {weekday[0]}
-                  </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {weeks.map((week, row) => (
-                <tr key={row}>
-                  {week.map((day, column) =>
-                    day ? (
-                      <td key={column} role="gridcell" aria-selected={day.day === pickedDay?.day} className="p-0.5 text-center">
-                        <button
-                          type="button"
-                          data-day={day.day}
-                          tabIndex={day.day === focused ? 0 : -1}
-                          aria-disabled={!day.slots.length}
-                          aria-label={`${longDate.format(day.date)}, ${day.slots.length ? copy.free : copy.booked}`}
-                          onClick={() => day.slots.length && pickDay(day.day)}
-                          onFocus={() => setFocused(day.day)}
-                          className={`mx-auto flex h-9 w-9 xl:h-[2.4vw] xl:w-[2.4vw] items-center justify-center rounded-full text-sm xl:text-[0.9vw] tabular-nums transition-colors duration-300 ${
-                            day.today ? "underline underline-offset-4" : ""
-                          } ${
-                            day.day === pickedDay?.day
-                              ? "cursor-pointer border border-white bg-white text-black"
-                              : day.slots.length
-                                ? "cursor-pointer border border-white/45 hover:border-white"
-                                : `cursor-default ${day.past ? "text-white/15" : day.weekday > 4 ? "text-white/25" : "text-white/40"}`
-                          }`}
-                        >
-                          {day.day}
-                        </button>
-                      </td>
-                    ) : (
-                      <td key={column} />
-                    )
-                  )}
-                </tr>
-              ))}
-            </tbody>
-          </table>
-
-          <div className="mt-4 border-t border-white/15 pt-4 min-h-24">
-            {pickedDay ? (
-              <div ref={times} role="group" aria-label={`${copy.times}, ${longDate.format(pickedDay.date)}`}>
-                <p className="text-sm xl:text-[0.9vw] text-white/60">{longDate.format(pickedDay.date)}</p>
-                <div className="mt-2 flex flex-wrap gap-2">
-                  {pickedDay.slots.map((slot) => {
-                    const chosen = value === slotValue(pickedDay.date, slot);
-                    return (
-                      <button
-                        key={slot}
-                        type="button"
-                        aria-pressed={chosen}
-                        onClick={() => pickTime(slot)}
-                        className={`cursor-pointer rounded-full border px-3 py-1.5 text-sm xl:text-[0.9vw] tabular-nums transition-colors duration-300 ${
-                          chosen ? "border-white bg-white text-black" : "border-white/30 hover:border-white"
-                        }`}
-                      >
-                        {slot}
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
-            ) : (
-              <p className="text-sm xl:text-[0.9vw] text-white/60">{free.length ? copy.note : copy.none}</p>
-            )}
-          </div>
-
-          {value && (
-            <button
-              type="button"
-              onClick={() => {
-                setValue("");
-                close();
-              }}
-              className="mt-3 cursor-pointer text-xs xl:text-[0.8vw] uppercase tracking-[0.25rem] text-white/60 hover:text-white"
-            >
-              {copy.clear}
-            </button>
-          )}
+          {panel}
         </div>
       )}
     </div>

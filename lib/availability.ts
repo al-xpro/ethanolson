@@ -28,7 +28,7 @@ function random(seed: number) {
   };
 }
 
-/** Every day of the month (0-based `month`), with the windows Ethan can be reached in */
+/** Every day of the month (0-based `month`), with the windows Ethan can be reached in (from tomorrow) */
 export function monthAvailability(year: number, month: number, today: Date): Day[] {
   const next = random(year * 12 + month + 1);
   const start = new Date(today.getFullYear(), today.getMonth(), today.getDate());
@@ -48,7 +48,8 @@ export function monthAvailability(year: number, month: number, today: Date): Day
       weekday,
       past,
       today: date.getTime() === start.getTime(),
-      slots: !past && weekday < 5 && open ? slots : [],
+      // Calls are booked from tomorrow: today's windows may already be over
+      slots: !past && date > start && weekday < 5 && open ? slots : [],
     };
   });
 }
