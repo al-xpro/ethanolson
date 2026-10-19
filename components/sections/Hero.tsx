@@ -57,40 +57,35 @@ const Hero = ({ content }: { content: Home["hero"] }) => {
             dpr={[1, 1.5]}
             camera={{ position: [0, 0, -10], fov: 17.5, near: 1, far: 20 }}
           >
-            <ambientLight intensity={0.4} />
+            <ambientLight intensity={1} />
             <Suspense fallback={null}>
               <Float
                 speed={reduceMotion ? 0 : 1}
-                rotationIntensity={reduceMotion ? 0 : 1}
+                rotationIntensity={reduceMotion ? 0 : 0.3}
                 floatIntensity={reduceMotion ? 0 : 1}
               >
                 <OpticalIllusion reduceMotion={reduceMotion} onReady={onFigureReady} />
               </Float>
             </Suspense>
-            {/* Key and rim lights: soft white gradients across the metal faces */}
-            <directionalLight position={[-4, 6, -8]} intensity={9} />
-            <directionalLight position={[6, -2, -6]} intensity={3} />
-            {/* Studio strips: sharp white reflections on the edges */}
+            {/* The original studio: four soft strips, reflected as white edges on the dark metal */}
             <Environment resolution={512}>
               <group rotation={[0, 0, 0]}>
-                <Lightformer form="rect" intensity={16} position={[0, 5, 0]} scale={[10, 2, 0]} />
+                <Lightformer form="rect" intensity={10} position={[0, 5, 0]} scale={[10, 2, 0]} />
                 <Lightformer
                   form="rect"
                   intensity={6}
                   position={[-5, 0, 0]}
                   rotation={[0, Math.PI / 2, 0]}
-                  scale={[10, 2, 0]}
+                  scale={[10, 6, 0]}
                 />
                 <Lightformer
                   form="rect"
                   intensity={6}
                   position={[5, 0, 0]}
                   rotation={[0, -Math.PI / 2, 0]}
-                  scale={[10, 2, 0]}
+                  scale={[10, 6, 0]}
                 />
-                <Lightformer form="circle" intensity={4} position={[0, 0, -2]} scale={5} />
-                {/* Front strip, on the camera side */}
-                <Lightformer form="rect" intensity={10} position={[1, 2, -6]} scale={[6, 1.2, 1]} />
+                <Lightformer form="circle" intensity={4} position={[0, 0, -5]} scale={5} />
               </group>
             </Environment>
           </Canvas>
