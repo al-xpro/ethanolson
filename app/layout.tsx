@@ -4,6 +4,8 @@ import { site } from "@/content/site";
 import SmoothScroll from "@/components/providers/SmoothScroll";
 import Navbar from "@/components/ui/Navbar";
 import Footer from "@/components/ui/Footer";
+// Lenis' own rules (auto height, stopped state, nested scroll areas): Safari needs them
+import "lenis/dist/lenis.css";
 import "./globals.css";
 
 const playfair = Playfair({
@@ -40,7 +42,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${playfair.variable} antialiased bg-[#111111] min-w-[320px] overflow-x-hidden`}
+        className={`${playfair.variable} antialiased bg-[#111111] min-w-[320px] overflow-x-clip`}
       >
         <a
           href="#main"

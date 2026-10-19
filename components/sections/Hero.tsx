@@ -50,6 +50,8 @@ const Hero = () => {
         >
           <Canvas
             frameloop={inView ? "always" : "never"}
+            // Retina screens would render 4× the pixels at full density; 1.5× still looks sharp
+            dpr={[1, 1.5]}
             camera={{ position: [0, 0, -10], fov: 17.5, near: 1, far: 20 }}
           >
             <ambientLight intensity={0.4} />

@@ -17,11 +17,26 @@ export default function ZoomParallax() {
             start: "top top",
             end: "bottom bottom",
             scrub: true,
+            invalidateOnRefresh: true,
           },
         });
 
-        gsap.utils.toArray<HTMLElement>(".zoom-layer").forEach((layer, index) => {
-          tl.to(layer, { scale: zoomPictures[index].scale, ease: "none" }, 0);
+        // Each picture grows around the center of the screen. Scaling the picture itself (not
+        // a full-screen layer around it) keeps the scaled surface small: Safari rasterizes the
+        // whole transformed layer, and full-screen layers at 9× froze the page there.
+        gsap.utils.toArray<HTMLElement>(".zoom-picture").forEach((picture, index) => {
+          tl.fromTo(
+            picture,
+            {
+              scale: 1,
+              transformOrigin: () => {
+                const layer = picture.parentElement!;
+                return `${layer.clientWidth / 2 - picture.offsetLeft}px ${layer.clientHeight / 2 - picture.offsetTop}px`;
+              },
+            },
+            { scale: zoomPictures[index].scale, ease: "none", immediateRender: true },
+            0
+          );
         });
       });
     },
@@ -36,7 +51,7 @@ export default function ZoomParallax() {
             key={src.src}
             className="zoom-layer size-full top-0 absolute flex items-center justify-center"
           >
-            <div className={`${className} relative`}>
+            <div className={`zoom-picture ${className} relative`}>
               <Image
                 src={src}
                 alt={alt}
