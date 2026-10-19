@@ -73,7 +73,7 @@ export function WorkDetail({ work, next }: { work: Work; next: Work }) {
         );
 
         // Challenge: each word lights up as it's read
-        const words = SplitText.create(".work-challenge", { type: "words" });
+        const words = SplitText.create(".work-challenge", { type: "words", aria: "none" }) // a <p> can't carry an aria-label;
         gsap.fromTo(
           words.words,
           { opacity: 0.15 },

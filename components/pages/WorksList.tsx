@@ -28,9 +28,11 @@ export function WorksList() {
 
       gsap.matchMedia().add(MOTION_OK, () => {
         gsap.utils.toArray<HTMLElement>(".work-row").forEach((row) => {
+          // aria "none": the split title is hidden from assistive tech, which reads its copy
           const split = SplitText.create(row.querySelector(".work-title"), {
             type: "chars",
             mask: "chars",
+            aria: "none",
           });
           gsap
             .timeline({ scrollTrigger: { trigger: row, start: "top 88%" } })
@@ -89,7 +91,10 @@ export function WorksList() {
               <span className="work-meta text-sm xl:text-[1vw] text-white/50 tabular-nums">
                 {String(index + 1).padStart(2, "0")}
               </span>
-              <span className="work-title text-4xl sm:text-6xl xl:text-[6vw] uppercase leading-[0.9] transition-[translate,color] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-3 xl:group-hover:translate-x-[1.5vw] lg:[ul:hover_&]:text-white/35 lg:group-hover:text-white!">
+              {/* The visible title is split into letters for its animation, so assistive tech
+                  reads this copy instead */}
+              <span className="sr-only">{work.title}</span>
+              <span aria-hidden className="work-title text-4xl sm:text-6xl xl:text-[6vw] uppercase leading-[0.9] transition-[translate,color] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-3 xl:group-hover:translate-x-[1.5vw] lg:[ul:hover_&]:text-white/35 lg:group-hover:text-white!">
                 {work.title}
               </span>
               <span className="work-meta col-start-2 lg:col-start-3 flex flex-col lg:items-end gap-1 text-sm xl:text-[1vw] text-white/60">

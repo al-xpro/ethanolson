@@ -17,7 +17,8 @@ export function AboutView() {
       gsap.matchMedia().add(MOTION_OK, () => {
         // Story: each line slides up out of its own mask
         gsap.utils.toArray<HTMLElement>(".about-story p").forEach((paragraph) => {
-          const split = SplitText.create(paragraph, { type: "lines", mask: "lines" });
+          // aria "none": a <p> can't carry an aria-label, and split lines read the same
+          const split = SplitText.create(paragraph, { type: "lines", mask: "lines", aria: "none" });
           gsap.from(split.lines, {
             yPercent: 100,
             stagger: 0.08,
