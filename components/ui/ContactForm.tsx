@@ -3,6 +3,7 @@
 import { useActionState, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { contactPage } from "@/content/sections";
+import { CallPicker } from "@/components/ui/CallPicker";
 import { submitContact } from "@/app/actions/contact";
 import {
   BUDGETS,
@@ -17,7 +18,7 @@ const fieldClass =
   "w-full bg-transparent border-b border-white/30 py-3 text-lg xl:text-[1.3vw] text-white placeholder:text-white/40 outline-none transition-[border-color,box-shadow] duration-300 hover:border-white/70 focus:border-white focus:shadow-[0_1px_0_0_#fff] aria-[invalid=true]:border-[#ff8a80] aria-[invalid=true]:focus:shadow-[0_1px_0_0_#ff8a80]";
 const labelClass = "text-xs xl:text-[0.8vw] tracking-[0.3rem] uppercase text-white/70";
 
-const FIELDS: ContactField[] = ["name", "email", "budget", "message"];
+const FIELDS: ContactField[] = ["name", "email", "budget", "message", "call"];
 
 type Errors = Partial<Record<ContactField, string>>;
 
@@ -76,6 +77,10 @@ export function ContactForm() {
     if (typing === field) return undefined;
     if (attempts > 0 || touched.has(field)) return clientErrors[field];
     return hydrated ? undefined : serverErrors[field] ?? clientErrors[field];
+  };
+
+  const revalidate = () => {
+    if (formRef.current) setClientErrors(validate(formRef.current));
   };
 
   const handleInput = (field: ContactField) => () => {
@@ -184,6 +189,15 @@ export function ContactForm() {
         </select>
         {error("budget")}
       </div>
+
+      <CallPicker
+        name="call"
+        defaultValue={values.call}
+        error={errorFor("call")}
+        labelClass={labelClass}
+        fieldClass={fieldClass}
+        onChange={revalidate}
+      />
 
       <div>
         <label htmlFor="message" className={labelClass}>

@@ -3,7 +3,6 @@
 import { useRef } from "react";
 import { SocialLinks, activeSocials } from "@/components/ui/SocialLinks";
 import { ContactForm } from "@/components/ui/ContactForm";
-import { AvailabilityCalendar } from "@/components/ui/AvailabilityCalendar";
 import { contactPage } from "@/content/sections";
 import { site } from "@/content/site";
 import { gsap, useGSAP, MOTION_OK } from "@/lib/gsap";
@@ -65,12 +64,6 @@ export function ContactView() {
             <p className="normal-case text-lg xl:text-[1.2vw] leading-relaxed text-white/70">
               {contactPage.replyText}
             </p>
-          </div>
-
-          <div className="contact-reveal">
-            <h2 className="xl:text-[2vw]">{contactPage.availability.label}</h2>
-            <div className="w-full h-px xl:h-[0.1vw] my-2 bg-white/30" />
-            <AvailabilityCalendar />
           </div>
 
           {activeSocials.length > 0 && (

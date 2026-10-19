@@ -85,16 +85,29 @@ test.describe("without JavaScript", () => {
   });
 });
 
-test("the availability calendar shows the times of a free day", async ({ page }) => {
-  await page.goto("/contact");
-  const calendar = page.getByRole("heading", { name: "Availability" }).locator("..");
-  await calendar.scrollIntoViewIfNeeded();
+test("the date picker chooses a free call slot with the keyboard", async ({ page }) => {
+  await openContact(page);
+  const trigger = page.getByRole("button", { name: /Preferred call/ });
+  await trigger.click();
+  const dialog = page.getByRole("dialog", { name: "Choose a day and a time for a call" });
+  await expect(dialog).toBeVisible();
 
-  // The pattern changes every month, so look at next month: it's always fully ahead
-  await calendar.getByRole("button", { name: "Next month" }).click();
-  const free = calendar.locator("ol").getByRole("button");
-  await expect(free.first()).toBeVisible();
-  await free.last().click();
-  await expect(free.last()).toHaveAttribute("aria-pressed", "true");
-  await expect(calendar.locator("[aria-live] li").first()).toHaveText(/\d{2}:\d{2}–\d{2}:\d{2}/);
+  // Next month is always fully ahead, so it always has free days
+  await page.keyboard.press("PageDown");
+  const free = dialog.getByRole("gridcell").getByRole("button", { name: /, free$/ });
+  await free.first().focus();
+  await page.keyboard.press("Enter");
+  const time = dialog.getByRole("group").getByRole("button").first();
+  await expect(time).toBeFocused();
+  const slot = (await time.textContent())!;
+  await page.keyboard.press("Enter");
+
+  await expect(dialog).toBeHidden();
+  await expect(trigger).toBeFocused();
+  await expect(trigger).toContainText(slot);
+  await expect(page.locator('input[name="call"]')).toHaveValue(new RegExp(`^\\d{4}-\\d{2}-\\d{2} ${slot}$`));
+
+  await trigger.click();
+  await page.keyboard.press("Escape");
+  await expect(dialog).toBeHidden();
 });

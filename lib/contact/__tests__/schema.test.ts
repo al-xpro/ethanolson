@@ -31,4 +31,11 @@ describe("contactSchema", () => {
     const result = contactSchema.safeParse({ ...valid, message: "a".repeat(2001) });
     expect(result.success).toBe(false);
   });
+
+  it("accepts no preferred call, and rejects one that isn't a free slot", () => {
+    expect(contactSchema.safeParse({ ...valid, call: "" }).success).toBe(true);
+    const result = contactSchema.safeParse({ ...valid, call: "2020-01-01 09:00–10:30" });
+    expect(result.success).toBe(false);
+    expect(result.error?.issues[0]?.path).toEqual(["call"]);
+  });
 });

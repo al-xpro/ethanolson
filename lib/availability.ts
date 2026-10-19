@@ -52,3 +52,18 @@ export function monthAvailability(year: number, month: number, today: Date): Day
     };
   });
 }
+
+/** "2026-10-21 14:00–15:30": the value the form sends for a chosen call */
+export const slotValue = (date: Date, slot: string) =>
+  `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")} ${slot}`;
+
+/** Whether a sent call slot is really free: this month or the next, not in the past */
+export function isOpenSlot(value: string, today: Date = new Date()) {
+  const match = /^(\d{4})-(\d{2})-(\d{2}) (\d{2}:\d{2}–\d{2}:\d{2})$/.exec(value);
+  if (!match) return false;
+  const [, year, month, day, slot] = match;
+  const offset = (Number(year) - today.getFullYear()) * 12 + Number(month) - 1 - today.getMonth();
+  if (offset < 0 || offset > 1) return false;
+  const days = monthAvailability(Number(year), Number(month) - 1, today);
+  return days[Number(day) - 1]?.slots.includes(slot) ?? false;
+}
