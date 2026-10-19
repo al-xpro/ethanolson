@@ -22,34 +22,43 @@ test("pressing Enter in a field doesn't send the form", async ({ page }) => {
   await expect(page.getByText("Please enter a valid e-mail address.")).toBeHidden();
 });
 
-test("errors show after leaving a field, and clear while typing", async ({ page }) => {
+test("leaving fields shows no errors; Send shows them all", async ({ page }) => {
   await openContact(page);
   const name = page.getByLabel("Name", { exact: true });
+  const email = page.getByLabel("E-mail", { exact: true });
 
   await name.fill("A");
-  await name.blur();
-  await expect(name).toHaveAttribute("aria-invalid", "true");
-  await expect(page.getByText("Please enter your name.")).toBeVisible();
-
-  await name.focus();
-  await page.keyboard.type("da");
+  await email.fill("not an e-mail");
+  await email.blur();
   await expect(page.getByText("Please enter your name.")).toBeHidden();
-  await expect(name).toHaveAttribute("aria-invalid", "false");
-});
-
-test("leaving an empty field shows no error; Send shows them all", async ({ page }) => {
-  await openContact(page);
-  const name = page.getByLabel("Name", { exact: true });
-  await name.focus();
-  await name.blur();
-  await expect(page.getByText("Please enter your name.")).toBeHidden();
+  await expect(page.getByText("Please enter a valid e-mail address.")).toBeHidden();
 
   // aria-disabled: looks disabled, but people can still press it to see what's missing.
   // Playwright treats it as disabled, so the click is forced.
   await page.getByRole("button", { name: "Send message" }).click({ force: true });
   await expect(page.getByText("Please enter your name.")).toBeVisible();
+  await expect(page.getByText("Please enter a valid e-mail address.")).toBeVisible();
   await expect(page.getByText("Please choose a budget.")).toBeVisible();
   await expect(name).toBeFocused();
+});
+
+test("after Send, errors clear while typing and follow the field", async ({ page }) => {
+  await openContact(page);
+  const name = page.getByLabel("Name", { exact: true });
+  await page.getByRole("button", { name: "Send message" }).click({ force: true });
+  await expect(name).toHaveAttribute("aria-invalid", "true");
+
+  await name.focus();
+  await page.keyboard.type("A");
+  await expect(page.getByText("Please enter your name.")).toBeHidden();
+  await name.blur();
+  await expect(page.getByText("Please enter your name.")).toBeVisible();
+
+  await name.focus();
+  await page.keyboard.type("da");
+  await name.blur();
+  await expect(page.getByText("Please enter your name.")).toBeHidden();
+  await expect(name).toHaveAttribute("aria-invalid", "false");
 });
 
 test("the button unlocks once the form is valid, then sends", async ({ page }) => {
