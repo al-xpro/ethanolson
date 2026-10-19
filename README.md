@@ -60,6 +60,8 @@ npm run dev        # http://localhost:3000
 npm run typecheck
 npm run lint
 npm run build
+npm test           # unit tests (Vitest)
+npm run test:e2e   # end-to-end tests (Playwright, builds the site first)
 ```
 
 ### Environment variables
