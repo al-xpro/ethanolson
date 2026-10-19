@@ -12,7 +12,8 @@
     "typecheck": "next typegen && tsc --noEmit",
     "test": "vitest run",
     "test:watch": "vitest",
-    "test:e2e": "playwright test"
+    "test:e2e": "playwright test",
+    "media": "node --experimental-strip-types --no-warnings scripts/media-manifest.ts"
   },
   "dependencies": {
     "@gsap/react": "^2.1.2",
