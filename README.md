@@ -3,7 +3,7 @@
 > **Work in progress.** The full-stack features are being built in the open. See the
 > [roadmap](#roadmap).
 
-[![CI](https://github.com/al-xpro/portfolio-project/actions/workflows/ci.yml/badge.svg)](https://github.com/al-xpro/portfolio-project/actions/workflows/ci.yml)
+[![CI](https://github.com/al-xpro/ethanolson/actions/workflows/ci.yml/badge.svg)](https://github.com/al-xpro/ethanolson/actions/workflows/ci.yml)
 
 A portfolio for **Ethan Olson, a fictional design engineer**, designed and
 developed by [AlxPro](https://alxpro.com). It's a concept build: the persona, works and
@@ -119,8 +119,8 @@ requests, and I review and merge every change.
 
 ## Roadmap
 
-[Open issues](https://github.com/al-xpro/portfolio-project/issues) and the
-[`v2.0 — Full stack` milestone](https://github.com/al-xpro/portfolio-project/milestones).
+[Open issues](https://github.com/al-xpro/ethanolson/issues) and the
+[`v2.0 — Full stack` milestone](https://github.com/al-xpro/ethanolson/milestones).
 
 ## Credits and license
 
