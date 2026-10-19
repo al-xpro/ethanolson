@@ -1,10 +1,10 @@
 "use client";
 
 import { useEffect, useId, useRef, useState, useSyncExternalStore } from "react";
-import { contactPage } from "@/content/sections";
+import { contactLabels } from "@/content/ui";
 import { monthAvailability, slotValue } from "@/lib/availability";
 
-const copy = contactPage.callPicker;
+const copy = contactLabels.callPicker;
 const monthName = new Intl.DateTimeFormat("en-GB", { month: "long", year: "numeric" });
 const longDate = new Intl.DateTimeFormat("en-GB", { weekday: "long", day: "numeric", month: "long" });
 

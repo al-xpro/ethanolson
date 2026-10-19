@@ -1,25 +1,23 @@
 import type { Metadata } from "next";
-import { draftMode } from "next/headers";
 import { notFound } from "next/navigation";
-import { StoryblokStory } from "@storyblok/react/rsc";
-import { WorkDetail } from "@/components/pages/WorkDetail";
-import { works } from "@/content/works";
+import { WorkPage } from "@/components/cms/pages";
+import { StoryblokStory } from "@/lib/cms/live";
+import { isDraft, loadWorks } from "@/lib/cms/load";
 import { site } from "@/content/site";
-import { getStory } from "@/lib/storyblok/client";
-import type { WorkBlok } from "@/lib/storyblok/work";
-import "@/lib/storyblok/components";
 
 type Props = { params: Promise<{ slug: string }> };
 
-export const dynamicParams = false;
+// Works published after the build are rendered on their first visit, then cached
+export const dynamicParams = true;
 
-export function generateStaticParams() {
+export async function generateStaticParams() {
+  const { works } = await loadWorks();
   return works.map((work) => ({ slug: work.slug }));
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const work = works.find((item) => item.slug === slug);
+  const work = (await loadWorks()).works.find((item) => item.slug === slug);
   if (!work) return {};
   return {
     title: work.title,
@@ -31,21 +29,17 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-export default async function WorkPage({ params }: Props) {
+export default async function WorkRoute({ params }: Props) {
   const { slug } = await params;
+  const [{ works, stories }, draft] = await Promise.all([loadWorks(), isDraft()]);
   const index = works.findIndex((item) => item.slug === slug);
-  if (index === -1) notFound();
+  const story = stories.get(slug);
+  if (index === -1 && !(draft && story)) notFound();
 
   const work = works[index];
   const next = works[(index + 1) % works.length];
 
-  // In draft mode (opened from Storyblok's Visual Editor), the page shows the draft from
-  // Storyblok and updates live while it's edited. Published pages still come from
-  // content/works.ts until the works are read from Storyblok (#22, #23).
-  const { isEnabled: draft } = await draftMode();
-  const story = draft ? await getStory<WorkBlok>(`works/${slug}`, { draft: true }) : null;
-
-  const jsonLd = {
+  const jsonLd = work && {
     "@context": "https://schema.org",
     "@type": "CreativeWork",
     name: work.title,
@@ -58,15 +52,14 @@ export default async function WorkPage({ params }: Props) {
 
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }}
-      />
-      {story ? (
-        <StoryblokStory story={story} slug={slug} next={next} />
-      ) : (
-        <WorkDetail work={work} next={next} />
+      {jsonLd && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }}
+        />
       )}
+      {/* In the Visual Editor, the draft renders through Storyblok and updates live */}
+      {draft && story ? <StoryblokStory story={story as never} slug={slug} /> : <WorkPage work={work} next={next} />}
     </>
   );
 }

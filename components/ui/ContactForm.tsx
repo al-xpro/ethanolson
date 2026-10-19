@@ -2,7 +2,7 @@
 
 import { useActionState, useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { contactPage } from "@/content/sections";
+import { contactLabels } from "@/content/ui";
 import { CallPicker } from "@/components/ui/CallPicker";
 import { submitContact } from "@/app/actions/contact";
 import {
@@ -214,9 +214,9 @@ export function ContactForm() {
       </div>
 
       <p className="text-sm xl:text-[0.9vw] text-white/60">
-        {contactPage.privacy.text}{" "}
+        {contactLabels.privacy.text}{" "}
         <Link href="/privacy" className="text-white underline underline-offset-4 hover:text-white/80">
-          {contactPage.privacy.link}
+          {contactLabels.privacy.link}
         </Link>
         .
       </p>

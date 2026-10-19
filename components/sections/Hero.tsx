@@ -4,12 +4,13 @@ import { Suspense, useCallback, useEffect, useRef, useState } from "react";
 import { Canvas } from "@react-three/fiber";
 import { Environment, Float, Lightformer } from "@react-three/drei";
 import AnimatedHeaderSection from "@/components/ui/AnimatedHeaderSection";
-import { heroHeader } from "@/content/sections";
+import type { Home } from "@/lib/cms/model";
+import { editable } from "@/lib/cms/editable";
 import { usePrefersReducedMotion } from "@/lib/useMediaQuery";
 import { useFastWebGL } from "@/lib/useFastWebGL";
 import { OpticalIllusion } from "../ui/OpticalIllusion";
 
-const Hero = () => {
+const Hero = ({ content }: { content: Home["hero"] }) => {
   const figureRef = useRef<HTMLElement>(null);
   const [inView, setInView] = useState(true);
   const reduceMotion = usePrefersReducedMotion();
@@ -30,14 +31,16 @@ const Hero = () => {
   return (
     <section
       id="home"
+      {...editable(content)}
       className="relative flex flex-col min-h-[max(100svh,320px)] w-full justify-start overflow-hidden pt-14 md:pt-20 xl:pt-[4.5vw]"
     >
       <AnimatedHeaderSection
-        subTitle={heroHeader.subTitle}
-        title={heroHeader.title}
-        text={heroHeader.text}
+        subTitle={content.header.subtitle}
+        title={content.header.title}
+        text={content.header.text}
         textColor={"text-white"}
         as="h1"
+        attrs={editable(content.header)}
       />
       {/* Without a GPU the scene would stutter, so it's skipped */}
       {fastWebGL && (

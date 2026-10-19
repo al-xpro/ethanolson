@@ -1,12 +1,6 @@
-import Hero from "@/components/sections/Hero";
-import ZoomParallax from "@/components/sections/ZoomParallax";
-import { IntroParallax } from "@/components/sections/IntroParallax";
-import Services from "@/components/sections/Services";
-import Works from "@/components/sections/Works";
-import { MiddleParallax } from "@/components/sections/MiddleParallax";
-import OutroParallax from "@/components/sections/OutroParallax";
-import Testimonials from "@/components/sections/Testimonials";
-import About from "@/components/sections/About";
+import { HomePage } from "@/components/cms/pages";
+import { StoryblokStory } from "@/lib/cms/live";
+import { isDraft, loadHome, loadWorks } from "@/lib/cms/load";
 import { site } from "@/content/site";
 
 const jsonLd = {
@@ -22,22 +16,16 @@ const jsonLd = {
   },
 };
 
-export default function Home() {
+export default async function Home() {
+  const [{ content, story }, { works }, draft] = await Promise.all([loadHome(), loadWorks(), isDraft()]);
   return (
     <>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }}
       />
-      <Hero />
-      <ZoomParallax />
-      <IntroParallax />
-      <About />
-      <Services />
-      <Works />
-      <MiddleParallax />
-      <Testimonials />
-      <OutroParallax />
+      {/* In the Visual Editor, the draft renders through Storyblok and updates live */}
+      {draft && story ? <StoryblokStory story={story as never} /> : <HomePage content={content} works={works} />}
     </>
   );
 }

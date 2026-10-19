@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Playfair } from "next/font/google";
 import { site } from "@/content/site";
 import { llmsIndex } from "@/lib/llms";
+import { loadSettings } from "@/lib/cms/load";
 import SmoothScroll from "@/components/providers/SmoothScroll";
 import Navbar from "@/components/ui/Navbar";
 import Footer from "@/components/ui/Footer";
@@ -35,11 +36,12 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const [{ content: settings }, llms] = await Promise.all([loadSettings(), llmsIndex()]);
   return (
     <html lang="en">
       <body
@@ -49,7 +51,7 @@ export default function RootLayout({
             map of the site, generated from content/, with a Markdown link for every page */}
         <script
           type="text/llms.txt"
-          dangerouslySetInnerHTML={{ __html: llmsIndex().replace(/<\/script/gi, "<\\/script") }}
+          dangerouslySetInnerHTML={{ __html: llms.replace(/<\/script/gi, "<\\/script") }}
         />
         <a
           href="#main"
@@ -58,7 +60,7 @@ export default function RootLayout({
           Skip to content
         </a>
         <SmoothScroll>
-          <Navbar />
+          <Navbar ctaLabel={settings.navbarCta} />
           <main id="main" className="relative w-full min-h-screen">
             {children}
           </main>

@@ -9,7 +9,7 @@ import { site } from "@/content/site";
 import { SocialLinks, activeSocials } from "@/components/ui/SocialLinks";
 import { usePrefersReducedMotion } from "@/lib/useMediaQuery";
 
-const Navbar = () => {
+const Navbar = ({ ctaLabel }: { ctaLabel: string }) => {
   const lenis = useLenis();
   const router = useRouter();
   const pathname = usePathname();
@@ -328,7 +328,7 @@ const Navbar = () => {
                 showHeader && !isOpen ? "pointer-events-auto opacity-100" : "opacity-0 invisible"
               }`}
             >
-              Start a project
+              {ctaLabel}
             </Link>
 
             <button

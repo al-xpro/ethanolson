@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
-import { PageIntro } from "@/components/ui/PageIntro";
-import { ContactView } from "@/components/pages/ContactView";
-import { contactHeader } from "@/content/sections";
+import { ContactPageView } from "@/components/cms/pages";
+import { StoryblokStory } from "@/lib/cms/live";
+import { isDraft, loadContact } from "@/lib/cms/load";
 
 export const metadata: Metadata = {
   title: "Contact",
@@ -9,11 +9,8 @@ export const metadata: Metadata = {
   alternates: { canonical: "/contact", types: { "text/markdown": "/contact.md" } },
 };
 
-export default function ContactPage() {
-  return (
-    <>
-      <PageIntro header={contactHeader} />
-      <ContactView />
-    </>
-  );
+export default async function ContactPage() {
+  const [{ content, story }, draft] = await Promise.all([loadContact(), isDraft()]);
+  if (draft && story) return <StoryblokStory story={story as never} />;
+  return <ContactPageView content={content} />;
 }

@@ -1,6 +1,8 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  // Media uploaded in Storyblok (resized by Storyblok's own image service, see CmsImage)
+  images: { remotePatterns: [{ protocol: "https", hostname: "a.storyblok.com" }] },
   // Markdown versions of the pages for agents (app/md, lib/llms.ts)
   async rewrites() {
     return [

@@ -1,32 +1,48 @@
 "use client";
 
 import { useRef } from "react";
-import Image from "next/image";
 import Link from "next/link";
 import { useLenis } from "lenis/react";
-import { works, workScreens, screenSize, darkBlur, type Work } from "@/content/works";
+import { CmsImage } from "@/components/cms/CmsImage";
+import type { Media } from "@/lib/cms/fields";
+import type { WorkEntry } from "@/lib/cms/types";
 import { gsap, useGSAP, MOTION_OK } from "@/lib/gsap";
 
-type Tile = { work: Work; src: string; tabStop: boolean };
+type Tile = { work: WorkEntry; screen: Media; tabStop: boolean };
 
-// Twelve tiles from the five projects' screens, mixed so each column shows different projects.
-// Keyboard users reach each project once, on the tile that scrolls fully into view (the
-// columns move at different speeds, so some tiles only ever show a sliver).
-const tile = (index: number, screen: number, tabStop = false): Tile => ({
-  work: works[index % works.length],
-  src: workScreens(works[index % works.length].slug)[screen],
-  tabStop,
-});
-
+// Twelve tiles from the works' screens, mixed so each column shows different works. Each
+// pair is (work, screen); with fewer works, they repeat.
 // Each column travels a different multiple of the viewport height while the gallery scrolls past
 const columns = [
-  { tiles: [tile(0, 0, true), tile(2, 1, true), tile(4, 2)], speed: 2, className: "block" },
-  { tiles: [tile(1, 0), tile(3, 1), tile(0, 2)], speed: 3.3, className: "hidden md:block" },
-  { tiles: [tile(2, 0), tile(4, 1, true), tile(1, 2, true)], speed: 1.25, className: "block" },
-  { tiles: [tile(3, 0, true), tile(0, 1), tile(2, 2)], speed: 3, className: "hidden lg:block" },
+  { tiles: [[0, 0], [2, 1], [4, 2]], speed: 2, className: "block" },
+  { tiles: [[1, 0], [3, 1], [0, 2]], speed: 3.3, className: "hidden md:block" },
+  { tiles: [[2, 0], [4, 1], [1, 2]], speed: 1.25, className: "block" },
+  { tiles: [[3, 0], [0, 1], [2, 2]], speed: 3, className: "hidden lg:block" },
 ];
 
-export const WorkParallax = () => {
+// Keyboard users reach each work once, on a tile that scrolls fully into view (the columns
+// move at different speeds, so some tiles only ever show a sliver): [column, tile]
+const visibleTiles = [[0, 0], [0, 1], [2, 1], [2, 2], [3, 0]];
+
+function tilesFor(works: WorkEntry[]): Tile[][] {
+  const grid = columns.map((column) =>
+    column.tiles.map(([work, screen]) => {
+      const entry = works[work % works.length];
+      return { work: entry, screen: entry.screens[screen % entry.screens.length], tabStop: false };
+    })
+  );
+  const reached = new Set<string>();
+  for (const [column, tile] of visibleTiles) {
+    const item = grid[column][tile];
+    if (reached.has(item.work.slug)) continue;
+    reached.add(item.work.slug);
+    item.tabStop = true;
+  }
+  return grid;
+}
+
+export const WorkParallax = ({ works }: { works: WorkEntry[] }) => {
+  const grid = tilesFor(works);
   const gallery = useRef<HTMLDivElement>(null);
   const timeline = useRef<gsap.core.Timeline | null>(null);
   const lenis = useLenis();
@@ -112,7 +128,7 @@ export const WorkParallax = () => {
 
         {columns.map((column, index) => (
           <div key={index} className={`${column.className} flex-1 min-w-0`}>
-            <Column tiles={column.tiles} index={index} />
+            <Column tiles={grid[index]} index={index} />
           </div>
         ))}
       </div>
@@ -126,9 +142,9 @@ const Column = ({ tiles, index }: { tiles: Tile[]; index: number }) => {
       data-column={index}
       className="work-column relative -top-[45%] flex h-full min-h-[500px] w-full flex-col gap-[2vw] first:top-[-45%] [&:nth-child(2)]:top-[-95%] [&:nth-child(3)]:top-[-45%] [&:nth-child(4)]:top-[-75%]"
     >
-      {tiles.map(({ work, src, tabStop }) => (
+      {tiles.map(({ work, screen, tabStop }, tileIndex) => (
         <Link
-          key={src}
+          key={tileIndex}
           href={`/works/${work.slug}`}
           aria-label={`${work.title}, ${work.category}`}
           // Repeated tiles stay clickable but out of the tab order and the accessibility tree
@@ -136,12 +152,9 @@ const Column = ({ tiles, index }: { tiles: Tile[]; index: number }) => {
           aria-hidden={tabStop ? undefined : true}
           className="group relative block w-full h-full overflow-hidden rounded-xl xl:rounded-[1.5vw]"
         >
-          <Image
-            src={src}
+          <CmsImage
+            media={screen}
             alt=""
-            {...screenSize}
-            placeholder="blur"
-            blurDataURL={darkBlur}
             sizes="(min-width: 1024px) 25vw, (min-width: 768px) 33vw, 50vw"
             className="h-full w-full object-cover transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-105"
           />

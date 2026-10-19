@@ -1,12 +1,13 @@
 "use client";
 
 import { useRef, useState } from "react";
-import Image from "next/image";
 import Link from "next/link";
-import { works, workCover, coverSize, darkBlur } from "@/content/works";
+import { CmsImage } from "@/components/cms/CmsImage";
+import type { WorkEntry } from "@/lib/cms/types";
+import { editable } from "@/lib/cms/editable";
 import { gsap, useGSAP, MOTION_OK, SplitText } from "@/lib/gsap";
 
-export function WorksList() {
+export function WorksList({ works }: { works: WorkEntry[] }) {
   const container = useRef<HTMLDivElement>(null);
   const preview = useRef<HTMLDivElement>(null);
   const [active, setActive] = useState(0);
@@ -77,7 +78,7 @@ export function WorksList() {
     >
       <ul onMouseLeave={() => showPreview(false)}>
         {works.map((work, index) => (
-          <li key={work.slug} className="work-row relative">
+          <li key={work.slug} {...editable(work)} className="work-row relative">
             <div className="work-rule absolute inset-x-0 top-0 h-px bg-white/25" />
             <Link
               href={`/works/${work.slug}`}
@@ -103,12 +104,9 @@ export function WorksList() {
               </span>
               {/* Phones get the cover inline instead of the cursor preview */}
               <span className="relative col-span-2 aspect-[16/10] overflow-hidden rounded-2xl lg:hidden">
-                <Image
-                  src={workCover(work.slug)}
+                <CmsImage
+                  media={work.cover}
                   alt=""
-                  {...coverSize}
-                  placeholder="blur"
-                  blurDataURL={darkBlur}
                   sizes="100vw"
                   className="h-full w-full object-cover"
                 />
@@ -131,12 +129,9 @@ export function WorksList() {
         >
           {works.map((work) => (
             <div key={work.slug} className="relative h-full w-full">
-              <Image
-                src={workCover(work.slug)}
+              <CmsImage
+                media={work.cover}
                 alt=""
-                {...coverSize}
-                placeholder="blur"
-                blurDataURL={darkBlur}
                 sizes="30vw"
                 className="h-full w-full object-cover"
               />

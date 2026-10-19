@@ -1,15 +1,16 @@
 "use client";
 
 import { useRef } from "react";
-import Image from "next/image";
+import { CmsImage } from "@/components/cms/CmsImage";
 import { PillLink } from "@/components/ui/PillLink";
-import { aboutPage, aboutPortrait } from "@/content/about";
+import type { AboutPage } from "@/lib/cms/model";
+import { editable } from "@/lib/cms/editable";
 import { gsap, useGSAP, MOTION_OK, ScrollTrigger, SplitText } from "@/lib/gsap";
 
 const label = "text-xs xl:text-[0.8vw] tracking-[0.3rem] uppercase text-white/50";
 const sectionTitle = "text-4xl sm:text-6xl xl:text-[4.5vw] uppercase leading-none";
 
-export function AboutView() {
+export function AboutView({ content: aboutPage }: { content: AboutPage }) {
   const container = useRef<HTMLDivElement>(null);
 
   useGSAP(
@@ -82,10 +83,8 @@ export function AboutView() {
       <section className="grid gap-12 lg:grid-cols-[1fr_1.15fr] xl:gap-[5vw] px-5 sm:px-10 xl:px-[1.5vw] pb-24 xl:pb-[6vw]">
         {/* Square crop of Ethan at his desk, coding */}
         <div className="relative aspect-square overflow-hidden rounded-3xl xl:rounded-[2vw] self-start">
-          <Image
-            src={aboutPortrait.src}
-            alt={aboutPortrait.alt}
-            placeholder="blur"
+          <CmsImage
+            media={aboutPage.image}
             priority
             sizes="(min-width: 1024px) 45vw, 100vw"
             className="h-full w-full object-cover object-[center_55%] grayscale contrast-125 brightness-90"
@@ -93,8 +92,10 @@ export function AboutView() {
           <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
         </div>
         <div className="about-story flex flex-col gap-8 xl:gap-[2vw] text-xl sm:text-2xl xl:text-[1.8vw] leading-snug text-white/85 text-pretty">
-          {aboutPage.story.map((paragraph) => (
-            <p key={paragraph}>{paragraph}</p>
+          {aboutPage.story.map((paragraph, index) => (
+            <p key={index} {...editable(paragraph)}>
+              {paragraph.text}
+            </p>
           ))}
         </div>
       </section>
@@ -104,9 +105,10 @@ export function AboutView() {
           {aboutPage.experienceTitle}
         </h2>
         <ol>
-          {aboutPage.experience.map((job) => (
+          {aboutPage.experience.map((job, index) => (
             <li
-              key={job.period}
+              key={index}
+              {...editable(job)}
               className="experience-row grid gap-3 md:grid-cols-[1fr_1.4fr_2fr] md:gap-8 xl:gap-[3vw] border-t border-white/20 py-8 xl:py-[2vw]"
             >
               <span className="text-sm xl:text-[1vw] text-white/50 tabular-nums">{job.period}</span>
@@ -125,16 +127,17 @@ export function AboutView() {
           {aboutPage.skillsTitle}
         </h2>
         <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-[2.5vw]">
-          {aboutPage.techSkills.map((group) => (
-            <div key={group.group} className="flex flex-col gap-4">
-              <h3 className={label}>{group.group}</h3>
+          {aboutPage.skills.map((group, index) => (
+            <div key={index} {...editable(group)} className="flex flex-col gap-4">
+              <h3 className={label}>{group.title}</h3>
               <ul className="flex flex-wrap gap-2">
-                {group.items.map((item) => (
+                {group.badges.map((badge, badgeIndex) => (
                   <li
-                    key={item}
+                    key={badgeIndex}
+                    {...editable(badge)}
                     className="skill-chip rounded-full border border-white/25 px-4 py-2 xl:px-[1vw] xl:py-[0.5vw] text-sm xl:text-[0.95vw]"
                   >
-                    {item}
+                    {badge.label}
                   </li>
                 ))}
               </ul>
@@ -145,11 +148,11 @@ export function AboutView() {
 
       <section aria-labelledby="how-i-work" className="px-5 sm:px-10 xl:px-[1.5vw] pb-24 xl:pb-[6vw]">
         <h2 id="how-i-work" className={`${sectionTitle} mb-10 xl:mb-[3vw]`}>
-          {aboutPage.softSkillsTitle}
+          {aboutPage.workTitle}
         </h2>
         <ol className="grid gap-px overflow-hidden rounded-3xl xl:rounded-[2vw] border border-white/15 bg-white/15 sm:grid-cols-2">
-          {aboutPage.softSkills.map((skill, index) => (
-            <li key={skill.title} className="flex flex-col gap-3 bg-[#111] p-8 xl:p-[2.5vw]">
+          {aboutPage.work.map((skill, index) => (
+            <li key={index} {...editable(skill)} className="flex flex-col gap-3 bg-[#111] p-8 xl:p-[2.5vw]">
               <span className="text-sm xl:text-[1vw] text-white/40 tabular-nums">
                 {String(index + 1).padStart(2, "0")}
               </span>
@@ -165,9 +168,10 @@ export function AboutView() {
           {aboutPage.passionsTitle}
         </h2>
         <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 xl:gap-[1.5vw] [perspective:1200px]">
-          {aboutPage.passions.map((passion) => (
+          {aboutPage.passions.map((passion, index) => (
             <li
-              key={passion.title}
+              key={index}
+              {...editable(passion)}
               onPointerMove={tilt}
               onPointerLeave={untilt}
               className="passion-card flex min-h-64 xl:min-h-[18vw] flex-col justify-between gap-6 rounded-3xl xl:rounded-[1.5vw] border border-white/15 bg-[#161616] p-8 xl:p-[2vw] [transform-style:preserve-3d]"
@@ -180,8 +184,8 @@ export function AboutView() {
       </section>
 
       <div className="flex flex-col items-center gap-6 pb-24 xl:pb-[6vw] px-5 text-center">
-        <p className="text-3xl sm:text-5xl xl:text-[3.5vw] uppercase text-balance leading-none">{aboutPage.cta.title}</p>
-        <PillLink href="/contact">{aboutPage.cta.link}</PillLink>
+        <p className="text-3xl sm:text-5xl xl:text-[3.5vw] uppercase text-balance leading-none">{aboutPage.ctaTitle}</p>
+        <PillLink href="/contact">{aboutPage.ctaLabel}</PillLink>
       </div>
     </div>
   );
