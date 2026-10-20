@@ -105,9 +105,14 @@ requests, and I review and merge every change.
 [Open issues](https://github.com/al-xpro/portfolio-project/issues) and the
 [`v2.0 — Full stack` milestone](https://github.com/al-xpro/portfolio-project/milestones).
 
+## Contributing
+
+Issues are welcome. See [CONTRIBUTING.md](CONTRIBUTING.md), the
+[code of conduct](CODE_OF_CONDUCT.md) and the [security policy](SECURITY.md).
+
 ## Credits and license
 
 Media sources are listed in [CREDITS.md](CREDITS.md).
 
 © Alex Prostamo. All rights reserved. The code is public so it can be read and reviewed.
-It is not licensed for reuse or redistribution.
+It is not licensed for reuse or redistribution. See [LICENSE](LICENSE).
