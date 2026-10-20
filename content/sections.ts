@@ -139,6 +139,17 @@ export const contactPage = {
     text: "I only use your details to reply to your message. More in the",
     link: "privacy policy",
   },
+  availability: {
+    label: "Availability",
+    intro: "Days I'm free for a call this month and next. Pick one to see the times.",
+    previous: "Previous month",
+    next: "Next month",
+    open: "Free for a call",
+    booked: "Booked",
+    none: "No free days left this month: have a look at the next one.",
+    note: "Times are Central European Time. Mention a day in your message and I'll confirm it.",
+    weekdays: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
+  },
 };
 
 export const contactHeader: SectionHeader = {

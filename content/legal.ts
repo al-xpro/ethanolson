@@ -13,7 +13,7 @@ export type LegalPage = {
   sections: LegalSection[];
 };
 
-const contact = "hello@ethanolson.dev";
+const contact = "hello@ethanolson.alxpro.com";
 
 export const legalLabels = { updated: "Last updated", onThisPage: "On this page" };
 
@@ -23,7 +23,7 @@ export const privacyPolicy: LegalPage = {
   text: `What this site collects,
   why it needs it,
   and what you can do about it.`,
-  updated: "17 October 2026",
+  updated: "18 October 2026",
   intro:
     "This page explains what personal data this website collects, why, and what you can do about it. The website is designed and developed by Alex Prostamo (AlxPro), who is responsible for the data described here.",
   sections: [
@@ -43,7 +43,6 @@ export const privacyPolicy: LegalPage = {
         "Spam protection: a salted, one-way hash of your IP address, kept for one hour to limit how many messages can be sent. Your IP address itself is never stored. The legal basis is my legitimate interest in keeping the form usable.",
         "Analytics: anonymous page views counted with Umami, without cookies and without identifying you. The legal basis is my legitimate interest in understanding which pages are useful.",
         "Performance: anonymous loading measurements (Core Web Vitals) and the page they were taken on, with no IP address, user agent or cookie.",
-        "Bookings: if you book a call, Cal.com processes your name, e-mail address and the details you enter, under its own privacy policy.",
       ],
     },
     {
@@ -57,7 +56,6 @@ export const privacyPolicy: LegalPage = {
         "Resend: sends the e-mail notification about your message, and its confirmation.",
         "Neon (EU servers): stores the spam-protection counters and performance measurements.",
         "Umami: counts anonymous page views.",
-        "Cal.com: handles call bookings.",
       ],
     },
     {
@@ -98,7 +96,7 @@ export const termsPage: LegalPage = {
   title: "Terms & Conditions",
   text: `The rules for using this site,
   in plain words.`,
-  updated: "17 October 2026",
+  updated: "18 October 2026",
   intro:
     "These terms apply to your use of this website. By using it, you agree to them. If you don't agree, please don't use the site.",
   sections: [
@@ -129,7 +127,7 @@ export const termsPage: LegalPage = {
     {
       heading: "Links to other websites",
       paragraphs: [
-        "The site links to services such as Cal.com and social networks. Their own terms and privacy policies apply there, and I'm not responsible for their content.",
+        "The site links to other services, such as social networks. Their own terms and privacy policies apply there, and I'm not responsible for their content.",
       ],
     },
     {

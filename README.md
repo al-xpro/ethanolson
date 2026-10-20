@@ -9,7 +9,7 @@ A portfolio for **Ethan Olson, a fictional design engineer**, designed and
 developed by [AlxPro](https://alxpro.com). It's a concept build: the persona, works and
 copy are invented to show how a motion-rich, full-stack portfolio is made.
 
-**Live:** not deployed yet. It will be published at `ethanolson.dev`.
+**Live:** not deployed yet. It will be published at `ethanolson.alxpro.com`.
 
 ![The hero section: "Design Engineer" next to a 3D optical illusion](.github/assets/hero.jpg)
 
@@ -20,9 +20,10 @@ copy are invented to show how a motion-rich, full-stack portfolio is made.
 - A real-time 3D optical illusion in the hero, in black metal, that turns into place on load
 - Original GSAP scroll scenes on every page: a zoom grid, a mask reveal over video, a
   testimonials deck, a sticky services timeline with diagrams built in code, a cursor
-  preview for the works, a pinned cover reveal per project, and a sticky reveal footer
+  preview for the works, a framed cover parallax per project, and a sticky reveal footer
 - A contact form with a shared Zod schema, live validation and a server action that works
-  without JavaScript
+  without JavaScript, next to an availability calendar that shows different free days
+  every month (generated from the month, no booking service)
 - Full `prefers-reduced-motion` support: every scene has a static fallback
 - Accessible navigation: real links and buttons, a focus trap, Escape to close, visible
   focus on every control
@@ -38,7 +39,7 @@ copy are invented to show how a motion-rich, full-stack portfolio is made.
 - Zod for validation, Vitest and Playwright for tests
 
 Coming next (see the roadmap): Storyblok, Neon Postgres with Drizzle, Resend and Vercel
-BotID for the contact flow, Umami, self-built Web Vitals and Cal.com.
+BotID for the contact flow, Umami and self-built Web Vitals.
 
 ## Architecture
 
@@ -77,7 +78,7 @@ Put them in `.env.local`. Names only here. Never commit values.
 
 | Name | Purpose |
 | --- | --- |
-| `NEXT_PUBLIC_SITE_URL` | Canonical URL for metadata, sitemap and robots. Defaults to `https://ethanolson.dev`. |
+| `NEXT_PUBLIC_SITE_URL` | Canonical URL for metadata, sitemap and robots. Defaults to `https://ethanolson.alxpro.com`. |
 
 ## How this was built
 
