@@ -60,18 +60,8 @@ export const contactLabels = {
   },
 };
 
-// The footer's "View as an agent": the page's Markdown version, as AI agents read it
-export const agentView = {
-  button: "View as an agent",
-  title: "This page, as agents read it",
-  loading: "Loading…",
-  missing: "This page has no Markdown version. Agents start from llms.txt.",
-  copy: "Copy",
-  copied: "Copied",
-  raw: "Open the Markdown",
-  index: "llms.txt",
-  close: "Close",
-};
+// The footer's "View as an agent": the page in llms.txt, as AI agents read it
+export const agentView = { button: "View as an agent" };
 
 export const notFoundPage = {
   subTitle: "Error 404",
