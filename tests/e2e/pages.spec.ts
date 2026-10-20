@@ -74,6 +74,18 @@ test("focusing a testimonial link brings its card to the front", async ({ page }
   }).toPass();
 });
 
+test("the footer shows the page as an agent reads it", async ({ page }) => {
+  await page.goto("/works/quarrow");
+  const button = page.getByRole("button", { name: "View as an agent" });
+  await button.focus();
+  await button.click();
+  const dialog = page.getByRole("dialog", { name: "This page, as agents read it" });
+  await expect(dialog.locator("pre")).toContainText("# Quarrow");
+  await page.keyboard.press("Escape");
+  await expect(dialog).toBeHidden();
+  await expect(button).toBeFocused();
+});
+
 test.describe("on phones", () => {
   test.use({ viewport: { width: 390, height: 844 } });
 

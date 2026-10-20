@@ -35,12 +35,15 @@ export function Drawer({
   onClose,
   title,
   closeLabel = "Close",
+  wide = false,
   children,
 }: {
   open: boolean;
   onClose: () => void;
   title: string;
   closeLabel?: string;
+  /** On larger screens, a centred sheet instead of a full-width one */
+  wide?: boolean;
   children: React.ReactNode;
 }) {
   // Portals need the document: render nothing on the server
@@ -144,7 +147,9 @@ export function Drawer({
         aria-modal="true"
         aria-label={title}
         tabIndex={-1}
-        className="absolute inset-x-0 bottom-0 flex max-h-[85svh] min-w-[320px] flex-col rounded-t-3xl border-t border-white/15 bg-[#161616] text-white shadow-2xl outline-none"
+        className={`absolute inset-x-0 bottom-0 flex max-h-[85svh] min-w-[320px] flex-col rounded-t-3xl border-t border-white/15 bg-[#161616] text-white shadow-2xl outline-none ${
+          wide ? "sm:inset-x-auto sm:left-1/2 sm:w-[min(52rem,calc(100vw-4rem))] sm:-translate-x-1/2 sm:border-x" : ""
+        }`}
       >
         {/* The handle and the title bar start a drag; the rest keeps its own taps and scrolling */}
         <div

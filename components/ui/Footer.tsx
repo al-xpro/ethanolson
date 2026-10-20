@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useLenis } from "lenis/react";
 import { site } from "@/content/site";
 import { SocialLinks, activeSocials } from "@/components/ui/SocialLinks";
+import { AgentView } from "@/components/ui/AgentView";
 import { gsap, useGSAP, MOTION_OK, SplitText } from "@/lib/gsap";
 
 const columnTitle = "text-xs xl:text-[0.8vw] tracking-[0.3rem] uppercase text-white/50";
@@ -132,6 +133,7 @@ export default function Footer() {
                 © {new Date().getFullYear()} {site.name}. A concept project: {site.name} is a
                 fictional designer.
               </p>
+              <AgentView className="cursor-pointer self-start text-left text-white underline underline-offset-4 hover:text-white/70" />
               <p>
                 Designed and developed by{" "}
                 <a

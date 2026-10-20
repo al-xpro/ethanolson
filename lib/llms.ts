@@ -22,8 +22,8 @@ const oneLine = (text: string) => text.replace(/\s+/g, " ").trim();
 const list = (items: string[]) => items.map((item) => `- ${item}`).join("\n");
 const absolute = (path: string) => `${site.url}${path}`;
 
-/** The Markdown twin of a page: `/about` → `/about.md`, `/` → `/index.md` */
-export const markdownPath = (path: string) => `${path === "/" ? "/index" : path}.md`;
+export { markdownPath } from "@/lib/markdown-path";
+import { markdownPath } from "@/lib/markdown-path";
 
 const concept = `${site.name} is a fictional design engineer: this is a concept site designed and developed by ${site.creator.name} (${site.creator.brand}, ${site.creator.url}). The projects, clients and testimonials are part of the concept.`;
 
