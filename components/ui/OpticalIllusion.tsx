@@ -31,19 +31,17 @@ export function OpticalIllusion({
   const fit = Math.min(1, area.width / 2.6, area.height / 3);
   const offsetY = portrait ? -viewport.height * 0.2 : 0;
 
-  // Brushed titanium and polished chrome: a light, mirror-like metal that takes its
-  // contrast from the studio (bright where it faces the overhead softbox, charcoal where
-  // it mirrors the dark room), with a slight brushed grain along the faces
+  // Brushed titanium and polished chrome: a light mirror metal, slightly soft, so each face
+  // shows the studio's gradients rather than a single flat colour; the clear coat adds a
+  // crisper second reflection on top
   const material = useMemo(
     () =>
       new THREE.MeshPhysicalMaterial({
-        color: "#d4d4d4",
+        color: "#d6d6d6",
         metalness: 1,
-        roughness: 0.14,
-        anisotropy: 0.45,
-        clearcoat: 1,
-        clearcoatRoughness: 0.04,
-        envMapIntensity: 1.4,
+        roughness: 0.3,
+        clearcoat: 0.5,
+        clearcoatRoughness: 0.12,
       }),
     []
   );
@@ -52,13 +50,7 @@ export function OpticalIllusion({
 
   useLayoutEffect(() => {
     scene.traverse((child) => {
-      if ((child as THREE.Mesh).isMesh) {
-        const mesh = child as THREE.Mesh;
-        mesh.material = material;
-        // The overhead light casts the figure's shadow across its own joints
-        mesh.castShadow = true;
-        mesh.receiveShadow = true;
-      }
+      if ((child as THREE.Mesh).isMesh) (child as THREE.Mesh).material = material;
     });
     scene.scale.setScalar(0.5);
     scene.position.set(0, -1.23, 0.6);
