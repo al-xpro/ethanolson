@@ -7,7 +7,7 @@ import * as THREE from "three";
 
 // With reduced motion, the lights hold still at this angle: one of the best lit, and the
 // pose the favicon is rendered from
-const STILL_ANGLE = 1.8;
+const STILL_ANGLE = 5.4;
 
 const strips = Array.from({ length: 10 }, (_, index) => ({
   angle: (index / 10) * Math.PI * 2,
@@ -64,11 +64,11 @@ export function StudioEnvironment({ moving = true }: { moving?: boolean }) {
       <mesh scale={20}>
         <sphereGeometry args={[1, 32, 16, 0, Math.PI * 2, 0, Math.PI / 2]} />
         {/* Brighter than white (unclipped): black reflects only a few percent of it */}
-        <meshBasicMaterial color={[1.2, 1.2, 1.2]} toneMapped={false} side={THREE.BackSide} />
+        <meshBasicMaterial color={[0.3, 0.3, 0.3]} toneMapped={false} side={THREE.BackSide} />
       </mesh>
       <mesh scale={20}>
         <sphereGeometry args={[1, 32, 16, 0, Math.PI * 2, Math.PI / 2, Math.PI / 2]} />
-        <meshBasicMaterial color={[0.35, 0.35, 0.35]} toneMapped={false} side={THREE.BackSide} />
+        <meshBasicMaterial color={[0.3, 0.3, 0.3]} toneMapped={false} side={THREE.BackSide} />
       </mesh>
       <Rig moving={moving} />
     </Environment>
