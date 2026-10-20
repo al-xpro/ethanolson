@@ -128,12 +128,11 @@ export default function Footer() {
             >
               {site.name}
             </p>
-            <div className="mt-6 xl:mt-[1.5vw] flex flex-col sm:flex-row gap-2 justify-between border-t border-white/20 pt-4 xl:pt-[1vw] text-xs sm:text-sm xl:text-[0.9vw] text-white/60">
-              <p suppressHydrationWarning>
+            <div className="mt-6 xl:mt-[1.5vw] flex flex-col lg:flex-row gap-2 items-center justify-between border-t border-white/20 pt-4 xl:pt-[1vw] text-xs sm:text-sm xl:text-[0.9vw] text-white/60">
+              <p suppressHydrationWarning className="text-center text-balance">
                 © {new Date().getFullYear()} {site.name}. A concept project: {site.name} is a
                 fictional designer.
               </p>
-              <AgentView className="cursor-pointer self-start text-left text-white underline underline-offset-4 hover:text-white/70" />
               <p>
                 Designed and developed by{" "}
                 <a
@@ -145,6 +144,7 @@ export default function Footer() {
                   {site.creator.brand}
                 </a>
               </p>
+              <AgentView className="cursor-pointer text-left text-white underline underline-offset-4 hover:text-white/70" />
             </div>
           </div>
         </div>
