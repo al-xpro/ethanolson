@@ -1,4 +1,5 @@
-import type { WorkFeature as Feature } from "@/content/works";
+import type { Feature } from "@/lib/cms/model";
+import { editable } from "@/lib/cms/editable";
 
 // Classes used by the page's animations: .feature-item (rises in), .feature-strike (line
 // draws across), .feature-dot (shrinks away)
@@ -7,14 +8,14 @@ const cell = "rounded-2xl xl:rounded-[1.2vw] border border-white/15 bg-[#161616]
 
 export function WorkFeature({ feature }: { feature: Feature }) {
   return (
-    <div className="flex flex-col gap-10 xl:gap-[2.5vw]">
+    <div {...editable(feature)} className="flex flex-col gap-10 xl:gap-[2.5vw]">
       <h2 className="text-4xl sm:text-6xl xl:text-[4.5vw] uppercase leading-none">{feature.title}</h2>
 
-      {feature.kind === "compare" && (
+      {feature.component === "feature_compare" && (
         <div className="grid gap-4 md:grid-cols-[1fr_auto_1fr] md:items-center xl:gap-[2vw]">
           <ul className="flex flex-col gap-3">
-            {feature.before.map((tool) => (
-              <li key={tool} className={`feature-item ${cell} px-6 py-4 xl:px-[1.5vw] xl:py-[1vw] text-white/50 xl:text-[1.2vw]`}>
+            {feature.before.map((tool, index) => (
+              <li key={index} className={`feature-item ${cell} px-6 py-4 xl:px-[1.5vw] xl:py-[1vw] text-white/50 xl:text-[1.2vw]`}>
                 <span className="relative">
                   {tool}
                   <span aria-hidden className="feature-strike absolute inset-x-0 top-1/2 h-px origin-left bg-white/70" />
@@ -31,7 +32,7 @@ export function WorkFeature({ feature }: { feature: Feature }) {
         </div>
       )}
 
-      {feature.kind === "collapse" && (
+      {feature.component === "feature_collapse" && (
         <div className="flex flex-col gap-8 xl:gap-[2vw]">
           <div className="flex flex-wrap gap-2 xl:gap-[0.6vw]" aria-label={`${feature.from} steps before`}>
             {Array.from({ length: feature.from }, (_, index) => (
@@ -45,7 +46,7 @@ export function WorkFeature({ feature }: { feature: Feature }) {
           </div>
           <ol className="grid gap-3 sm:grid-cols-3 xl:gap-[1.5vw]">
             {feature.steps.map((step, index) => (
-              <li key={step} className={`feature-item ${cell} flex flex-col gap-6 p-6 xl:p-[1.8vw]`}>
+              <li key={index} className={`feature-item ${cell} flex flex-col gap-6 p-6 xl:p-[1.8vw]`}>
                 <span className="flex h-12 w-12 xl:h-[3.2vw] xl:w-[3.2vw] items-center justify-center rounded-full bg-white text-black xl:text-[1.1vw]">
                   {index + 1}
                 </span>
@@ -56,10 +57,10 @@ export function WorkFeature({ feature }: { feature: Feature }) {
         </div>
       )}
 
-      {feature.kind === "swatches" && (
+      {feature.component === "feature_swatches" && (
         <ul className="grid grid-cols-2 gap-3 sm:grid-cols-5 xl:gap-[1.2vw]">
-          {feature.swatches.map((swatch) => (
-            <li key={swatch.name} className="feature-item flex flex-col gap-3">
+          {feature.swatches.map((swatch, index) => (
+            <li key={index} {...editable(swatch)} className="feature-item flex flex-col gap-3">
               <span
                 className="aspect-square rounded-full border border-white/20 shadow-[inset_0_-12px_24px_rgb(0_0_0/0.45),inset_0_10px_20px_rgb(255_255_255/0.15)]"
                 style={{ background: swatch.tone }}
@@ -70,11 +71,11 @@ export function WorkFeature({ feature }: { feature: Feature }) {
         </ul>
       )}
 
-      {feature.kind === "blocks" && (
+      {feature.component === "feature_blocks" && (
         <ul className="grid grid-cols-2 gap-3 sm:grid-cols-4 xl:gap-[1.2vw]">
           {feature.blocks.map((block, index) => (
             <li
-              key={block}
+              key={index}
               className={`feature-item ${cell} flex aspect-[4/3] flex-col justify-between p-5 xl:p-[1.4vw] ${
                 index % 3 === 0 ? "bg-white text-black" : ""
               }`}
@@ -88,11 +89,11 @@ export function WorkFeature({ feature }: { feature: Feature }) {
         </ul>
       )}
 
-      {feature.kind === "sequence" && (
+      {feature.component === "feature_sequence" && (
         <ol className="relative grid gap-6 sm:grid-cols-3 xl:gap-[2vw]">
           <span aria-hidden className="feature-strike absolute left-0 right-0 top-6 xl:top-[1.6vw] hidden h-px origin-left bg-white/40 sm:block" />
           {feature.steps.map((step, index) => (
-            <li key={step.label} className="feature-item relative flex flex-col gap-4">
+            <li key={index} {...editable(step)} className="feature-item relative flex flex-col gap-4">
               <span
                 className={`flex h-12 w-12 xl:h-[3.2vw] xl:w-[3.2vw] items-center justify-center rounded-full border xl:text-[1.1vw] ${
                   index < 2 ? "border-white bg-white text-black" : "border-white/40 bg-[#111] text-white/60"

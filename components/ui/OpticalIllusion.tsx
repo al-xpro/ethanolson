@@ -31,17 +31,17 @@ export function OpticalIllusion({
   const fit = Math.min(1, area.width / 2.6, area.height / 3);
   const offsetY = portrait ? -viewport.height * 0.2 : 0;
 
-  // Polished gunmetal: dark where it faces the room, white where it mirrors a softbox
+  // The original iron: near-black, polished, so the studio strips draw sharp white
+  // reflections on the edges (the material of the first version of the hero)
   const material = useMemo(
     () =>
       new THREE.MeshPhysicalMaterial({
-        color: "#2e2e2e",
+        color: "#2B2B2B",
         metalness: 1,
-        // Slightly brushed, so each strip's reflection spreads into a soft white gradient
-        roughness: 0.38,
-        clearcoat: 0.4,
+        roughness: 0.2,
+        clearcoat: 0.1,
         clearcoatRoughness: 0.1,
-        envMapIntensity: 2.6,
+        envMapIntensity: 2.2,
       }),
     []
   );

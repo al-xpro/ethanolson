@@ -1,7 +1,9 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { services, servicesPage } from "@/content/services";
+import type { ServicesPage } from "@/lib/cms/model";
+import { editable } from "@/lib/cms/editable";
+import { serviceLabels } from "@/content/ui";
 import { PillLink } from "@/components/ui/PillLink";
 import { SectionMinimap } from "@/components/ui/SectionMinimap";
 import { ServiceSchema } from "@/components/ui/ServiceSchema";
@@ -11,7 +13,16 @@ import { gsap, useGSAP, MOTION_OK, ScrollTrigger, SplitText } from "@/lib/gsap";
 const label = "text-xs xl:text-[0.8vw] tracking-[0.3rem] uppercase text-white/50";
 const number = (index: number) => String(index + 1).padStart(2, "0");
 
-export function ServicesDetails() {
+// Anchors come from the titles, so services can be added and renamed freely
+const slugify = (text: string) =>
+  text
+    .toLowerCase()
+    .replace(/&/g, "and")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/(^-|-$)/g, "");
+
+export function ServicesDetails({ content }: { content: ServicesPage }) {
+  const services = content.services.map((service, index) => ({ ...service, slug: `${slugify(service.title)}-${index + 1}` }));
   const container = useRef<HTMLDivElement>(null);
   const body = useRef<HTMLDivElement>(null);
   const [current, setCurrent] = useState(0);
@@ -90,14 +101,14 @@ export function ServicesDetails() {
       <SectionMinimap
         items={services.map((service) => ({ id: service.slug, label: service.title }))}
         active={[services[current].slug]}
-        label={servicesPage.timelineLabel}
+        label={serviceLabels.timeline}
         region={body}
       />
 
       <div className="grid lg:grid-cols-[minmax(240px,0.75fr)_2.25fr] lg:gap-[4vw]">
         {/* Sticky four-step timeline (large screens) */}
         <aside className="hidden lg:block">
-          <nav aria-label={servicesPage.timelineLabel} className="sticky top-[22vh]">
+          <nav aria-label={serviceLabels.timeline} className="sticky top-[22vh]">
             <div className="relative pl-10 xl:pl-[2.6vw]">
               <span aria-hidden className="absolute left-[11px] xl:left-[0.75vw] top-2 bottom-2 w-px bg-white/15" />
               <span
@@ -152,11 +163,12 @@ export function ServicesDetails() {
             <article
               key={service.slug}
               id={service.slug}
+              {...editable(service)}
               aria-labelledby={`${service.slug}-title`}
               className="service-step scroll-mt-20 flex flex-col gap-8 xl:gap-[2vw] border-t border-white/15 py-16 xl:py-[5vw] first:border-t-0 first:pt-10"
             >
               <span className={label}>
-                {servicesPage.stepLabel} {number(index)} — {number(services.length - 1)}
+                {serviceLabels.step} {number(index)} — {number(services.length - 1)}
               </span>
               <h2
                 id={`${service.slug}-title`}
@@ -172,10 +184,10 @@ export function ServicesDetails() {
 
               <div className="grid gap-10 md:grid-cols-2 xl:gap-[3vw]">
                 <div>
-                  <p className={`${label} mb-4 xl:mb-[1vw]`}>{servicesPage.deliverablesLabel}</p>
+                  <p className={`${label} mb-4 xl:mb-[1vw]`}>{serviceLabels.deliverables}</p>
                   <ul className="flex flex-col gap-2 text-base xl:text-[1.1vw] text-white/80">
-                    {service.deliverables.map((item) => (
-                      <li key={item} className="flex gap-3">
+                    {service.deliverables.map((item, itemIndex) => (
+                      <li key={itemIndex} className="flex gap-3">
                         <span aria-hidden className="text-white/40">
                           —
                         </span>
@@ -185,10 +197,10 @@ export function ServicesDetails() {
                   </ul>
                 </div>
                 <div className="process">
-                  <p className={`${label} mb-4 xl:mb-[1vw]`}>{servicesPage.processLabel}</p>
+                  <p className={`${label} mb-4 xl:mb-[1vw]`}>{serviceLabels.process}</p>
                   <ol className="flex flex-col gap-4">
                     {service.process.map((step, stepIndex) => (
-                      <li key={step.title} className="process-step grid grid-cols-[2rem_1fr] xl:grid-cols-[2.4vw_1fr]">
+                      <li key={stepIndex} {...editable(step)} className="process-step grid grid-cols-[2rem_1fr] xl:grid-cols-[2.4vw_1fr]">
                         <span className="text-white/40 tabular-nums xl:text-[1vw]">{stepIndex + 1}.</span>
                         <span className="flex flex-col gap-1">
                           <span className="text-base xl:text-[1.15vw]">{step.title}</span>
@@ -202,14 +214,15 @@ export function ServicesDetails() {
 
               <div className="flex flex-wrap items-center gap-2 xl:gap-[0.5vw]">
                 <span className="rounded-full bg-white px-4 py-1.5 xl:px-[1vw] xl:py-[0.35vw] text-xs xl:text-[0.8vw] uppercase tracking-widest text-black">
-                  {servicesPage.durationLabel}: {service.timeline}
+                  {serviceLabels.duration}: {service.timeline}
                 </span>
-                {service.stack.map((tool) => (
+                {service.stack.map((tool, toolIndex) => (
                   <span
-                    key={tool}
+                    key={toolIndex}
+                    {...editable(tool)}
                     className="rounded-full border border-white/25 px-4 py-1.5 xl:px-[1vw] xl:py-[0.35vw] text-xs xl:text-[0.8vw] tracking-wide text-white/80"
                   >
-                    {tool}
+                    {tool.label}
                   </span>
                 ))}
               </div>
@@ -219,8 +232,8 @@ export function ServicesDetails() {
       </div>
 
       <div className="flex flex-col items-center gap-6 py-24 xl:py-[6vw] text-center">
-        <p className="text-3xl sm:text-5xl xl:text-[3.5vw] uppercase text-balance leading-none">{servicesPage.cta.title}</p>
-        <PillLink href="/contact">{servicesPage.cta.link}</PillLink>
+        <p className="text-3xl sm:text-5xl xl:text-[3.5vw] uppercase text-balance leading-none">{content.ctaTitle}</p>
+        <PillLink href="/contact">{content.ctaLabel}</PillLink>
       </div>
     </div>
   );

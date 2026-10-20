@@ -5,7 +5,9 @@ import Link from "next/link";
 import { useLenis } from "lenis/react";
 import AnimatedHeaderSection from "@/components/ui/AnimatedHeaderSection";
 import { PillLink } from "@/components/ui/PillLink";
-import { testimonials, testimonialsHeader } from "@/content/testimonials";
+import type { Home } from "@/lib/cms/model";
+import { editable } from "@/lib/cms/editable";
+import { testimonialLabels } from "@/content/ui";
 import { gsap, useGSAP, MOTION_OK } from "@/lib/gsap";
 
 const initials = (name: string) =>
@@ -14,7 +16,7 @@ const initials = (name: string) =>
     .map((part) => part[0])
     .join("");
 
-export default function Testimonials() {
+export default function Testimonials({ content }: { content: Home["testimonials"] }) {
   const deck = useRef<HTMLDivElement>(null);
   const timeline = useRef<gsap.core.Timeline | null>(null);
   const lenis = useLenis();
@@ -95,13 +97,14 @@ export default function Testimonials() {
   };
 
   return (
-    <section id="testimonials" className="relative">
+    <section id="testimonials" {...editable(content)} className="relative">
       <AnimatedHeaderSection
-        subTitle={testimonialsHeader.subTitle}
-        title={testimonialsHeader.title}
-        text={testimonialsHeader.text}
+        subTitle={content.header.subtitle}
+        title={content.header.title}
+        text={content.header.text}
         textColor="text-white"
         withScrollTrigger
+        attrs={editable(content.header)}
       />
 
       <div
@@ -110,9 +113,10 @@ export default function Testimonials() {
         className="relative flex h-[100svh] min-h-[320px] items-center justify-center overflow-clip px-5 motion-reduce:h-auto motion-reduce:flex-col motion-reduce:gap-6 motion-reduce:py-10"
       >
         {/* Short screens (phones in landscape) get a compact card, so the whole quote fits */}
-        {testimonials.map((item) => (
+        {content.testimonials.map((item, index) => (
           <figure
-            key={item.name}
+            key={index}
+            {...editable(item)}
             className="testimonial-card absolute flex w-[calc(100%-2.5rem)] max-w-3xl xl:max-w-[50vw] flex-col gap-8 xl:gap-[2vw] rounded-3xl xl:rounded-[2vw] border border-white/10 bg-[#161616] p-8 sm:p-12 xl:p-[3vw] text-white shadow-2xl motion-reduce:relative [@media(max-height:560px)]:gap-4 [@media(max-height:560px)]:p-6 [@media(max-height:560px)]:max-w-2xl"
           >
             <span
@@ -143,7 +147,7 @@ export default function Testimonials() {
                 href={`/works/${item.work}`}
                 className="text-xs xl:text-[0.8vw] uppercase tracking-[0.25rem] text-white/70 hover:text-white transition-colors duration-300"
               >
-                See the project →
+                {testimonialLabels.link}
               </Link>
             </figcaption>
           </figure>
@@ -152,9 +156,9 @@ export default function Testimonials() {
         {/* After the cards, so it's last in the tab order; the cards' z-index keeps it behind */}
         <div className="testimonials-closing absolute inset-0 flex flex-col items-center justify-center gap-6 xl:gap-[2vw] px-5 text-center text-white motion-reduce:relative motion-reduce:order-last motion-reduce:py-10">
           <p className="text-4xl sm:text-6xl xl:text-[5vw] uppercase leading-none text-balance max-w-4xl xl:max-w-[60vw]">
-            {testimonialsHeader.closing.title}
+            {content.ctaTitle}
           </p>
-          <PillLink href="/contact">{testimonialsHeader.closing.link}</PillLink>
+          <PillLink href="/contact">{content.ctaLabel}</PillLink>
         </div>
       </div>
     </section>

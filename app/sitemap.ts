@@ -1,8 +1,9 @@
 import type { MetadataRoute } from "next";
 import { site } from "@/content/site";
-import { works } from "@/content/works";
+import { loadWorks } from "@/lib/cms/load";
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const { works } = await loadWorks();
   const pages = ["", "/about", "/services", "/works", "/contact", "/privacy", "/terms"];
   return [
     ...pages.map((path) => ({

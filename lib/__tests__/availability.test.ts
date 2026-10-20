@@ -20,10 +20,10 @@ describe("monthAvailability", () => {
     expect(open(monthAvailability(2026, 9, today))).not.toEqual(open(monthAvailability(2026, 10, today)));
   });
 
-  it("is never open on weekends or past days", () => {
+  it("is never open on weekends, past days or today", () => {
     const days = monthAvailability(2026, 9, new Date(2026, 9, 18));
     for (const day of days) {
-      if (day.weekday > 4 || day.past) expect(day.slots).toEqual([]);
+      if (day.weekday > 4 || day.past || day.today) expect(day.slots).toEqual([]);
     }
     expect(days.find((day) => day.today)?.day).toBe(18);
   });

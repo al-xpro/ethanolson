@@ -24,6 +24,8 @@ export async function GET(request: NextRequest) {
   if (/[:\\]/.test(clean)) return new Response("Invalid path", { status: 400 });
 
   (await draftMode()).enable();
-  const target = clean === "home" ? "/" : `/${clean}`;
+  // Stories that aren't a page of their own (home, settings) open the home page
+  const page = clean.replace(/\/$/, "");
+  const target = page === "home" || page === "settings" || page === "" ? "/" : `/${page}`;
   redirect(forward.size ? `${target}?${forward}` : target);
 }

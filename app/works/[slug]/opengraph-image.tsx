@@ -1,17 +1,19 @@
 import { ImageResponse } from "next/og";
 import { site } from "@/content/site";
-import { works } from "@/content/works";
+import { loadWorks } from "@/lib/cms/load";
 
 export const alt = `${site.name}: work`;
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
-export function generateStaticParams() {
+export async function generateStaticParams() {
+  const { works } = await loadWorks();
   return works.map((work) => ({ slug: work.slug }));
 }
 
 export default async function OpengraphImage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
+  const { works } = await loadWorks();
   const work = works.find((item) => item.slug === slug) ?? works[0];
   return new ImageResponse(
     (

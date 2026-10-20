@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
-import { PageIntro } from "@/components/ui/PageIntro";
-import { AboutView } from "@/components/pages/AboutView";
-import { aboutPage } from "@/content/about";
+import { AboutPageView } from "@/components/cms/pages";
+import { StoryblokStory } from "@/lib/cms/live";
+import { isDraft, loadAbout } from "@/lib/cms/load";
 
 export const metadata: Metadata = {
   title: "About",
@@ -10,11 +10,8 @@ export const metadata: Metadata = {
   alternates: { canonical: "/about", types: { "text/markdown": "/about.md" } },
 };
 
-export default function AboutPage() {
-  return (
-    <>
-      <PageIntro header={aboutPage} />
-      <AboutView />
-    </>
-  );
+export default async function AboutPage() {
+  const [{ content, story }, draft] = await Promise.all([loadAbout(), isDraft()]);
+  if (draft && story) return <StoryblokStory story={story as never} />;
+  return <AboutPageView content={content} />;
 }

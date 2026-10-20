@@ -2,7 +2,7 @@
 
 import { useActionState, useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { contactPage } from "@/content/sections";
+import { contactLabels } from "@/content/ui";
 import { CallPicker } from "@/components/ui/CallPicker";
 import { submitContact } from "@/app/actions/contact";
 import {
@@ -41,7 +41,6 @@ export function ContactForm() {
   // Client checks only start once React runs, so the form still works without JavaScript
   const [hydrated, setHydrated] = useState(false);
   const [clientErrors, setClientErrors] = useState<Errors>({});
-  const [touched, setTouched] = useState<Set<ContactField>>(new Set());
   const [typing, setTyping] = useState<ContactField | null>(null);
   // Set when Send is pressed on an incomplete form: every error shows, and focus moves
   const [attempts, setAttempts] = useState(0);
@@ -71,12 +70,12 @@ export function ContactForm() {
     );
   }
 
-  // A field shows its error once something was typed in it and it was left, or after Send
-  // is pressed; never while it's being typed in
+  // Errors only show once Send has been pressed; from then on they follow the fields, but
+  // never while one is being typed in. Without JavaScript, the server's errors show.
   const errorFor = (field: ContactField) => {
     if (typing === field) return undefined;
-    if (attempts > 0 || touched.has(field)) return clientErrors[field];
-    return hydrated ? undefined : serverErrors[field] ?? clientErrors[field];
+    if (attempts > 0) return clientErrors[field];
+    return hydrated ? undefined : serverErrors[field];
   };
 
   const revalidate = () => {
@@ -88,14 +87,7 @@ export function ContactForm() {
     if (formRef.current) setClientErrors(validate(formRef.current));
   };
 
-  const handleBlur =
-    (field: ContactField) =>
-    (event: React.FocusEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
-      setTyping(null);
-      // Leaving an empty field isn't a mistake yet
-      if (event.currentTarget.value.trim() === "") return;
-      setTouched((current) => new Set(current).add(field));
-    };
+  const handleBlur = () => setTyping(null);
 
   const fieldProps = (field: ContactField) => {
     const error = errorFor(field);
@@ -108,7 +100,7 @@ export function ContactForm() {
       "aria-describedby": error ? `${field}-error` : undefined,
       onInput: handleInput(field),
       onChange: handleInput(field),
-      onBlur: handleBlur(field),
+      onBlur: handleBlur,
       className: fieldClass,
     };
   };
@@ -214,9 +206,9 @@ export function ContactForm() {
       </div>
 
       <p className="text-sm xl:text-[0.9vw] text-white/60">
-        {contactPage.privacy.text}{" "}
+        {contactLabels.privacy.text}{" "}
         <Link href="/privacy" className="text-white underline underline-offset-4 hover:text-white/80">
-          {contactPage.privacy.link}
+          {contactLabels.privacy.link}
         </Link>
         .
       </p>

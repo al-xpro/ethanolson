@@ -1,13 +1,14 @@
 "use client";
 
 import { useRef } from "react";
-import Image from "next/image";
-import { servicesData, servicesHeader } from "@/content/sections";
+import { CmsImage } from "@/components/cms/CmsImage";
+import type { Home } from "@/lib/cms/model";
+import { editable } from "@/lib/cms/editable";
 import { gsap, useGSAP, MOTION_OK } from "@/lib/gsap";
 import AnimatedHeaderSection from "../ui/AnimatedHeaderSection";
 import { PillLink } from "../ui/PillLink";
 
-const Services = () => {
+const Services = ({ content }: { content: Home["services"] }) => {
   const contentRef = useRef<HTMLDivElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
 
@@ -43,16 +44,18 @@ const Services = () => {
   return (
     <section
       id="services"
+      {...editable(content)}
       className="relative bg-black text-white overflow-hidden"
     >
       {/* HEADER SECTION: shrink-0 prevents it from being crushed by the flex column */}
       <div className="shrink-0">
         <AnimatedHeaderSection
-          subTitle={servicesHeader.subTitle}
-          title={servicesHeader.title}
-          text={servicesHeader.text}
+          subTitle={content.header.subtitle}
+          title={content.header.title}
+          text={content.header.text}
           textColor={"text-white"}
           withScrollTrigger={true}
+          attrs={editable(content.header)}
         />
       </div>
 
@@ -65,9 +68,10 @@ const Services = () => {
           ref={trackRef}
           className="flex h-full w-fit motion-reduce:w-full motion-reduce:flex-col"
         >
-          {servicesData.map((service, index) => (
+          {content.services.map((service, index) => (
             <div
-              key={service.title}
+              key={index}
+              {...editable(service)}
               className="
                 w-screen h-full motion-reduce:h-screen flex-shrink-0
                 flex flex-col lg:flex-row
@@ -79,10 +83,8 @@ const Services = () => {
             >
               {/* 1. VISUAL (Image) */}
               <div className="relative w-full lg:w-1/2 h-[50vh] lg:h-full rounded-3xl overflow-hidden border border-white/10 shadow-2xl">
-                <Image
-                  src={service.visual.src}
-                  alt={service.visual.alt}
-                  placeholder="blur"
+                <CmsImage
+                  media={service.image}
                   className="h-full w-full object-cover transition-transform duration-700"
                   sizes="(max-width: 1024px) 100vw, 50vw"
                 />
@@ -96,7 +98,7 @@ const Services = () => {
                 {/* Counter */}
                 <span className="text-xs lg:text-sm xl:text-[1vw] font-mono text-white/60 tracking-widest uppercase">
                   {String(index + 1).padStart(2, "0")} —{" "}
-                  {String(servicesData.length).padStart(2, "0")}
+                  {String(content.services.length).padStart(2, "0")}
                 </span>
 
                 {/* Title */}
@@ -114,7 +116,7 @@ const Services = () => {
         </div>
       </div>
       <div className="flex justify-center py-16 xl:py-[4vw]">
-        <PillLink href="/services">Explore the services →</PillLink>
+        <PillLink href="/services">{content.ctaLabel} →</PillLink>
       </div>
     </section>
   );

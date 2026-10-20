@@ -22,34 +22,43 @@ test("pressing Enter in a field doesn't send the form", async ({ page }) => {
   await expect(page.getByText("Please enter a valid e-mail address.")).toBeHidden();
 });
 
-test("errors show after leaving a field, and clear while typing", async ({ page }) => {
+test("leaving fields shows no errors; Send shows them all", async ({ page }) => {
   await openContact(page);
   const name = page.getByLabel("Name", { exact: true });
+  const email = page.getByLabel("E-mail", { exact: true });
 
   await name.fill("A");
-  await name.blur();
-  await expect(name).toHaveAttribute("aria-invalid", "true");
-  await expect(page.getByText("Please enter your name.")).toBeVisible();
-
-  await name.focus();
-  await page.keyboard.type("da");
+  await email.fill("not an e-mail");
+  await email.blur();
   await expect(page.getByText("Please enter your name.")).toBeHidden();
-  await expect(name).toHaveAttribute("aria-invalid", "false");
-});
-
-test("leaving an empty field shows no error; Send shows them all", async ({ page }) => {
-  await openContact(page);
-  const name = page.getByLabel("Name", { exact: true });
-  await name.focus();
-  await name.blur();
-  await expect(page.getByText("Please enter your name.")).toBeHidden();
+  await expect(page.getByText("Please enter a valid e-mail address.")).toBeHidden();
 
   // aria-disabled: looks disabled, but people can still press it to see what's missing.
   // Playwright treats it as disabled, so the click is forced.
   await page.getByRole("button", { name: "Send message" }).click({ force: true });
   await expect(page.getByText("Please enter your name.")).toBeVisible();
+  await expect(page.getByText("Please enter a valid e-mail address.")).toBeVisible();
   await expect(page.getByText("Please choose a budget.")).toBeVisible();
   await expect(name).toBeFocused();
+});
+
+test("after Send, errors clear while typing and follow the field", async ({ page }) => {
+  await openContact(page);
+  const name = page.getByLabel("Name", { exact: true });
+  await page.getByRole("button", { name: "Send message" }).click({ force: true });
+  await expect(name).toHaveAttribute("aria-invalid", "true");
+
+  await name.focus();
+  await page.keyboard.type("A");
+  await expect(page.getByText("Please enter your name.")).toBeHidden();
+  await name.blur();
+  await expect(page.getByText("Please enter your name.")).toBeVisible();
+
+  await name.focus();
+  await page.keyboard.type("da");
+  await name.blur();
+  await expect(page.getByText("Please enter your name.")).toBeHidden();
+  await expect(name).toHaveAttribute("aria-invalid", "false");
 });
 
 test("the button unlocks once the form is valid, then sends", async ({ page }) => {
@@ -110,4 +119,29 @@ test("the date picker chooses a free call slot with the keyboard", async ({ page
   await trigger.click();
   await page.keyboard.press("Escape");
   await expect(dialog).toBeHidden();
+});
+
+test.describe("on phones", () => {
+  test.use({ viewport: { width: 390, height: 844 }, hasTouch: true });
+
+  test("the date picker opens as a drawer that picks a slot and closes", async ({ page }) => {
+    await openContact(page);
+    const trigger = page.getByRole("button", { name: /Preferred call/ });
+    await trigger.click();
+    const drawer = page.getByRole("dialog", { name: "Preferred call" });
+    await expect(drawer).toBeVisible();
+
+    await page.keyboard.press("Escape");
+    await expect(drawer).toBeHidden();
+    await expect(trigger).toBeFocused();
+
+    await trigger.click();
+    await page.keyboard.press("PageDown");
+    await drawer.getByRole("gridcell").getByRole("button", { name: /, free$/ }).first().tap();
+    const time = drawer.getByRole("group").getByRole("button").first();
+    const slot = (await time.textContent())!;
+    await time.tap();
+    await expect(drawer).toBeHidden();
+    await expect(trigger).toContainText(slot);
+  });
 });

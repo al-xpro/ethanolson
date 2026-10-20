@@ -3,10 +3,12 @@
 import { useRef } from "react";
 import Image from "next/image";
 import mask from "@/public/images/mask.svg";
-import { introVideo } from "@/content/sections";
+import type { Home } from "@/lib/cms/model";
+import { editable } from "@/lib/cms/editable";
+import { introText } from "@/content/ui";
 import { gsap, useGSAP } from "@/lib/gsap";
 
-export const IntroParallax = () => {
+export const IntroParallax = ({ content }: { content: Home["intro"] }) => {
   const containerRef = useRef<HTMLDivElement>(null);
 
   useGSAP(
@@ -81,13 +83,16 @@ export const IntroParallax = () => {
   return (
     <section
       id="showcase"
+      {...editable(content)}
       ref={containerRef}
       className="relative w-full h-screen min-h-[320px] overflow-hidden text-white bg-black"
     >
       <div className="media relative w-full h-full z-0">
         <video
-          src={introVideo.src}
-          poster={introVideo.poster}
+          // A new file restarts the element
+          key={content.video.src}
+          src={content.video.src}
+          poster={content.poster.src}
           loop
           muted
           autoPlay
@@ -100,10 +105,10 @@ export const IntroParallax = () => {
         {/* Intro Text (Visible at start) */}
         <div className="intro-text absolute bottom-20 inset-x-0 z-20 flex flex-col items-center justify-end text-center pb-10 pointer-events-none motion-reduce:hidden">
           <h2 className="text-4xl md:text-6xl lg:text-7xl xl:text-[5vw] font-bold tracking-tight">
-            Shaped by vision
+            {introText.title}
           </h2>
           <p className="mt-4 text-lg md:text-xl xl:text-[2vw] text-white/80 uppercase tracking-widest">
-            Powered by Precision
+            {introText.subtitle}
           </p>
         </div>
 
@@ -118,13 +123,13 @@ export const IntroParallax = () => {
         <div className="flow-text pointer-events-none absolute inset-0 z-40">
           <div className="flow-text-top absolute inset-x-0 bottom-[calc(50%+max(100vw,100vh)*0.0417+1.5rem)] text-center opacity-0 motion-reduce:opacity-100">
             <p className="text-4xl md:text-6xl lg:text-7xl xl:text-[5vw] [@media(max-height:560px)]:text-3xl font-bold text-white/90 tracking-[0.2rem]">
-              Where Ideas
+              {introText.top}
             </p>
           </div>
 
           <div className="flow-text-bottom absolute inset-x-0 top-[calc(50%+max(100vw,100vh)*0.1042+1.5rem)] text-center opacity-0 motion-reduce:opacity-100">
             <p className="text-4xl md:text-6xl lg:text-7xl xl:text-[5vw] [@media(max-height:560px)]:text-3xl font-bold text-white/90 tracking-[0.2rem]">
-              Into Reality
+              {introText.bottom}
             </p>
           </div>
         </div>
