@@ -36,8 +36,9 @@ const FINAL_ROTATION = { x: -0.6, y: 2.5, z: 0.05 };
 export function OpticalIllusion({
   reduceMotion = false,
   onReady,
+  onTurned,
   ...props
-}: JSX.IntrinsicElements["group"] & { reduceMotion?: boolean; onReady?: () => void }) {
+}: JSX.IntrinsicElements["group"] & { reduceMotion?: boolean; onReady?: () => void; onTurned?: () => void }) {
   const container = useRef<THREE.Group>(null);
   const { scene } = useGLTF(MODEL);
 
@@ -63,7 +64,6 @@ export function OpticalIllusion({
         metalness: 0.55,
         roughness: 0.3,
         roughnessMap: glitter,
-        envMapIntensity: 2.6,
       }),
     [glitter]
   );
@@ -92,6 +92,7 @@ export function OpticalIllusion({
 
     if (reduceMotion) {
       group.rotation.set(FINAL_ROTATION.x, FINAL_ROTATION.y, FINAL_ROTATION.z);
+      onTurned?.();
       return;
     }
 
@@ -99,11 +100,13 @@ export function OpticalIllusion({
       ...FINAL_ROTATION,
       duration: 2.2,
       ease: "expo.out",
+      // The studio lights come up once the figure has settled
+      onComplete: () => onTurned?.(),
     });
     return () => {
       tween.kill();
     };
-  }, [reduceMotion, onReady]);
+  }, [reduceMotion, onReady, onTurned]);
 
   return (
     <group

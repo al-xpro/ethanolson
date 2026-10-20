@@ -18,6 +18,9 @@ const Hero = ({ content }: { content: Home["hero"] }) => {
   const fastWebGL = useFastWebGL();
   const [sceneReady, setSceneReady] = useState(false);
   const onFigureReady = useCallback(() => setSceneReady(true), []);
+  // The figure turns into place in the dark; the lights come up once it settles
+  const [lit, setLit] = useState(false);
+  const onFigureTurned = useCallback(() => setLit(true), []);
 
   // Stop rendering the scene once it scrolls out of view
   useEffect(() => {
@@ -60,14 +63,14 @@ const Hero = ({ content }: { content: Home["hero"] }) => {
           >
             <ambientLight intensity={1} />
             {/* The black metal is lit by what it reflects: a studio whose lights keep turning */}
-            <StudioEnvironment moving={!reduceMotion} />
+            <StudioEnvironment moving={!reduceMotion} lit={lit} />
             <Suspense fallback={null}>
               <Float
                 speed={reduceMotion ? 0 : 1}
                 rotationIntensity={reduceMotion ? 0 : 0.3}
                 floatIntensity={reduceMotion ? 0 : 1}
               >
-                <OpticalIllusion reduceMotion={reduceMotion} onReady={onFigureReady} />
+                <OpticalIllusion reduceMotion={reduceMotion} onReady={onFigureReady} onTurned={onFigureTurned} />
               </Float>
             </Suspense>
           </Canvas>

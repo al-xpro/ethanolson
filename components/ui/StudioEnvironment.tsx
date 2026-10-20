@@ -42,35 +42,76 @@ function Rig({ moving }: { moving: boolean }) {
           key={index}
           form="rect"
           intensity={strip.intensity}
-          position={[Math.sin(strip.angle) * 4.5, strip.height, Math.cos(strip.angle) * 4.5]}
+          position={[
+            Math.sin(strip.angle) * 4.5,
+            strip.height,
+            Math.cos(strip.angle) * 4.5,
+          ]}
           rotation={[0, strip.angle + Math.PI, strip.tilt]}
           scale={[strip.width, 9, 1]}
         />
       ))}
       {/* A horizontal strip overhead, which lights the top edges to white */}
-      <Lightformer form="rect" intensity={12} position={[0, 4, -3]} rotation-x={-Math.PI / 4} scale={[8, 0.7, 1]} />
+      <Lightformer
+        form="rect"
+        intensity={12}
+        position={[0, 4, -3]}
+        rotation-x={-Math.PI / 4}
+        scale={[8, 0.7, 1]}
+      />
     </group>
   );
 }
 
+// Fades the whole studio in (0 to 1) once `lit` turns on. With no environment map of its
+// own, the material takes its reflection strength from scene.environmentIntensity.
+function LightLevel({ lit }: { lit: boolean }) {
+  const level = useRef(0);
+  useFrame(({ scene }, delta) => {
+    level.current = lit ? Math.min(1, level.current + delta / 1.5) : 0;
+    // Ease in and out, so the light swells instead of switching on
+    scene.environmentIntensity =
+      level.current * level.current * (3 - 2 * level.current);
+  });
+  return null;
+}
+
 /**
  * The studio the black metal reflects, re-rendered every frame to follow the turning
- * lights. A faint room surrounds it, lighter overhead than underfoot, so no face goes
- * dead between the bands.
+ * lights. A faint, even room surrounds it, so no face goes completely dead between the
+ * bands. Dark until `lit`, then fades in.
  */
-export function StudioEnvironment({ moving = true }: { moving?: boolean }) {
+export function StudioEnvironment({
+  moving = true,
+  lit = true,
+}: {
+  moving?: boolean;
+  lit?: boolean;
+}) {
   return (
-    <Environment resolution={128} frames={Infinity}>
-      <mesh scale={20}>
-        <sphereGeometry args={[1, 32, 16, 0, Math.PI * 2, 0, Math.PI / 2]} />
-        {/* Brighter than white (unclipped): black reflects only a few percent of it */}
-        <meshBasicMaterial color={[0.3, 0.3, 0.3]} toneMapped={false} side={THREE.BackSide} />
-      </mesh>
-      <mesh scale={20}>
-        <sphereGeometry args={[1, 32, 16, 0, Math.PI * 2, Math.PI / 2, Math.PI / 2]} />
-        <meshBasicMaterial color={[0.3, 0.3, 0.3]} toneMapped={false} side={THREE.BackSide} />
-      </mesh>
-      <Rig moving={moving} />
-    </Environment>
+    <>
+      <LightLevel lit={lit} />
+      <Environment resolution={128} frames={Infinity}>
+        <mesh scale={20}>
+          <sphereGeometry args={[1, 32, 16, 0, Math.PI * 2, 0, Math.PI / 2]} />
+          <meshBasicMaterial
+            color={[0.3, 0.3, 0.3]}
+            toneMapped={false}
+            side={THREE.BackSide}
+          />
+        </mesh>
+        <mesh scale={20}>
+          <sphereGeometry
+            args={[1, 32, 16, 0, Math.PI * 2, Math.PI / 2, Math.PI / 2]}
+          />
+          <meshBasicMaterial
+            color={[0.3, 0.3, 0.3]}
+            toneMapped={false}
+            side={THREE.BackSide}
+          />
+        </mesh>
+        <Rig moving={moving} />
+      </Environment>
+    </>
   );
 }
