@@ -1,138 +1,76 @@
 "use client";
 
-import { useEffect, useMemo, useRef } from "react";
-import { useFrame, useThree } from "@react-three/fiber";
+import { useRef } from "react";
+import { useFrame } from "@react-three/fiber";
+import { Environment, Lightformer } from "@react-three/drei";
 import * as THREE from "three";
 
-// The studio the chrome reflects, painted once on a canvas: a dark room, a ceiling that
-// fades into it, and soft lights of different sizes and strengths. Soft edges everywhere,
-// so each face of the figure catches a gradient instead of a flat block of white or black.
-// With reduced motion, the studio and the lights hold still at this moment (in seconds):
-// one of the best lit, and the pose the favicon is rendered from
-const STILL_TIME = 9;
+// With reduced motion, the lights hold still at this angle: one of the best lit, and the
+// pose the favicon is rendered from
+const STILL_ANGLE = 1.8;
 
-function paintStudio() {
-  const width = 1024;
-  const height = 512;
-  const canvas = document.createElement("canvas");
-  canvas.width = width;
-  canvas.height = height;
-  const context = canvas.getContext("2d")!;
+const strips = Array.from({ length: 10 }, (_, index) => ({
+  angle: (index / 10) * Math.PI * 2,
+  height: [1, -1.5, 2.5, 0, -2.5, 1.5, -0.5, 3, -2, 0.5][index],
+  tilt: [0.5, -0.3, 0.2, -0.6, 0.35, -0.15, 0.7, -0.45, 0.1, -0.25][index],
+  width: index % 2 ? 0.45 : 0.75,
+  intensity: index % 2 ? 6 : 11,
+}));
 
-  // The room: bright ceiling, dark grey walls at eye level, near black floor
-  const room = context.createLinearGradient(0, 0, 0, height);
-  room.addColorStop(0, "#6e6e6e");
-  room.addColorStop(0.25, "#2c2c2c");
-  room.addColorStop(0.5, "#141414");
-  room.addColorStop(0.75, "#070707");
-  room.addColorStop(1, "#020202");
-  context.fillStyle = room;
-  context.fillRect(0, 0, width, height);
-
-  // A soft light: an ellipse that fades to nothing (x and y in 0–1 of the panorama)
-  const light = (x: number, y: number, radiusX: number, radiusY: number, strength: number) => {
-    // Drawn three times so lights near the seam wrap around the panorama
-    for (const shift of [-1, 0, 1]) {
-      context.save();
-      context.translate((x + shift) * width, y * height);
-      context.scale(radiusX / radiusY, 1);
-      const glow = context.createRadialGradient(0, 0, 0, 0, 0, radiusY * height);
-      glow.addColorStop(0, `rgba(255,255,255,${strength})`);
-      glow.addColorStop(0.35, `rgba(255,255,255,${strength * 0.55})`);
-      glow.addColorStop(0.7, `rgba(255,255,255,${strength * 0.15})`);
-      glow.addColorStop(1, "rgba(255,255,255,0)");
-      context.fillStyle = glow;
-      context.beginPath();
-      context.arc(0, 0, radiusY * height, 0, Math.PI * 2);
-      context.fill();
-      context.restore();
-    }
-  };
-
-  // Tall soft strips around the room, each a different strength: as the studio turns,
-  // bright bands sweep across the sides of the figure
-  light(0.06, 0.5, 0.035, 0.32, 1);
-  light(0.31, 0.47, 0.06, 0.28, 0.5);
-  light(0.55, 0.52, 0.025, 0.3, 0.85);
-  light(0.78, 0.48, 0.09, 0.26, 0.35);
-  // Smaller lights overhead, so the tops get gradients too
-  light(0.2, 0.18, 0.14, 0.1, 0.8);
-  light(0.62, 0.12, 0.2, 0.08, 0.6);
-  light(0.9, 0.24, 0.07, 0.07, 0.7);
-
-  const texture = new THREE.CanvasTexture(canvas);
-  texture.mapping = THREE.EquirectangularReflectionMapping;
-  texture.colorSpace = THREE.SRGBColorSpace;
-  return texture;
+/*
+ * The lights, turning. The figure is black, so it only shows what it reflects: narrow
+ * strips circle it slowly and their reflections sweep across one face after another,
+ * which is what makes the black read as metal. Narrow strips rather than broad cards:
+ * through a long lens each face sees only a sliver of the room, and a broad card would
+ * flood it white in one go, where a strip draws a band that travels across it.
+ */
+function Rig({ moving }: { moving: boolean }) {
+  const rig = useRef<THREE.Group>(null);
+  useFrame(({ clock }) => {
+    if (!rig.current) return;
+    const time = clock.elapsedTime;
+    rig.current.rotation.y = moving ? time * 0.3 : STILL_ANGLE;
+    // A slow nod, so the strips also pass over the tops and undersides
+    rig.current.rotation.x = moving ? Math.sin(time * 0.21) * 0.45 : 0;
+  });
+  return (
+    <group ref={rig}>
+      {/* Ten tilted strips spread around the room, alternately bright and dim, so a band
+          is always crossing some face, whichever way the rig has turned */}
+      {strips.map((strip, index) => (
+        <Lightformer
+          key={index}
+          form="rect"
+          intensity={strip.intensity}
+          position={[Math.sin(strip.angle) * 4.5, strip.height, Math.cos(strip.angle) * 4.5]}
+          rotation={[0, strip.angle + Math.PI, strip.tilt]}
+          scale={[strip.width, 9, 1]}
+        />
+      ))}
+      {/* A horizontal strip overhead, which lights the top edges to white */}
+      <Lightformer form="rect" intensity={12} position={[0, 4, -3]} rotation-x={-Math.PI / 4} scale={[8, 0.7, 1]} />
+    </group>
+  );
 }
 
 /**
- * Lights the scene with the painted studio, and turns it slowly, so the reflections keep
- * travelling across every face of the figure. Turning the environment (not re-rendering
- * it) costs nothing per frame.
+ * The studio the black metal reflects, re-rendered every frame to follow the turning
+ * lights. A faint room surrounds it, lighter overhead than underfoot, so no face goes
+ * dead between the bands.
  */
-export function StudioEnvironment({ intensity = 1.3, moving = true }: { intensity?: number; moving?: boolean }) {
-  const get = useThree((state) => state.get);
-  const texture = useMemo(() => paintStudio(), []);
-
-  useEffect(() => {
-    const { scene } = get();
-    scene.environment = texture;
-    scene.environmentIntensity = intensity;
-    return () => {
-      scene.environment = null;
-      texture.dispose();
-    };
-  }, [get, texture, intensity]);
-
-  useFrame(({ clock, scene }) => {
-    const time = moving ? clock.elapsedTime : STILL_TIME;
-    // One turn every ~40 s, with a slow nod, so no two moments light the figure the same way
-    scene.environmentRotation.set(Math.sin(time * 0.11) * 0.35, time * 0.16, Math.sin(time * 0.07) * 0.12);
-  });
-
-  return null;
-}
-
-// Lights close to the figure, unlike the studio (which counts as infinitely far away): their
-// reflections fade across each flat face instead of filling it, and as they orbit at their
-// own speeds and heights, the highlights keep travelling over the whole figure
-const orbits = [
-  { radius: 2.6, height: 2.2, speed: 0.23, phase: 0, intensity: 30 },
-  { radius: 3, height: 0.4, speed: -0.17, phase: 2.1, intensity: 24 },
-  { radius: 2.4, height: -1.4, speed: 0.13, phase: 4.2, intensity: 14 },
-];
-
-export function OrbitingLights({ moving = true }: { moving?: boolean }) {
-  const lights = useRef<(THREE.PointLight | null)[]>([]);
-
-  useFrame(({ clock }) => {
-    const time = moving ? clock.elapsedTime : STILL_TIME;
-    orbits.forEach((orbit, index) => {
-      const light = lights.current[index];
-      if (!light) return;
-      const angle = orbit.phase + time * orbit.speed;
-      light.position.set(
-        Math.cos(angle) * orbit.radius,
-        orbit.height + Math.sin(time * 0.31 + orbit.phase) * 0.6,
-        Math.sin(angle) * orbit.radius
-      );
-    });
-  });
-
+export function StudioEnvironment({ moving = true }: { moving?: boolean }) {
   return (
-    <>
-      {orbits.map((orbit, index) => (
-        <pointLight
-          key={index}
-          ref={(light) => {
-            lights.current[index] = light;
-          }}
-          intensity={orbit.intensity}
-          decay={2}
-          color="#ffffff"
-        />
-      ))}
-    </>
+    <Environment resolution={128} frames={Infinity}>
+      <mesh scale={20}>
+        <sphereGeometry args={[1, 32, 16, 0, Math.PI * 2, 0, Math.PI / 2]} />
+        {/* Brighter than white (unclipped): black reflects only a few percent of it */}
+        <meshBasicMaterial color={[1.2, 1.2, 1.2]} toneMapped={false} side={THREE.BackSide} />
+      </mesh>
+      <mesh scale={20}>
+        <sphereGeometry args={[1, 32, 16, 0, Math.PI * 2, Math.PI / 2, Math.PI / 2]} />
+        <meshBasicMaterial color={[0.35, 0.35, 0.35]} toneMapped={false} side={THREE.BackSide} />
+      </mesh>
+      <Rig moving={moving} />
+    </Environment>
   );
 }

@@ -9,7 +9,7 @@ import { editable } from "@/lib/cms/editable";
 import { usePrefersReducedMotion } from "@/lib/useMediaQuery";
 import { useFastWebGL } from "@/lib/useFastWebGL";
 import { OpticalIllusion } from "../ui/OpticalIllusion";
-import { OrbitingLights, StudioEnvironment } from "../ui/StudioEnvironment";
+import { StudioEnvironment } from "../ui/StudioEnvironment";
 
 const Hero = ({ content }: { content: Home["hero"] }) => {
   const figureRef = useRef<HTMLElement>(null);
@@ -58,10 +58,9 @@ const Hero = ({ content }: { content: Home["hero"] }) => {
             dpr={[1, 1.5]}
             camera={{ position: [0, 0, -10], fov: 17.5, near: 1, far: 20 }}
           >
-            {/* The chrome is lit by what it reflects: a dark studio that keeps turning, and
-                lights that orbit close to it */}
+            <ambientLight intensity={1} />
+            {/* The black metal is lit by what it reflects: a studio whose lights keep turning */}
             <StudioEnvironment moving={!reduceMotion} />
-            <OrbitingLights moving={!reduceMotion} />
             <Suspense fallback={null}>
               <Float
                 speed={reduceMotion ? 0 : 1}

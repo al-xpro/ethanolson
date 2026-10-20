@@ -9,6 +9,27 @@ import { gsap } from "@/lib/gsap";
 // Modified version of "Optical Illusions" by Johannes R. (CC BY 4.0), see CREDITS.md
 const MODEL = "/models/optical-illusion.glb";
 
+// Fine speckle for the roughness: a few very smooth flecks catch the light, the rest stays
+// rough and swallows it
+function glitterMap() {
+  const size = 256;
+  const canvas = document.createElement("canvas");
+  canvas.width = canvas.height = size;
+  const context = canvas.getContext("2d")!;
+  context.fillStyle = "#6b6b6b";
+  context.fillRect(0, 0, size, size);
+  for (let index = 0; index < 9000; index++) {
+    const bright = Math.random();
+    const dot = bright > 0.94 ? 2 : 1;
+    context.fillStyle = bright > 0.94 ? "#0d0d0d" : bright > 0.7 ? "#3a3a3a" : "#8a8a8a";
+    context.fillRect(Math.random() * size, Math.random() * size, dot, dot);
+  }
+  const texture = new THREE.CanvasTexture(canvas);
+  texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
+  texture.repeat.set(3, 3);
+  return texture;
+}
+
 const START_ROTATION = { x: -1.2, y: 0.8, z: 0.4 };
 const FINAL_ROTATION = { x: -0.6, y: 2.5, z: 0.05 };
 
@@ -31,22 +52,29 @@ export function OpticalIllusion({
   const fit = Math.min(1, area.width / 2.6, area.height / 3);
   const offsetY = portrait ? -viewport.height * 0.2 : 0;
 
-  // Brushed titanium and polished chrome: a light mirror metal, slightly soft, so each face
-  // shows the studio's gradients rather than a single flat colour; the clear coat adds a
-  // crisper second reflection on top
+  const glitter = useMemo(() => glitterMap(), []);
+
+  // Black epoxy with a fine glitter: a black base, slightly metallic, whose roughness map
+  // breaks the reflections into points, so the turning studio lights catch along the edges
   const material = useMemo(
     () =>
-      new THREE.MeshPhysicalMaterial({
-        color: "#d6d6d6",
-        metalness: 1,
+      new THREE.MeshStandardMaterial({
+        color: "#000000",
+        metalness: 0.55,
         roughness: 0.3,
-        clearcoat: 0.5,
-        clearcoatRoughness: 0.12,
+        roughnessMap: glitter,
+        envMapIntensity: 2.6,
       }),
-    []
+    [glitter]
   );
 
-  useEffect(() => () => material.dispose(), [material]);
+  useEffect(
+    () => () => {
+      material.dispose();
+      glitter.dispose();
+    },
+    [material, glitter]
+  );
 
   useLayoutEffect(() => {
     scene.traverse((child) => {
