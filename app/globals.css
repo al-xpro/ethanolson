@@ -84,3 +84,11 @@ main {
   bottom: 0;
   background: linear-gradient(to top, #111 0%, rgb(17 17 17 / 0.7) 40%, rgb(17 17 17 / 0));
 }
+
+/* No visible scrollbars: the page and its panels still scroll with the wheel, touch and keys */
+* {
+  scrollbar-width: none;
+}
+::-webkit-scrollbar {
+  display: none;
+}
