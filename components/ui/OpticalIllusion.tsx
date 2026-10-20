@@ -31,17 +31,19 @@ export function OpticalIllusion({
   const fit = Math.min(1, area.width / 2.6, area.height / 3);
   const offsetY = portrait ? -viewport.height * 0.2 : 0;
 
-  // The original iron: near-black, polished, so the studio strips draw sharp white
-  // reflections on the edges (the material of the first version of the hero)
+  // Brushed titanium and polished chrome: a light, mirror-like metal that takes its
+  // contrast from the studio (bright where it faces the overhead softbox, charcoal where
+  // it mirrors the dark room), with a slight brushed grain along the faces
   const material = useMemo(
     () =>
       new THREE.MeshPhysicalMaterial({
-        color: "#2B2B2B",
+        color: "#d4d4d4",
         metalness: 1,
-        roughness: 0.2,
-        clearcoat: 0.1,
-        clearcoatRoughness: 0.1,
-        envMapIntensity: 2.2,
+        roughness: 0.14,
+        anisotropy: 0.45,
+        clearcoat: 1,
+        clearcoatRoughness: 0.04,
+        envMapIntensity: 1.4,
       }),
     []
   );
@@ -50,7 +52,13 @@ export function OpticalIllusion({
 
   useLayoutEffect(() => {
     scene.traverse((child) => {
-      if ((child as THREE.Mesh).isMesh) (child as THREE.Mesh).material = material;
+      if ((child as THREE.Mesh).isMesh) {
+        const mesh = child as THREE.Mesh;
+        mesh.material = material;
+        // The overhead light casts the figure's shadow across its own joints
+        mesh.castShadow = true;
+        mesh.receiveShadow = true;
+      }
     });
     scene.scale.setScalar(0.5);
     scene.position.set(0, -1.23, 0.6);

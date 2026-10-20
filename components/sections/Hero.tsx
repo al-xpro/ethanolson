@@ -55,9 +55,25 @@ const Hero = ({ content }: { content: Home["hero"] }) => {
             frameloop={inView ? "always" : "never"}
             // Retina screens would render 4× the pixels at full density; 1.5× still looks sharp
             dpr={[1, 1.5]}
+            shadows="soft"
             camera={{ position: [0, 0, -10], fov: 17.5, near: 1, far: 20 }}
           >
-            <ambientLight intensity={1} />
+            {/* Almost no fill: the faces turned away from the light stay deep charcoal */}
+            <ambientLight intensity={0.05} />
+            {/* Hard key light from above: bright silver tops and a shadow sweeping across the joints */}
+            <directionalLight
+              position={[1.5, 9, -3]}
+              intensity={3.2}
+              castShadow
+              shadow-mapSize={[2048, 2048]}
+              shadow-bias={-0.0004}
+              shadow-normalBias={0.02}
+              shadow-radius={6}
+              shadow-camera-left={-3}
+              shadow-camera-right={3}
+              shadow-camera-top={3}
+              shadow-camera-bottom={-3}
+            />
             <Suspense fallback={null}>
               <Float
                 speed={reduceMotion ? 0 : 1}
@@ -67,26 +83,27 @@ const Hero = ({ content }: { content: Home["hero"] }) => {
                 <OpticalIllusion reduceMotion={reduceMotion} onReady={onFigureReady} />
               </Float>
             </Suspense>
-            {/* The original studio: four soft strips, reflected as white edges on the dark metal */}
+            {/* The studio the chrome mirrors: a dark room, one big softbox overhead, and thin
+                strips behind for the crisp highlights that trace the edges */}
             <Environment resolution={512}>
-              <group rotation={[0, 0, 0]}>
-                <Lightformer form="rect" intensity={10} position={[0, 5, 0]} scale={[10, 2, 0]} />
-                <Lightformer
-                  form="rect"
-                  intensity={6}
-                  position={[-5, 0, 0]}
-                  rotation={[0, Math.PI / 2, 0]}
-                  scale={[10, 6, 0]}
-                />
-                <Lightformer
-                  form="rect"
-                  intensity={6}
-                  position={[5, 0, 0]}
-                  rotation={[0, -Math.PI / 2, 0]}
-                  scale={[10, 6, 0]}
-                />
-                <Lightformer form="circle" intensity={4} position={[0, 0, -5]} scale={5} />
-              </group>
+              <color attach="background" args={["#050505"]} />
+              {/* Overhead softbox: the bright silver on every face turned up */}
+              <Lightformer form="rect" intensity={5} position={[0, 6, 0]} rotation={[Math.PI / 2, 0, 0]} scale={[10, 4, 1]} />
+              {/* A ring of tall strips, alternately bright and dim: whichever way a face turns,
+                  it mirrors a band of light fading into the dark room, and the edges catch a line */}
+              {Array.from({ length: 8 }, (_, index) => {
+                const angle = (index / 8) * Math.PI * 2;
+                return (
+                  <Lightformer
+                    key={index}
+                    form="rect"
+                    intensity={index % 2 ? 0.5 : 1.9}
+                    position={[Math.sin(angle) * 6, 1.5, Math.cos(angle) * 6]}
+                    rotation={[0, angle + Math.PI, 0]}
+                    scale={[0.9, 9, 1]}
+                  />
+                );
+              })}
             </Environment>
           </Canvas>
         </figure>
