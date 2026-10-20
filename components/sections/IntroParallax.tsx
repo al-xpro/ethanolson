@@ -2,6 +2,7 @@
 
 import { useRef } from "react";
 import Image from "next/image";
+import mask from "@/public/images/mask.svg";
 import { introVideo } from "@/content/sections";
 import { gsap, useGSAP } from "@/lib/gsap";
 
@@ -81,7 +82,7 @@ export const IntroParallax = () => {
     <section
       id="showcase"
       ref={containerRef}
-      className="relative w-full h-screen overflow-hidden text-white bg-black"
+      className="relative w-full h-screen min-h-[320px] overflow-hidden text-white bg-black"
     >
       <div className="media relative w-full h-full z-0">
         <video
@@ -108,25 +109,23 @@ export const IntroParallax = () => {
 
         {/* Mask */}
         <div className="mask absolute inset-0 flex items-center justify-center pointer-events-none z-30">
-          <Image src="/images/mask.svg" alt="" fill className="object-cover" />
+          <Image src={mask} alt="" className="h-full w-full object-cover" />
         </div>
 
         {/* Flow Text (appears after the mask closes, above the mask layer) */}
-        <div className="flow-text pointer-events-none absolute inset-0 z-40 flex flex-col items-center justify-center h-full w-full">
-          <div className="w-full flex flex-col h-full justify-between py-36 md:py-44">
-            {/* Top Text */}
-            <div className="flow-text-top text-center opacity-0 motion-reduce:opacity-100">
-              <p className="text-4xl md:text-6xl lg:text-7xl xl:text-[5vw] font-bold text-white/90 tracking-[0.2rem]">
-                Where Ideas
-              </p>
-            </div>
+        {/* Anchored to the word in the mask: the 1920px-square mask covers the section, so
+            "Flow" spans y = 880–1160 of it, scaled by max(100vw, 100vh) / 1920 */}
+        <div className="flow-text pointer-events-none absolute inset-0 z-40">
+          <div className="flow-text-top absolute inset-x-0 bottom-[calc(50%+max(100vw,100vh)*0.0417+1.5rem)] text-center opacity-0 motion-reduce:opacity-100">
+            <p className="text-4xl md:text-6xl lg:text-7xl xl:text-[5vw] [@media(max-height:560px)]:text-3xl font-bold text-white/90 tracking-[0.2rem]">
+              Where Ideas
+            </p>
+          </div>
 
-            {/* Bottom Text */}
-            <div className="flow-text-bottom text-center opacity-0 motion-reduce:opacity-100">
-              <p className="text-4xl md:text-6xl lg:text-7xl xl:text-[5vw] font-bold text-white/90 tracking-[0.2rem]">
-                Into Reality
-              </p>
-            </div>
+          <div className="flow-text-bottom absolute inset-x-0 top-[calc(50%+max(100vw,100vh)*0.1042+1.5rem)] text-center opacity-0 motion-reduce:opacity-100">
+            <p className="text-4xl md:text-6xl lg:text-7xl xl:text-[5vw] [@media(max-height:560px)]:text-3xl font-bold text-white/90 tracking-[0.2rem]">
+              Into Reality
+            </p>
           </div>
         </div>
       </div>

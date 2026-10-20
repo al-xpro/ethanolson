@@ -5,21 +5,28 @@
 
 [![CI](https://github.com/al-xpro/portfolio-project/actions/workflows/ci.yml/badge.svg)](https://github.com/al-xpro/portfolio-project/actions/workflows/ci.yml)
 
-A one-page portfolio for **Ethan Olson, a fictional design engineer**, designed and
+A portfolio for **Ethan Olson, a fictional design engineer**, designed and
 developed by [AlxPro](https://alxpro.com). It's a concept build: the persona, works and
 copy are invented to show how a motion-rich, full-stack portfolio is made.
 
-**Live:** not deployed yet. It will be published at `ethanolson.dev`.
+**Live:** not deployed yet. It will be published at `ethanolson.alxpro.com`.
 
 ![The hero section: "Design Engineer" next to a 3D optical illusion](.github/assets/hero.jpg)
 
 ## What it does
 
+- Pages: home, about, services, works with a page per project, contact, privacy, terms
+  and a 404 page
 - A real-time 3D optical illusion in the hero, in black metal, that turns into place on load
-- Pinned scroll scenes: a zoom grid, an SVG mask reveal over video, a horizontal services
-  track and a column parallax gallery
+- Original GSAP scroll scenes on every page: a zoom grid, a mask reveal over video, a
+  testimonials deck, a sticky services timeline with diagrams built in code, a cursor
+  preview for the works, a framed cover parallax per project, and a sticky reveal footer
+- A contact form with a shared Zod schema, live validation and a server action that works
+  without JavaScript, next to an availability calendar that shows different free days
+  every month (generated from the month, no booking service)
 - Full `prefers-reduced-motion` support: every scene has a static fallback
-- An accessible menu: real links and buttons, a focus trap, Escape to close
+- Accessible navigation: real links and buttons, a focus trap, Escape to close, visible
+  focus on every control
 - SEO: metadata, canonical URL, generated Open Graph image and icons, JSON-LD,
   `robots.txt`, `sitemap.xml` and `llms.txt`
 
@@ -29,22 +36,24 @@ copy are invented to show how a motion-rich, full-stack portfolio is made.
 - TypeScript and Tailwind CSS 4
 - GSAP + ScrollTrigger for scroll scenes, Lenis for smooth scrolling
 - React Three Fiber, drei and three.js for the 3D hero
+- Zod for validation, Vitest and Playwright for tests
 
-Coming next (see the roadmap): Storyblok, project pages, Neon Postgres with Drizzle, a
-contact flow with Zod, Resend and Vercel BotID, Umami, self-built Web Vitals and Cal.com.
+Coming next (see the roadmap): Storyblok, Neon Postgres with Drizzle, Resend and Vercel
+BotID for the contact flow, Umami and self-built Web Vitals.
 
 ## Architecture
 
 ```text
 app/                  routes, metadata, icons, OG image, robots, sitemap
-components/sections/  one component per page section
-components/ui/        shared UI (header animation, navbar, gallery, 3D figure)
+components/sections/  the home page sections
+components/pages/     one view per page (services, works, about, contact, legal, 404)
+components/ui/        shared UI (header animation, navbar, footer, diagrams, 3D figure)
 components/providers/ smooth scrolling (Lenis)
-content/              all copy and media paths (site.ts, sections.ts)
+content/              all copy and media paths, one file per page
 lib/                  GSAP setup, animation helpers, media-query hooks
 ```
 
-The page is a Server Component that renders client sections. All scroll animation runs
+Pages are Server Components that render client sections. All scroll animation runs
 through `lib/gsap.ts`, inside `gsap.matchMedia()`, so it's skipped when the visitor
 prefers reduced motion. Copy and media paths live in `content/`, so the planned CMS
 replaces one layer.
@@ -69,7 +78,7 @@ Put them in `.env.local`. Names only here. Never commit values.
 
 | Name | Purpose |
 | --- | --- |
-| `NEXT_PUBLIC_SITE_URL` | Canonical URL for metadata, sitemap and robots. Defaults to `https://ethanolson.dev`. |
+| `NEXT_PUBLIC_SITE_URL` | Canonical URL for metadata, sitemap and robots. Defaults to `https://ethanolson.alxpro.com`. |
 
 ## How this was built
 

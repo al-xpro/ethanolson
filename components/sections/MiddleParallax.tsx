@@ -84,15 +84,15 @@ export const MiddleParallax = () => {
               <div className="w-full flex flex-col md:flex-row gap-5 xl:gap-[1vw] items-center">
                 {middleParallax.pictures.map((picture) => (
                   <div
-                    key={picture.src}
+                    key={picture.src.src}
                     className="relative flex-1 w-full h-[50vh] overflow-hidden rounded-xl xl:rounded-[1.5vw]"
                   >
                     <Image
                       src={picture.src}
                       alt={picture.alt}
-                      fill
+                      placeholder="blur"
                       sizes="(min-width: 768px) 50vw, 100vw"
-                      className="object-cover object-center scale-150 opacity-0 motion-reduce:scale-100 motion-reduce:opacity-100 g_grow"
+                      className="h-full w-full object-cover object-center scale-150 opacity-0 motion-reduce:scale-100 motion-reduce:opacity-100 g_grow"
                     />
                   </div>
                 ))}

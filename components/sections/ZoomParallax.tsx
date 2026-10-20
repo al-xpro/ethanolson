@@ -33,16 +33,16 @@ export default function ZoomParallax() {
       <div className="sticky overflow-hidden top-0 h-screen">
         {zoomPictures.map(({ src, alt, className }) => (
           <div
-            key={src}
+            key={src.src}
             className="zoom-layer size-full top-0 absolute flex items-center justify-center"
           >
             <div className={`${className} relative`}>
               <Image
                 src={src}
                 alt={alt}
-                fill
+                placeholder="blur"
                 sizes="(min-width: 768px) 35vw, 50vw"
-                className="object-cover"
+                className="h-full w-full object-cover"
               />
             </div>
           </div>
