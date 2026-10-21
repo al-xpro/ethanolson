@@ -29,8 +29,8 @@ export const defaultPrivacy: LegalPage = {
       "paragraphs": "These providers process data on my behalf, under data processing agreements:",
       "list": [
         "Vercel (hosting): serves the website and keeps short-lived server logs.",
-        "Storyblok (EU servers): stores contact form messages.",
-        "Resend: sends the e-mail notification about your message, and its confirmation.",
+        "Resend: delivers your message to my inbox by e-mail, and sends you its confirmation.",
+        "ImprovMX: forwards e-mail sent to hello@ethanolson.alxpro.com to my mailbox, where messages are kept.",
         "Neon (EU servers): stores the spam-protection counters and performance measurements.",
         "Umami: counts anonymous page views."
       ]
@@ -47,7 +47,7 @@ export const defaultPrivacy: LegalPage = {
     },
     {
       "heading": "Cookies",
-      "paragraphs": "This website doesn't use tracking or advertising cookies, so there is no cookie banner. Bot protection on the contact form runs a short check in your browser, without storing a cookie for tracking.",
+      "paragraphs": "This website doesn't use tracking or advertising cookies, so there is no cookie banner.",
       "list": []
     },
     {

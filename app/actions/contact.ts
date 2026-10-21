@@ -33,6 +33,6 @@ export async function submitContact(
     };
   }
 
-  // Next: rate limiting (#26), storage in Storyblok (#27) and e-mail with Resend (#28)
+  // Next: rate limiting (#26) and e-mail with Resend (#28), which is also the record of each enquiry
   return { status: "success" };
 }
