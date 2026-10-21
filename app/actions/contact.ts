@@ -37,9 +37,9 @@ export async function submitContact(
     };
   }
 
-  // At most 5 messages per visitor per hour (counted only once a message is valid)
+  // One message per visitor per day (counted only once a message is valid)
   const key = visitorKey(clientIp(await headers()), "contact");
-  const { allowed } = await limit(key, 5, 3600);
+  const { allowed } = await limit(key, 1, 86_400);
   if (!allowed) return { status: "error", values, fieldErrors: {}, formError: contactLabels.limited };
 
   // The e-mail to me is the only record of the message: if it fails, the visitor keeps it

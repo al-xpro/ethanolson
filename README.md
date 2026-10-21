@@ -22,7 +22,7 @@ copy are invented to show how a motion-rich, full-stack portfolio is made.
   without JavaScript, next to an availability calendar that shows different free days
   every month (generated from the month, no booking service)
 - Enquiries e-mailed with Resend (a notification with reply-to, and a confirmation to the
-  visitor, both in React Email), and rate-limited to 5 per visitor per hour in Postgres,
+  visitor, both in React Email), and rate-limited to one message per visitor per day in Postgres,
   keyed by a salted hash: no IP address is stored
 - Cookieless analytics (Vercel Web Analytics and Umami, with a few custom events): no
   cookies, no consent banner

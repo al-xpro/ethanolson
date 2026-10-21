@@ -63,7 +63,7 @@ describe("submitContact", () => {
 
     expect(state.status).toBe("error");
     if (state.status !== "error") return;
-    expect(state.formError).toMatch(/try again later/);
+    expect(state.formError).toMatch(/one message a day/);
     expect(state.values.message).toBe(valid.message);
   });
 
