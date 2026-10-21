@@ -17,7 +17,7 @@ repository. They are not for resale.
 
 ## Video
 
-- `public/videos/design.mp4` and `water-ripple.mp4`: edited by Alex Prostamo from
+- `public/videos/design.mp4` and `water-ripple.mp4`: edited by AlxPro from
   royalty-free stock footage.
 - `public/videos/*-poster.jpg`: still frames from those two videos.
 

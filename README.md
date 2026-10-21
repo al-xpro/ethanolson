@@ -41,8 +41,8 @@ copy are invented to show how a motion-rich, full-stack portfolio is made.
 - Storyblok as the CMS, with the Visual Editor: every page's text, images and videos, the
   works (including new ones) and their animated blocks, checked against a content model
 
-Coming next (see the roadmap): Neon Postgres with Drizzle, Resend and Vercel BotID for the
-contact flow, Umami and self-built Web Vitals.
+Coming next (see the roadmap): Neon Postgres with Drizzle, rate limiting and Resend e-mails
+for the contact flow, Umami and self-built Web Vitals.
 
 ## Architecture
 
@@ -112,10 +112,33 @@ Put them in `.env.local`. Names only here. Never commit values.
 
 ## How this was built
 
-First version built from January to March 2026; cleaned up and published as `v1.0` in
-October 2026 (the clean-up was done with Claude Code); new features developed in the open
-since. Built with an agentic workflow: I write issues as specs, agents open the pull
-requests, and I review and merge every change.
+I'm the developer on this project, working with AI coding agents
+([Claude Code](https://claude.com/claude-code)) the way a lead works with a pair
+programmer. I own the architecture, the specs and the code that ships. Agents draft
+implementations; I read every diff, run it, and change the code myself until it's right.
+
+Every change goes through the same loop:
+
+1. **Spec.** Each change starts as an issue with context, a goal and acceptance criteria.
+   Example: [#82](https://github.com/al-xpro/ethanolson/issues/82), the home page freezes
+   in Safari.
+2. **Implement on a branch.** The first draft runs typecheck, lint, tests and the build
+   before I see it.
+3. **Review and change it locally.** I read the diff, run the site in Safari and Chrome, on
+   a phone and with reduced motion, and edit the code directly where it needs it: the
+   lighting values of the 3D hero, layouts, copy. Nothing is pushed before I've used it.
+4. **Pull request.** What, Why and How to test, linked to its issue. CI has to pass, and I
+   merge.
+5. **Ship.** A merge into `main` deploys to production.
+
+Small, safe changes (docs, chores, patch updates) take a **fast lane**: no issue, and the
+pull request merges itself when CI is green. Features, data, security and CI take the
+**review lane** above. The [project board](https://github.com/users/al-xpro/projects/5)
+shows both.
+
+Commits drafted with an agent carry a `Co-Authored-By` trailer, so the history is honest
+about how the work was done. The first version was built from January to March 2026,
+published as `v1.0` in October 2026, and developed in the open since.
 
 ## Roadmap
 
@@ -131,5 +154,5 @@ Issues are welcome. See [CONTRIBUTING.md](CONTRIBUTING.md), the
 
 Media sources are listed in [CREDITS.md](CREDITS.md).
 
-© Alex Prostamo. All rights reserved. The code is public so it can be read and reviewed.
+© AlxPro. All rights reserved. The code is public so it can be read and reviewed.
 It is not licensed for reuse or redistribution. See [LICENSE](LICENSE).
