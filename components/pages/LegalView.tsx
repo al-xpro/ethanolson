@@ -1,7 +1,19 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { legalLabels, type LegalPage } from "@/content/legal";
+import type { LegalPage } from "@/lib/cms/model";
+import { legalLabels } from "@/content/ui";
+import { editable } from "@/lib/cms/editable";
+
+const formatDate = (iso: string) =>
+  new Intl.DateTimeFormat("en-GB", { day: "numeric", month: "long", year: "numeric", timeZone: "UTC" }).format(new Date(`${iso}T00:00:00Z`));
+
+// One text box per section in Storyblok: an empty line starts a new paragraph
+const paragraphsOf = (text: string) =>
+  text
+    .split(/\n\s*\n/)
+    .map((paragraph) => paragraph.trim())
+    .filter(Boolean);
 import { SectionMinimap } from "@/components/ui/SectionMinimap";
 import { useSmoothAnchor } from "@/lib/useSmoothAnchor";
 import { gsap, useGSAP, MOTION_OK } from "@/lib/gsap";
@@ -62,7 +74,7 @@ export function LegalView({ page }: { page: LegalPage }) {
       <div className="grid gap-12 lg:grid-cols-[1fr_2.4fr] xl:gap-[5vw]">
         <aside className="lg:sticky lg:top-32 xl:top-[8vw] self-start">
           <p className="text-xs xl:text-[0.8vw] tracking-[0.3rem] uppercase text-white/50">
-            {legalLabels.updated} {page.updated}
+            {legalLabels.updated} {formatDate(page.updated)}
           </p>
           <nav aria-label={legalLabels.onThisPage} className="mt-8 hidden lg:block">
             {/* No gap between entries: their borders touch, so active ones form one line */}
@@ -92,21 +104,22 @@ export function LegalView({ page }: { page: LegalPage }) {
           <p className="text-xl sm:text-2xl xl:text-[1.8vw] leading-snug text-white/85 text-pretty">
             {page.intro}
           </p>
-          {page.sections.map((section) => (
+          {page.sections.map((section, index) => (
             <section
-              key={section.heading}
+              key={index}
+              {...editable(section)}
               id={slugify(section.heading)}
               className="legal-section scroll-mt-24 lg:scroll-mt-32 flex flex-col gap-4 xl:gap-[1vw]"
             >
               <h2 className="legal-heading text-2xl sm:text-3xl xl:text-[2.2vw] uppercase leading-none">
                 {section.heading}
               </h2>
-              {section.paragraphs.map((paragraph) => (
+              {paragraphsOf(section.paragraphs).map((paragraph) => (
                 <p key={paragraph} className="text-base xl:text-[1.15vw] leading-relaxed text-white/70">
                   {paragraph}
                 </p>
               ))}
-              {section.list && (
+              {section.list.length > 0 && (
                 <ul className="flex flex-col gap-3 text-base xl:text-[1.15vw] leading-relaxed text-white/70">
                   {section.list.map((item) => (
                     <li key={item} className="grid grid-cols-[1.5rem_1fr]">

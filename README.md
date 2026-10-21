@@ -3,7 +3,7 @@
 > **Work in progress.** The full-stack features are being built in the open. See the
 > [roadmap](#roadmap).
 
-[![CI](https://github.com/al-xpro/portfolio-project/actions/workflows/ci.yml/badge.svg)](https://github.com/al-xpro/portfolio-project/actions/workflows/ci.yml)
+[![CI](https://github.com/al-xpro/ethanolson/actions/workflows/ci.yml/badge.svg)](https://github.com/al-xpro/ethanolson/actions/workflows/ci.yml)
 
 A portfolio for **Ethan Olson, a fictional design engineer**, designed and
 developed by [AlxPro](https://alxpro.com). It's a concept build: the persona, works and
@@ -38,8 +38,11 @@ copy are invented to show how a motion-rich, full-stack portfolio is made.
 - React Three Fiber, drei and three.js for the 3D hero
 - Zod for validation, Vitest and Playwright for tests
 
-Coming next (see the roadmap): Storyblok, Neon Postgres with Drizzle, Resend and Vercel
-BotID for the contact flow, Umami and self-built Web Vitals.
+- Storyblok as the CMS, with the Visual Editor: every page's text, images and videos, the
+  works (including new ones) and their animated blocks, checked against a content model
+
+Coming next (see the roadmap): Neon Postgres with Drizzle, Resend and Vercel BotID for the
+contact flow, Umami and self-built Web Vitals.
 
 ## Architecture
 
@@ -49,14 +52,24 @@ components/sections/  the home page sections
 components/pages/     one view per page (services, works, about, contact, legal, 404)
 components/ui/        shared UI (header animation, navbar, footer, diagrams, 3D figure)
 components/providers/ smooth scrolling (Lenis)
-content/              all copy and media paths, one file per page
+components/cms/       pages composed from content, CMS image, Visual Editor helpers
+content/defaults/     the default content (used without Storyblok, and to fill it)
+content/ui.ts         interface copy that stays in code (labels, the form, the 404 page)
+lib/cms/              content model, Storyblok fetching, validation, live editing
 lib/                  GSAP setup, animation helpers, media-query hooks
+scripts/              Storyblok setup and preview, media manifest
 ```
 
-Pages are Server Components that render client sections. All scroll animation runs
-through `lib/gsap.ts`, inside `gsap.matchMedia()`, so it's skipped when the visitor
-prefers reduced motion. Copy and media paths live in `content/`, so the planned CMS
-replaces one layer.
+Pages are Server Components that load their content and render client sections. All
+scroll animation runs through `lib/gsap.ts`, inside `gsap.matchMedia()`, so it's skipped
+when the visitor prefers reduced motion.
+
+**Content.** `lib/cms/model.ts` describes everything editable once, with zod: each field's
+type, limits (characters, number of items, file weight) and help text. The same model
+generates the Storyblok components, types the content, and validates what Storyblok sends.
+A field that breaks a rule falls back to its default (the published site never shows
+broken content), and the Visual Editor lists the problem on the page. Without Storyblok
+(CI, a fresh clone), the site renders `content/defaults`.
 
 ## Getting started
 
@@ -79,6 +92,23 @@ Put them in `.env.local`. Names only here. Never commit values.
 | Name | Purpose |
 | --- | --- |
 | `NEXT_PUBLIC_SITE_URL` | Canonical URL for metadata, sitemap and robots. Defaults to `https://ethanolson.alxpro.com`. |
+| `STORYBLOK_PUBLIC_TOKEN` | Storyblok public token, for published content (server only). |
+| `STORYBLOK_PREVIEW_TOKEN` | Storyblok preview token, for drafts in draft mode (server only). |
+| `STORYBLOK_DRAFT_SECRET` | Protects `/api/draft`, the Visual Editor's entry point. |
+| `STORYBLOK_WEBHOOK_SECRET` | Checks that publish webhooks (`/api/revalidate`) come from Storyblok. |
+| `STORYBLOK_SPACE_ID` | The content space, for `npm run storyblok:setup`. |
+| `STORYBLOK_MANAGEMENT_TOKEN` | Personal access token, for `npm run storyblok:setup`. |
+
+### Storyblok
+
+- `npm run storyblok:setup` creates the components from the content model and fills the
+  space with the default content and media. Run it again after changing the model.
+- `npm run preview:storyblok` serves the production build on `https://localhost:3010` for
+  the Visual Editor (draft mode needs HTTPS and a production server; run `mkcert -install`
+  once). The space's preview location is
+  `https://localhost:3010/api/draft?secret=<STORYBLOK_DRAFT_SECRET>&slug=`.
+- Publishing calls `/api/revalidate` (a signed webhook), which refreshes the site.
+- `npm run media` updates `content/media.ts` after a file in `public/` changes.
 
 ## How this was built
 
@@ -89,8 +119,8 @@ requests, and I review and merge every change.
 
 ## Roadmap
 
-[Open issues](https://github.com/al-xpro/portfolio-project/issues) and the
-[`v2.0 — Full stack` milestone](https://github.com/al-xpro/portfolio-project/milestones).
+[Open issues](https://github.com/al-xpro/ethanolson/issues) and the
+[`v2.0 — Full stack` milestone](https://github.com/al-xpro/ethanolson/milestones).
 
 ## Contributing
 

@@ -58,7 +58,7 @@ export default function Footer() {
         // The content rises slower than the page, so it feels like it's underneath
         gsap.fromTo(".footer-content", { yPercent: -35 }, { yPercent: 0, ease: "none", scrollTrigger: scroll });
 
-        const split = SplitText.create(".footer-wordmark", { type: "chars", mask: "chars" });
+        const split = SplitText.create(".footer-wordmark", { type: "chars", mask: "chars", aria: "none" }) // decorative, already hidden;
         gsap.from(split.chars, {
           yPercent: 110,
           stagger: 0.04,
@@ -138,7 +138,7 @@ export default function Footer() {
                   href={site.creator.url}
                   target="_blank"
                   rel="noopener"
-                  className="text-white hover:underline"
+                  className="text-white underline underline-offset-4 hover:text-white/70"
                 >
                   {site.creator.brand}
                 </a>

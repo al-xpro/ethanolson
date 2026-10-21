@@ -1,17 +1,12 @@
 "use client";
 
 import { useRef } from "react";
-import Image from "next/image";
 import Link from "next/link";
-import {
-  type Work,
-  workCover,
-  workLabels,
-  coverSize,
-  darkBlur,
-} from "@/content/works";
+import { CmsImage } from "@/components/cms/CmsImage";
 import { WorkFeature } from "@/components/ui/WorkFeature";
-import { ProjectTemplates } from "@/components/ui/ProjectTemplates";
+import { WorkGallery } from "@/components/ui/WorkGallery";
+import type { WorkEntry } from "@/lib/cms/types";
+import { workLabels } from "@/content/ui";
 import { gsap, useGSAP, MOTION_OK, SplitText } from "@/lib/gsap";
 
 const label =
@@ -23,7 +18,7 @@ const formatResult = (value: number, decimals: number) =>
     maximumFractionDigits: decimals,
   });
 
-export function WorkDetail({ work, next }: { work: Work; next: Work }) {
+export function WorkDetail({ work, next }: { work: WorkEntry; next: WorkEntry }) {
   const container = useRef<HTMLDivElement>(null);
 
   useGSAP(
@@ -73,7 +68,7 @@ export function WorkDetail({ work, next }: { work: Work; next: Work }) {
         );
 
         // Challenge: each word lights up as it's read
-        const words = SplitText.create(".work-challenge", { type: "words" });
+        const words = SplitText.create(".work-challenge", { type: "words", aria: "none" }) // a <p> can't carry an aria-label;
         gsap.fromTo(
           words.words,
           { opacity: 0.15 },
@@ -207,12 +202,12 @@ export function WorkDetail({ work, next }: { work: Work; next: Work }) {
             <div className="col-span-2">
               <dt className={label}>{workLabels.stack}</dt>
               <dd className="mt-3 flex flex-wrap gap-2">
-                {work.stack.map((tool) => (
+                {work.stack.map((tool, index) => (
                   <span
-                    key={tool}
+                    key={index}
                     className="rounded-full border border-white/25 px-3 py-1 xl:px-[0.8vw] xl:py-[0.3vw] text-xs xl:text-[0.8vw]"
                   >
-                    {tool}
+                    {tool.label}
                   </span>
                 ))}
               </dd>
@@ -223,12 +218,9 @@ export function WorkDetail({ work, next }: { work: Work; next: Work }) {
 
       <div className="px-5 sm:px-10 xl:px-[1.5vw]">
         <div className="work-cover relative aspect-[16/10] overflow-hidden rounded-3xl xl:rounded-[2vw] border border-white/10">
-          <Image
-            src={workCover(work.slug)}
-            alt={`${work.title}, cover`}
-            {...coverSize}
-            placeholder="blur"
-            blurDataURL={darkBlur}
+          <CmsImage
+            media={work.cover}
+            alt={work.cover.alt || `${work.title}, cover`}
             priority
             sizes="100vw"
             className="work-cover-image absolute inset-x-0 -top-[8%] h-[116%] w-full object-cover"
@@ -248,7 +240,7 @@ export function WorkDetail({ work, next }: { work: Work; next: Work }) {
         <ol className="flex flex-col">
           {work.solution.map((step, index) => (
             <li
-              key={step}
+              key={index}
               className="grid grid-cols-[3rem_1fr] xl:grid-cols-[4vw_1fr] gap-4 border-t border-white/20 py-6 xl:py-[1.6vw] text-lg xl:text-[1.4vw] leading-relaxed text-white/80"
             >
               <span className="text-white/40 tabular-nums">
@@ -261,18 +253,18 @@ export function WorkDetail({ work, next }: { work: Work; next: Work }) {
       </section>
 
       <section className="work-feature px-5 sm:px-10 xl:px-[1.5vw] pb-24 xl:pb-[7vw]">
-        <WorkFeature feature={work.feature} />
+        {work.feature[0] && <WorkFeature feature={work.feature[0]} />}
       </section>
 
       <section
         aria-label={workLabels.results}
         className="mx-5 sm:mx-10 xl:mx-[1.5vw] grid gap-px overflow-hidden rounded-3xl xl:rounded-[2vw] border border-white/15 bg-white/15 sm:grid-cols-3"
       >
-        {work.results.map((result) => {
+        {work.results.map((result, index) => {
           const decimals = Number.isInteger(result.value) ? 0 : 1;
           return (
             <div
-              key={result.label}
+              key={index}
               className="flex flex-col gap-3 bg-[#111] p-8 xl:p-[2.5vw]"
             >
               <span className="text-6xl xl:text-[5.5vw] leading-none tabular-nums">
@@ -284,7 +276,8 @@ export function WorkDetail({ work, next }: { work: Work; next: Work }) {
                 >
                   {formatResult(result.value, decimals)}
                 </span>
-                {result.suffix}
+                {/* A space before units like "s"; none before symbols like "%" */}
+                {/^[a-z]/i.test(result.suffix) ? `\u202f${result.suffix}` : result.suffix}
               </span>
               <span className="text-base xl:text-[1.1vw] text-white/65">
                 {result.label}
@@ -298,7 +291,7 @@ export function WorkDetail({ work, next }: { work: Work; next: Work }) {
         aria-label={workLabels.templates}
         className="work-templates grid gap-4 sm:grid-cols-3 sm:gap-6 xl:gap-[2vw] items-start px-5 sm:px-10 xl:px-[1.5vw] py-24 xl:py-[8vw] overflow-hidden"
       >
-        <ProjectTemplates slug={work.slug} />
+        <WorkGallery items={work.gallery} />
       </section>
 
       <Link

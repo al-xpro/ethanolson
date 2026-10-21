@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef } from "react";
-import { notFoundPage } from "@/content/sections";
+import { notFoundPage } from "@/content/ui";
 import { PillLink } from "@/components/ui/PillLink";
 import { gsap, useGSAP, MOTION_OK } from "@/lib/gsap";
 

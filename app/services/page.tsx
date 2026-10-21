@@ -1,20 +1,17 @@
 import type { Metadata } from "next";
-import { PageIntro } from "@/components/ui/PageIntro";
-import { ServicesDetails } from "@/components/pages/ServicesDetails";
-import { servicesPage } from "@/content/services";
+import { ServicesPageView } from "@/components/cms/pages";
+import { StoryblokStory } from "@/lib/cms/live";
+import { isDraft, loadServices } from "@/lib/cms/load";
 
 export const metadata: Metadata = {
   title: "Services",
   description:
     "Product design, interactive front ends, back ends and APIs, and performance: what Ethan Olson offers, and how he works.",
-  alternates: { canonical: "/services" },
+  alternates: { canonical: "/services", types: { "text/markdown": "/services.md" } },
 };
 
-export default function ServicesPage() {
-  return (
-    <>
-      <PageIntro header={servicesPage} />
-      <ServicesDetails />
-    </>
-  );
+export default async function ServicesPage() {
+  const [{ content, story }, draft] = await Promise.all([loadServices(), isDraft()]);
+  if (draft && story) return <StoryblokStory story={story as never} />;
+  return <ServicesPageView content={content} />;
 }

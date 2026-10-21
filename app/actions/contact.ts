@@ -8,7 +8,7 @@ import {
   type ContactState,
 } from "@/lib/contact/schema";
 
-const FIELDS: ContactField[] = ["name", "email", "budget", "message"];
+const FIELDS: ContactField[] = ["name", "email", "budget", "message", "call"];
 
 export async function submitContact(
   _previous: ContactState,

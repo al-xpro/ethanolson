@@ -11,6 +11,7 @@ const AnimatedHeaderSection = ({
   textColor,
   withScrollTrigger = false,
   as: Heading = "h2",
+  attrs,
 }: {
   subTitle: string;
   title: string;
@@ -18,6 +19,8 @@ const AnimatedHeaderSection = ({
   textColor: string;
   withScrollTrigger?: boolean;
   as?: "h1" | "h2";
+  /** Visual Editor attributes (lib/cms/editable.ts) */
+  attrs?: Record<string, string>;
 }) => {
   const contextRef = useRef<HTMLDivElement>(null);
   const headerRef = useRef<HTMLDivElement>(null);
@@ -52,7 +55,7 @@ const AnimatedHeaderSection = ({
   }, []);
 
   return (
-    <div ref={contextRef} className="relative z-10 h-full pointer-events-none">
+    <div ref={contextRef} {...attrs} className="relative z-10 h-full pointer-events-none">
       <div style={{ clipPath: "polygon(0 0, 100% 0, 100% 100%, 0 100%)" }}>
         <div
           ref={headerRef}

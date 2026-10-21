@@ -1,12 +1,13 @@
 "use client";
 
 import { useRef, useState } from "react";
-import Image from "next/image";
 import Link from "next/link";
-import { works, workCover, coverSize, darkBlur } from "@/content/works";
+import { CmsImage } from "@/components/cms/CmsImage";
+import type { WorkEntry } from "@/lib/cms/types";
+import { editable } from "@/lib/cms/editable";
 import { gsap, useGSAP, MOTION_OK, SplitText } from "@/lib/gsap";
 
-export function WorksList() {
+export function WorksList({ works }: { works: WorkEntry[] }) {
   const container = useRef<HTMLDivElement>(null);
   const preview = useRef<HTMLDivElement>(null);
   const [active, setActive] = useState(0);
@@ -28,9 +29,11 @@ export function WorksList() {
 
       gsap.matchMedia().add(MOTION_OK, () => {
         gsap.utils.toArray<HTMLElement>(".work-row").forEach((row) => {
+          // aria "none": the split title is hidden from assistive tech, which reads its copy
           const split = SplitText.create(row.querySelector(".work-title"), {
             type: "chars",
             mask: "chars",
+            aria: "none",
           });
           gsap
             .timeline({ scrollTrigger: { trigger: row, start: "top 88%" } })
@@ -75,7 +78,7 @@ export function WorksList() {
     >
       <ul onMouseLeave={() => showPreview(false)}>
         {works.map((work, index) => (
-          <li key={work.slug} className="work-row relative">
+          <li key={work.slug} {...editable(work)} className="work-row relative">
             <div className="work-rule absolute inset-x-0 top-0 h-px bg-white/25" />
             <Link
               href={`/works/${work.slug}`}
@@ -89,7 +92,10 @@ export function WorksList() {
               <span className="work-meta text-sm xl:text-[1vw] text-white/50 tabular-nums">
                 {String(index + 1).padStart(2, "0")}
               </span>
-              <span className="work-title text-4xl sm:text-6xl xl:text-[6vw] uppercase leading-[0.9] transition-[translate,color] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-3 xl:group-hover:translate-x-[1.5vw] lg:[ul:hover_&]:text-white/35 lg:group-hover:text-white!">
+              {/* The visible title is split into letters for its animation, so assistive tech
+                  reads this copy instead */}
+              <span className="sr-only">{work.title}</span>
+              <span aria-hidden className="work-title text-4xl sm:text-6xl xl:text-[6vw] uppercase leading-[0.9] transition-[translate,color] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-3 xl:group-hover:translate-x-[1.5vw] lg:[ul:hover_&]:text-white/35 lg:group-hover:text-white!">
                 {work.title}
               </span>
               <span className="work-meta col-start-2 lg:col-start-3 flex flex-col lg:items-end gap-1 text-sm xl:text-[1vw] text-white/60">
@@ -98,12 +104,9 @@ export function WorksList() {
               </span>
               {/* Phones get the cover inline instead of the cursor preview */}
               <span className="relative col-span-2 aspect-[16/10] overflow-hidden rounded-2xl lg:hidden">
-                <Image
-                  src={workCover(work.slug)}
+                <CmsImage
+                  media={work.cover}
                   alt=""
-                  {...coverSize}
-                  placeholder="blur"
-                  blurDataURL={darkBlur}
                   sizes="100vw"
                   className="h-full w-full object-cover"
                 />
@@ -126,12 +129,9 @@ export function WorksList() {
         >
           {works.map((work) => (
             <div key={work.slug} className="relative h-full w-full">
-              <Image
-                src={workCover(work.slug)}
+              <CmsImage
+                media={work.cover}
                 alt=""
-                {...coverSize}
-                placeholder="blur"
-                blurDataURL={darkBlur}
                 sizes="30vw"
                 className="h-full w-full object-cover"
               />

@@ -1,4 +1,6 @@
-import type { Service } from "@/content/services";
+import type { ServiceStep } from "@/lib/cms/model";
+
+type Service = Pick<ServiceStep, "schema">;
 
 // Diagrams built in code, one per service. Classes used by the page's animations:
 // .schema-pop (rises in), .schema-bar (grows from the left), .schema-draw (SVG line draws)

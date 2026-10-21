@@ -3,12 +3,12 @@
 import { useRef } from "react";
 import { SocialLinks, activeSocials } from "@/components/ui/SocialLinks";
 import { ContactForm } from "@/components/ui/ContactForm";
-import { AvailabilityCalendar } from "@/components/ui/AvailabilityCalendar";
-import { contactPage } from "@/content/sections";
+import type { ContactPage } from "@/lib/cms/model";
+import { contactLabels } from "@/content/ui";
 import { site } from "@/content/site";
 import { gsap, useGSAP, MOTION_OK } from "@/lib/gsap";
 
-export function ContactView() {
+export function ContactView({ content }: { content: ContactPage }) {
   const container = useRef<HTMLDivElement>(null);
 
   useGSAP(
@@ -33,7 +33,7 @@ export function ContactView() {
     { scope: container }
   );
 
-  const words = `${contactPage.marquee} · `.repeat(4);
+  const words = `${content.marquee} · `.repeat(4);
 
   return (
     <div ref={container} className="text-white">
@@ -49,7 +49,7 @@ export function ContactView() {
 
         <div className="flex flex-col w-full gap-10 xl:gap-[1.5vw]">
           <div className="contact-reveal">
-            <h2 className="xl:text-[2vw]">{contactPage.emailLabel}</h2>
+            <h2 className="xl:text-[2vw]">{contactLabels.email}</h2>
             <div className="w-full h-px xl:h-[0.1vw] my-2 bg-white/30" />
             <a
               href={`mailto:${site.email}`}
@@ -60,22 +60,16 @@ export function ContactView() {
           </div>
 
           <div className="contact-reveal">
-            <h2 className="xl:text-[2vw]">{contactPage.replyLabel}</h2>
+            <h2 className="xl:text-[2vw]">{contactLabels.replies}</h2>
             <div className="w-full h-px xl:h-[0.1vw] my-2 bg-white/30" />
             <p className="normal-case text-lg xl:text-[1.2vw] leading-relaxed text-white/70">
-              {contactPage.replyText}
+              {content.replyText}
             </p>
-          </div>
-
-          <div className="contact-reveal">
-            <h2 className="xl:text-[2vw]">{contactPage.availability.label}</h2>
-            <div className="w-full h-px xl:h-[0.1vw] my-2 bg-white/30" />
-            <AvailabilityCalendar />
           </div>
 
           {activeSocials.length > 0 && (
             <div className="contact-reveal">
-              <h2 className="xl:text-[2vw]">{contactPage.socialLabel}</h2>
+              <h2 className="xl:text-[2vw]">{contactLabels.social}</h2>
               <div className="w-full h-px xl:h-[0.1vw] my-2 bg-white/30" />
               <SocialLinks
                 className="flex flex-wrap gap-2 xl:gap-[0.5vw]"

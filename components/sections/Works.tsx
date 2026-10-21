@@ -2,22 +2,25 @@
 
 import AnimatedHeaderSection from "@/components/ui/AnimatedHeaderSection";
 import { WorkParallax } from "../ui/WorkParallax";
-import { worksHeader } from "@/content/sections";
 import { PillLink } from "@/components/ui/PillLink";
+import type { Home } from "@/lib/cms/model";
+import type { WorkEntry } from "@/lib/cms/types";
+import { editable } from "@/lib/cms/editable";
 
-const Works = () => {
+const Works = ({ content, works }: { content: Home["works"]; works: WorkEntry[] }) => {
   return (
-    <section id="works" className="relative h-full">
+    <section id="works" {...editable(content)} className="relative h-full">
       <AnimatedHeaderSection
-        subTitle={worksHeader.subTitle}
-        title={worksHeader.title}
-        text={worksHeader.text}
+        subTitle={content.header.subtitle}
+        title={content.header.title}
+        text={content.header.text}
         textColor={"text-white"}
         withScrollTrigger={true}
+        attrs={editable(content.header)}
       />
-      <WorkParallax />
+      <WorkParallax works={works} />
       <div className="flex justify-center py-16 xl:py-[4vw]">
-        <PillLink href="/works">See all works →</PillLink>
+        <PillLink href="/works">{content.ctaLabel} →</PillLink>
       </div>
     </section>
   );

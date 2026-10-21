@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { isOpenSlot } from "@/lib/availability";
 
 export const BUDGETS = ["Under €5k", "€5k–15k", "€15k–50k", "Over €50k", "Not sure yet"] as const;
 
@@ -20,6 +21,14 @@ export const contactSchema = z.object({
     .trim()
     .min(20, { error: "Tell me a bit more: at least 20 characters." })
     .max(2000, { error: "Keep it under 2,000 characters." }),
+  // Optional: a free slot from the date picker, checked again on the server
+  call: z
+    .string()
+    .trim()
+    .refine((value) => value === "" || isOpenSlot(value), {
+      error: "That time isn't free any more. Please choose another one.",
+    })
+    .optional(),
 });
 
 export type ContactInput = z.infer<typeof contactSchema>;
