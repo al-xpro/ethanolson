@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState, useEffect, useRef, useState } from "react";
+import { Component, useActionState, useEffect, useRef, useState, type ReactNode } from "react";
 import Link from "next/link";
 import { contactLabels } from "@/content/ui";
 import { CallPicker } from "@/components/ui/CallPicker";
@@ -21,11 +21,24 @@ const labelClass = "text-xs xl:text-[0.8vw] tracking-[0.3rem] uppercase text-whi
 const FIELDS: ContactField[] = ["name", "email", "budget", "message", "call"];
 
 type Errors = Partial<Record<ContactField, string>>;
+type Values = Partial<Record<ContactField, string>>;
+
+// What the visitor wrote, kept for this tab only, so a reload after a failed send loses nothing
+const DRAFT_KEY = "contact-draft";
+
+const readValues = (data: FormData): Values =>
+  Object.fromEntries(FIELDS.map((field) => [field, String(data.get(field) ?? "")]));
+
+const saveDraft = (values: Values | null) => {
+  try {
+    if (values) sessionStorage.setItem(DRAFT_KEY, JSON.stringify(values));
+    else sessionStorage.removeItem(DRAFT_KEY);
+  } catch {}
+};
 
 function validate(form: HTMLFormElement): Errors {
   const data = new FormData(form);
-  const values = Object.fromEntries(FIELDS.map((field) => [field, String(data.get(field) ?? "")]));
-  const result = contactSchema.safeParse(values);
+  const result = contactSchema.safeParse(readValues(data));
   if (result.success) return {};
   const errors: Errors = {};
   for (const issue of result.error.issues) {
@@ -35,7 +48,45 @@ function validate(form: HTMLFormElement): Errors {
   return errors;
 }
 
+/**
+ * Sending can fail outright: offline, or the site was redeployed while this page was open,
+ * so the action it was built with no longer exists. Instead of the error page, explain and
+ * offer a reload; the message was saved before sending and comes back after it.
+ */
+class SendFailure extends Component<{ children: ReactNode }, { failed: boolean }> {
+  state = { failed: false };
+
+  static getDerivedStateFromError() {
+    return { failed: true };
+  }
+
+  render() {
+    if (!this.state.failed) return this.props.children;
+    return (
+      <div role="alert" className="flex flex-col items-start gap-4 py-6 normal-case leading-normal">
+        <p className="text-lg xl:text-[1.3vw] text-[#ff8a80]">{contactLabels.failed.text}</p>
+        <button
+          type="button"
+          onClick={() => window.location.reload()}
+          className="cursor-pointer rounded-full bg-white px-8 py-4 xl:px-[2vw] xl:py-[1vw] text-sm xl:text-[0.9vw] uppercase tracking-widest text-black hover:opacity-80"
+        >
+          {contactLabels.failed.reload}
+        </button>
+      </div>
+    );
+  }
+}
+
 export function ContactForm() {
+  return (
+    <SendFailure>
+      <Form />
+    </SendFailure>
+  );
+}
+
+function Form() {
+  // The server action itself, so the form also posts without JavaScript
   const [state, formAction, pending] = useActionState(submitContact, initialContactState);
   const formRef = useRef<HTMLFormElement>(null);
   // Client checks only start once React runs, so the form still works without JavaScript
@@ -44,16 +95,32 @@ export function ContactForm() {
   const [typing, setTyping] = useState<ContactField | null>(null);
   // Set when Send is pressed on an incomplete form: every error shows, and focus moves
   const [attempts, setAttempts] = useState(0);
+  // A message saved before a failed send (see SendFailure)
+  const [draft, setDraft] = useState<Values | null>(null);
 
   const serverErrors: Errors = state.status === "error" ? state.fieldErrors : {};
-  const values = state.status === "error" ? state.values : {};
+  const values: Values = state.status === "error" ? state.values : (draft ?? {});
+
+  useEffect(() => {
+    try {
+      const saved = sessionStorage.getItem(DRAFT_KEY);
+      // Runs once after hydration: the server can't know what this tab saved
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      if (saved) setDraft(JSON.parse(saved));
+    } catch {}
+  }, []);
+
+  useEffect(() => {
+    if (state.status === "success") saveDraft(null);
+  }, [state]);
 
   useEffect(() => {
     // Runs once after hydration; there's no earlier point to read the form
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setHydrated(true);
+    // Again when a saved message comes back, so Send unlocks for it
     if (formRef.current) setClientErrors(validate(formRef.current));
-  }, [state]);
+  }, [state, draft]);
 
   // After a failed submit (server or client), take the visitor to the first problem
   useEffect(() => {
@@ -136,10 +203,12 @@ export function ContactForm() {
     <form
       // React resets the form after every submit, and a <select> would fall back to its
       // first default. A new key remounts the form with the submitted values instead.
-      key={state.status === "error" ? JSON.stringify(state.values) : "empty"}
+      key={JSON.stringify(values)}
       ref={formRef}
       action={formAction}
       onKeyDown={blockEnter}
+      // Kept until it's sent, in case sending fails (see SendFailure)
+      onSubmit={(event) => saveDraft(readValues(new FormData(event.currentTarget)))}
       noValidate
       className="group relative flex flex-col gap-8 xl:gap-[1.5vw] normal-case leading-normal"
     >
