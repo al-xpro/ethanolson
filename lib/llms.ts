@@ -22,8 +22,8 @@ const oneLine = (text: string) => text.replace(/\s+/g, " ").trim();
 const list = (items: string[]) => items.map((item) => `- ${item}`).join("\n");
 const absolute = (path: string) => `${site.url}${path}`;
 
-/** The Markdown twin of a page: `/about` → `/about.md`, `/` → `/index.md` */
-export const markdownPath = (path: string) => `${path === "/" ? "/index" : path}.md`;
+export { markdownPath } from "@/lib/markdown-path";
+import { markdownPath } from "@/lib/markdown-path";
 
 const concept = `${site.name} is a fictional design engineer: this is a concept site designed and developed by ${site.creator.name} (${site.creator.brand}, ${site.creator.url}). The projects, clients and testimonials are part of the concept.`;
 
@@ -186,7 +186,7 @@ export async function llmsIndex() {
       `# ${site.title}`,
       `> ${site.description}`,
       concept,
-      `Every page has a Markdown version at the same URL with \`.md\` added (the home page is ${absolute("/index.md")}). Everything in one file: ${absolute("/llms-full.txt")}.`,
+      `Every page has a Markdown version at the same URL with \`.md\` added (the home page is ${absolute("/index.md")}), also at ${absolute("/llms.txt?page=/about")} (\`/home\` for the home page). Everything in one file: ${absolute("/llms-full.txt")}.`,
       "## Pages",
       main.map(link).join("\n"),
       "## Works",

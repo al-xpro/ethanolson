@@ -26,7 +26,8 @@ repository. They are not for resale.
 - `public/models/optical-illusion.glb`: modified from
   ["Optical Illusions"](https://sketchfab.com/3d-models/optical-illusions-bd5b32c2851749a7abcdc66c92a95965)
   by [Johannes R.](https://sketchfab.com/selkie3d), licensed under
-  [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). Changes: the edges were
+  [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). Changes: the geometry was
+  cleaned (vertices snapped so every face is exactly flat, flat normals), the edges were
   reshaped (the uprights lean by about 12°, the figure is 15% taller and 15% shallower)
   and the material was replaced.
 

@@ -16,7 +16,6 @@ import { gsap, useGSAP, MOTION_OK } from "@/lib/gsap";
 
 export default function OutroParallax({ content }: { content: Home["outro"] }) {
   const container = useRef<HTMLDivElement>(null);
-
   useGSAP(
     () => {
       gsap.matchMedia().add(MOTION_OK, () => {
@@ -69,7 +68,11 @@ export default function OutroParallax({ content }: { content: Home["outro"] }) {
             <img
               {...imageProps}
               alt=""
-              className="absolute inset-0 w-full h-full object-cover"
+              // On high-density screens the photo is painted at half size and scaled up 2×:
+              // a quarter of the pixels to rasterize when it first scrolls in, which Safari
+              // did in one frame and stalled on (a background photo behind text stays sharp
+              // enough at 1×)
+              className="absolute inset-0 w-full h-full object-cover [@media(min-resolution:2dppx)]:h-1/2 [@media(min-resolution:2dppx)]:w-1/2 [@media(min-resolution:2dppx)]:origin-top-left [@media(min-resolution:2dppx)]:scale-200"
             />
           </picture>
         </div>

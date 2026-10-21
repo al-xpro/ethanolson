@@ -60,6 +60,9 @@ export const contactLabels = {
   },
 };
 
+// The footer's "View as an agent": the page in llms.txt, as AI agents read it
+export const agentView = { button: "View as an agent" };
+
 export const notFoundPage = {
   subTitle: "Error 404",
   title: "Lost in the grid",

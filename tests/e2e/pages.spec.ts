@@ -74,6 +74,17 @@ test("focusing a testimonial link brings its card to the front", async ({ page }
   }).toPass();
 });
 
+test("the footer links to the page as agents read it", async ({ page, request }) => {
+  await page.goto("/works/quarrow");
+  const link = page.getByRole("link", { name: "View as an agent" });
+  await expect(link).toHaveAttribute("href", "/llms.txt?page=%2Fworks%2Fquarrow");
+
+  const markdown = await request.get("/llms.txt?page=/works/quarrow");
+  expect(await markdown.text()).toContain("# Quarrow");
+  expect((await request.get("/llms.txt?page=/home")).ok()).toBe(true);
+  expect((await request.get("/llms.txt?page=/nowhere")).status()).toBe(404);
+});
+
 test.describe("on phones", () => {
   test.use({ viewport: { width: 390, height: 844 } });
 

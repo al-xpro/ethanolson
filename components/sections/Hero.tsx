@@ -2,13 +2,14 @@
 
 import { Suspense, useCallback, useEffect, useRef, useState } from "react";
 import { Canvas } from "@react-three/fiber";
-import { Environment, Float, Lightformer } from "@react-three/drei";
+import { Float } from "@react-three/drei";
 import AnimatedHeaderSection from "@/components/ui/AnimatedHeaderSection";
 import type { Home } from "@/lib/cms/model";
 import { editable } from "@/lib/cms/editable";
 import { usePrefersReducedMotion } from "@/lib/useMediaQuery";
 import { useFastWebGL } from "@/lib/useFastWebGL";
 import { OpticalIllusion } from "../ui/OpticalIllusion";
+import { StudioEnvironment } from "../ui/StudioEnvironment";
 
 const Hero = ({ content }: { content: Home["hero"] }) => {
   const figureRef = useRef<HTMLElement>(null);
@@ -17,6 +18,9 @@ const Hero = ({ content }: { content: Home["hero"] }) => {
   const fastWebGL = useFastWebGL();
   const [sceneReady, setSceneReady] = useState(false);
   const onFigureReady = useCallback(() => setSceneReady(true), []);
+  // The figure turns into place in the dark; the lights come up once it settles
+  const [lit, setLit] = useState(false);
+  const onFigureTurned = useCallback(() => setLit(true), []);
 
   // Stop rendering the scene once it scrolls out of view
   useEffect(() => {
@@ -58,36 +62,17 @@ const Hero = ({ content }: { content: Home["hero"] }) => {
             camera={{ position: [0, 0, -10], fov: 17.5, near: 1, far: 20 }}
           >
             <ambientLight intensity={1} />
+            {/* The black metal is lit by what it reflects: a studio whose lights keep turning */}
+            <StudioEnvironment moving={!reduceMotion} lit={lit} />
             <Suspense fallback={null}>
               <Float
                 speed={reduceMotion ? 0 : 1}
                 rotationIntensity={reduceMotion ? 0 : 0.3}
                 floatIntensity={reduceMotion ? 0 : 1}
               >
-                <OpticalIllusion reduceMotion={reduceMotion} onReady={onFigureReady} />
+                <OpticalIllusion reduceMotion={reduceMotion} onReady={onFigureReady} onTurned={onFigureTurned} />
               </Float>
             </Suspense>
-            {/* The original studio: four soft strips, reflected as white edges on the dark metal */}
-            <Environment resolution={512}>
-              <group rotation={[0, 0, 0]}>
-                <Lightformer form="rect" intensity={10} position={[0, 5, 0]} scale={[10, 2, 0]} />
-                <Lightformer
-                  form="rect"
-                  intensity={6}
-                  position={[-5, 0, 0]}
-                  rotation={[0, Math.PI / 2, 0]}
-                  scale={[10, 6, 0]}
-                />
-                <Lightformer
-                  form="rect"
-                  intensity={6}
-                  position={[5, 0, 0]}
-                  rotation={[0, -Math.PI / 2, 0]}
-                  scale={[10, 6, 0]}
-                />
-                <Lightformer form="circle" intensity={4} position={[0, 0, -5]} scale={5} />
-              </group>
-            </Environment>
           </Canvas>
         </figure>
       )}
