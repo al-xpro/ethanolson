@@ -26,8 +26,6 @@ copy are invented to show how a motion-rich, full-stack portfolio is made.
   keyed by a salted hash: no IP address is stored
 - Cookieless analytics (Vercel Web Analytics and Umami, with a few custom events): no
   cookies, no consent banner
-- Real-user Core Web Vitals collected into Postgres, and a password-protected dashboard
-  with the 75th percentile per metric and per page
 - Full `prefers-reduced-motion` support: every scene has a static fallback
 - Accessible navigation: real links and buttons, a focus trap, Escape to close, visible
   focus on every control
@@ -61,9 +59,8 @@ content/defaults/     the default content (used without Storyblok, and to fill i
 content/ui.ts         interface copy that stays in code (labels, the form, the 404 page)
 lib/cms/              content model, Storyblok fetching, validation, live editing
 lib/db/               Drizzle schema and client (migrations in drizzle/)
-lib/                  GSAP setup, animation helpers, rate limit, e-mail, Web Vitals
+lib/                  GSAP setup, animation helpers, rate limit, e-mail, analytics
 emails/               the contact e-mails (React Email)
-proxy.ts              Basic auth for /admin (the Web Vitals dashboard)
 scripts/              Storyblok setup and preview, media manifest
 ```
 
@@ -107,11 +104,10 @@ Put them in `.env.local`. Names only here. Never commit values.
 | `STORYBLOK_WEBHOOK_SECRET` | Checks that publish webhooks (`/api/revalidate`) come from Storyblok. |
 | `STORYBLOK_SPACE_ID` | The content space, for `npm run storyblok:setup`. |
 | `STORYBLOK_MANAGEMENT_TOKEN` | Personal access token, for `npm run storyblok:setup`. |
-| `DATABASE_URL` | Neon Postgres: rate limits and Web Vitals. Without it, both step aside. |
+| `DATABASE_URL` | Neon Postgres, for the contact form's rate limit. Without it, there's no limit. |
 | `RATE_LIMIT_SALT` | Salt for the hashed visitor keys of the rate limit. |
 | `RESEND_API_KEY` | Resend, for the contact e-mails. Without it, nothing is sent. |
 | `NEXT_PUBLIC_UMAMI_WEBSITE_ID`, `NEXT_PUBLIC_UMAMI_SCRIPT_URL` | Umami. Without both, no script loads. |
-| `ADMIN_USER`, `ADMIN_PASSWORD` | Basic auth for `/admin/vitals`. Without them, nobody gets in. |
 
 ### Storyblok
 

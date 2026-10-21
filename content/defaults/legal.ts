@@ -20,8 +20,7 @@ export const defaultPrivacy: LegalPage = {
       "list": [
         "Contact form: your name, e-mail address, budget range and message, so I can reply to your enquiry. The legal basis is the steps you ask me to take before a possible contract.",
         "Spam protection: a salted, one-way hash of your IP address, kept for one hour to limit how many messages can be sent. Your IP address itself is never stored. The legal basis is my legitimate interest in keeping the form usable.",
-        "Analytics: anonymous page views counted with Vercel Web Analytics and Umami, without cookies and without identifying you. The legal basis is my legitimate interest in understanding which pages are useful.",
-        "Performance: anonymous loading measurements (Core Web Vitals) and the page they were taken on, with no IP address, user agent or cookie."
+        "Analytics: anonymous page views counted with Vercel Web Analytics and Umami, without cookies and without identifying you. The legal basis is my legitimate interest in understanding which pages are useful."
       ]
     },
     {
@@ -31,7 +30,7 @@ export const defaultPrivacy: LegalPage = {
         "Vercel (hosting and analytics): serves the website, keeps short-lived server logs and counts anonymous page views.",
         "Resend: delivers your message to my inbox by e-mail, and sends you its confirmation.",
         "ImprovMX: forwards e-mail sent to hello@ethanolson.alxpro.com to my mailbox, where messages are kept.",
-        "Neon (EU servers): stores the spam-protection counters and performance measurements.",
+        "Neon (EU servers): stores the spam-protection counters.",
         "Umami: counts anonymous page views."
       ]
     },
@@ -42,7 +41,7 @@ export const defaultPrivacy: LegalPage = {
     },
     {
       "heading": "How long data is kept",
-      "paragraphs": "Contact messages are deleted 12 months after our last exchange, unless they become part of a project. Spam-protection counters are deleted after one hour. Anonymous analytics and performance data are kept in aggregate form.",
+      "paragraphs": "Contact messages are deleted 12 months after our last exchange, unless they become part of a project. Spam-protection counters are deleted after one hour. Anonymous analytics are kept in aggregate form.",
       "list": []
     },
     {
