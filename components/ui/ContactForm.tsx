@@ -5,6 +5,7 @@ import Link from "next/link";
 import { contactLabels } from "@/content/ui";
 import { CallPicker } from "@/components/ui/CallPicker";
 import { submitContact } from "@/app/actions/contact";
+import { track } from "@/lib/analytics";
 import {
   BUDGETS,
   HONEYPOT_FIELD,
@@ -112,6 +113,10 @@ function Form() {
 
   useEffect(() => {
     if (state.status === "success") saveDraft(null);
+    // Umami: how sends end (the fields themselves are never sent)
+    if (state.status === "success") track("Contact submit", { result: "success" });
+    else if (state.status === "error")
+      track("Contact submit", { result: state.formError === contactLabels.limited ? "limited" : state.formError ? "not sent" : "invalid" });
   }, [state]);
 
   useEffect(() => {
@@ -281,6 +286,12 @@ function Form() {
         </Link>
         .
       </p>
+
+      {state.status === "error" && state.formError && (
+        <p role="alert" className="text-sm xl:text-[0.9vw] text-[#ff8a80]">
+          {state.formError}
+        </p>
+      )}
 
       {/* Until React runs, the browser's own checks (required, e-mail) dim the button, so it
           never flashes as ready on load. It still submits: the server validates too. */}

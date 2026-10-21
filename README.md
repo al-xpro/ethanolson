@@ -1,15 +1,12 @@
 # Ethan Olson | Concept Portfolio
 
-> **Work in progress.** The full-stack features are being built in the open. See the
-> [roadmap](#roadmap).
-
 [![CI](https://github.com/al-xpro/ethanolson/actions/workflows/ci.yml/badge.svg)](https://github.com/al-xpro/ethanolson/actions/workflows/ci.yml)
 
 A portfolio for **Ethan Olson, a fictional design engineer**, designed and
 developed by [AlxPro](https://alxpro.com). It's a concept build: the persona, works and
 copy are invented to show how a motion-rich, full-stack portfolio is made.
 
-**Live:** not deployed yet. It will be published at `ethanolson.alxpro.com`.
+**Live:** [ethanolson.alxpro.com](https://ethanolson.alxpro.com)
 
 ![The hero section: "Design Engineer" next to a 3D optical illusion](.github/assets/hero.jpg)
 
@@ -24,6 +21,11 @@ copy are invented to show how a motion-rich, full-stack portfolio is made.
 - A contact form with a shared Zod schema, live validation and a server action that works
   without JavaScript, next to an availability calendar that shows different free days
   every month (generated from the month, no booking service)
+- Enquiries e-mailed with Resend (a notification with reply-to, and a confirmation to the
+  visitor, both in React Email), and rate-limited to 5 per visitor per hour in Postgres,
+  keyed by a salted hash: no IP address is stored
+- Cookieless analytics (Vercel Web Analytics and Umami, with a few custom events): no
+  cookies, no consent banner
 - Full `prefers-reduced-motion` support: every scene has a static fallback
 - Accessible navigation: real links and buttons, a focus trap, Escape to close, visible
   focus on every control
@@ -36,13 +38,13 @@ copy are invented to show how a motion-rich, full-stack portfolio is made.
 - TypeScript and Tailwind CSS 4
 - GSAP + ScrollTrigger for scroll scenes, Lenis for smooth scrolling
 - React Three Fiber, drei and three.js for the 3D hero
-- Zod for validation, Vitest and Playwright for tests
+- Zod for validation, Vitest and Playwright for tests (PGlite runs the real migrations in
+  memory)
+- Neon Postgres with Drizzle ORM, Resend with React Email, Umami and Vercel Web Analytics
 
 - Storyblok as the CMS, with the Visual Editor: every page's text, images and videos, the
   works (including new ones) and their animated blocks, checked against a content model
 
-Coming next (see the roadmap): Neon Postgres with Drizzle, rate limiting and Resend e-mails
-for the contact flow, Umami and self-built Web Vitals.
 
 ## Architecture
 
@@ -56,7 +58,9 @@ components/cms/       pages composed from content, CMS image, Visual Editor help
 content/defaults/     the default content (used without Storyblok, and to fill it)
 content/ui.ts         interface copy that stays in code (labels, the form, the 404 page)
 lib/cms/              content model, Storyblok fetching, validation, live editing
-lib/                  GSAP setup, animation helpers, media-query hooks
+lib/db/               Drizzle schema and client (migrations in drizzle/)
+lib/                  GSAP setup, animation helpers, rate limit, e-mail, analytics
+emails/               the contact e-mails (React Email)
 scripts/              Storyblok setup and preview, media manifest
 ```
 
@@ -83,6 +87,8 @@ npm run lint
 npm run build
 npm test           # unit tests (Vitest)
 npm run test:e2e   # end-to-end tests (Playwright, builds the site first)
+npm run db:generate # a migration from lib/db/schema.ts, into drizzle/
+npm run db:migrate  # applies pending migrations to DATABASE_URL
 ```
 
 ### Environment variables
@@ -98,6 +104,10 @@ Put them in `.env.local`. Names only here. Never commit values.
 | `STORYBLOK_WEBHOOK_SECRET` | Checks that publish webhooks (`/api/revalidate`) come from Storyblok. |
 | `STORYBLOK_SPACE_ID` | The content space, for `npm run storyblok:setup`. |
 | `STORYBLOK_MANAGEMENT_TOKEN` | Personal access token, for `npm run storyblok:setup`. |
+| `DATABASE_URL` | Neon Postgres, for the contact form's rate limit. Without it, there's no limit. |
+| `RATE_LIMIT_SALT` | Salt for the hashed visitor keys of the rate limit. |
+| `RESEND_API_KEY` | Resend, for the contact e-mails. Without it, nothing is sent. |
+| `NEXT_PUBLIC_UMAMI_WEBSITE_ID`, `NEXT_PUBLIC_UMAMI_SCRIPT_URL` | Umami. Without both, no script loads. |
 
 ### Storyblok
 

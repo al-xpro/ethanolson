@@ -3,15 +3,21 @@ import type { NextConfig } from "next";
 // What the pages may load, and from where. Inline scripts are allowed: Next.js streams its
 // data in them, and nonces would make every page dynamic instead of prerendered.
 // Development keeps the defaults (hot reload needs eval).
+// Umami (when configured): its script's origin, and the gateway it reports to.
+const umamiScript = process.env.NEXT_PUBLIC_UMAMI_SCRIPT_URL
+  ? new URL(process.env.NEXT_PUBLIC_UMAMI_SCRIPT_URL).origin
+  : "";
+const umamiReport = umamiScript ? "https://gateway.umami.is" : "";
+
 const contentSecurityPolicy = [
   "default-src 'self'",
-  "script-src 'self' 'unsafe-inline'",
+  `script-src 'self' 'unsafe-inline' ${umamiScript}`.trim(),
   "style-src 'self' 'unsafe-inline'",
   // Storyblok's image service, and the textures the 3D figure builds in the browser
   "img-src 'self' data: blob: https://a.storyblok.com",
   "media-src 'self' https://a.storyblok.com",
   "font-src 'self'",
-  "connect-src 'self'",
+  `connect-src 'self' ${umamiReport}`.trim(),
   "worker-src 'self' blob:",
   "object-src 'none'",
   "base-uri 'self'",
