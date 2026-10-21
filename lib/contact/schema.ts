@@ -47,6 +47,8 @@ export type ContactState =
       status: "error";
       fieldErrors: Partial<Record<ContactField, string>>;
       values: Partial<Record<ContactField, string>>;
+      // A problem with the whole message rather than a field (too many sent, not delivered)
+      formError?: string;
     };
 
 export const initialContactState: ContactState = { status: "idle" };

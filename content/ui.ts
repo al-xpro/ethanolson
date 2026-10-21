@@ -42,6 +42,7 @@ export const contactLabels = {
     text: "I only use your details to reply to your message. More in the",
     link: "privacy policy",
   },
+  limited: "You've sent a few messages in the last hour. Please try again later.",
   failed: {
     text: "Your message couldn't be sent. The site may have just been updated: reload the page and send it again. What you wrote will still be there.",
     reload: "Reload the page",

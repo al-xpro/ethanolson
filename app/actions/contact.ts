@@ -1,6 +1,9 @@
 "use server";
 
+import { headers } from "next/headers";
 import { z } from "zod";
+import { contactLabels } from "@/content/ui";
+import { clientIp, limit, visitorKey } from "@/lib/rate-limit";
 import {
   contactSchema,
   HONEYPOT_FIELD,
@@ -33,6 +36,10 @@ export async function submitContact(
     };
   }
 
-  // Next: rate limiting (#26) and e-mail with Resend (#28), which is also the record of each enquiry
+  // At most 5 messages per visitor per hour (counted only once a message is valid)
+  const key = visitorKey(clientIp(await headers()), "contact");
+  const { allowed } = await limit(key, 5, 3600);
+  if (!allowed) return { status: "error", values, fieldErrors: {}, formError: contactLabels.limited };
+
   return { status: "success" };
 }

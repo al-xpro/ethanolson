@@ -282,6 +282,12 @@ function Form() {
         .
       </p>
 
+      {state.status === "error" && state.formError && (
+        <p role="alert" className="text-sm xl:text-[0.9vw] text-[#ff8a80]">
+          {state.formError}
+        </p>
+      )}
+
       {/* Until React runs, the browser's own checks (required, e-mail) dim the button, so it
           never flashes as ready on load. It still submits: the server validates too. */}
       <button
