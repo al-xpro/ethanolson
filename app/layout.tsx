@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Playfair } from "next/font/google";
+import { Analytics } from "@vercel/analytics/next";
 import { site } from "@/content/site";
 import { llmsIndex } from "@/lib/llms";
 import { loadSettings } from "@/lib/cms/load";
@@ -66,6 +67,8 @@ export default async function RootLayout({
           </main>
           <Footer />
         </SmoothScroll>
+        {/* Cookieless page views (Vercel Web Analytics), served from this domain */}
+        <Analytics />
       </body>
     </html>
   );
