@@ -186,6 +186,7 @@ export async function llmsIndex() {
       `# ${site.title}`,
       `> ${site.description}`,
       concept,
+      "Analytics are cookieless (Vercel Web Analytics and Umami): no cookies, no consent banner.",
       `Every page has a Markdown version at the same URL with \`.md\` added (the home page is ${absolute("/index.md")}), also at ${absolute("/llms.txt?page=/about")} (\`/home\` for the home page). Everything in one file: ${absolute("/llms-full.txt")}.`,
       "## Pages",
       main.map(link).join("\n"),

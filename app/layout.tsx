@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Playfair } from "next/font/google";
+import Script from "next/script";
 import { Analytics } from "@vercel/analytics/next";
 import { site } from "@/content/site";
 import { llmsIndex } from "@/lib/llms";
@@ -37,6 +38,12 @@ export const metadata: Metadata = {
   },
 };
 
+// Umami loads only when both variables are set (not in CI, not in the end-to-end tests)
+const umami =
+  process.env.NEXT_PUBLIC_UMAMI_WEBSITE_ID && process.env.NEXT_PUBLIC_UMAMI_SCRIPT_URL
+    ? { id: process.env.NEXT_PUBLIC_UMAMI_WEBSITE_ID, src: process.env.NEXT_PUBLIC_UMAMI_SCRIPT_URL }
+    : null;
+
 export default async function RootLayout({
   children,
 }: Readonly<{
@@ -73,6 +80,15 @@ export default async function RootLayout({
         </SmoothScroll>
         {/* Cookieless page views (Vercel Web Analytics), served from this domain */}
         <Analytics />
+        {/* Umami: cookieless page views and a few events, on the live domain only */}
+        {umami && (
+          <Script
+            src={umami.src}
+            data-website-id={umami.id}
+            data-domains={new URL(site.url).hostname}
+            strategy="afterInteractive"
+          />
+        )}
       </body>
     </html>
   );

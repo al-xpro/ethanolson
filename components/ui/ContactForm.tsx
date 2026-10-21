@@ -5,6 +5,7 @@ import Link from "next/link";
 import { contactLabels } from "@/content/ui";
 import { CallPicker } from "@/components/ui/CallPicker";
 import { submitContact } from "@/app/actions/contact";
+import { track } from "@/lib/analytics";
 import {
   BUDGETS,
   HONEYPOT_FIELD,
@@ -112,6 +113,10 @@ function Form() {
 
   useEffect(() => {
     if (state.status === "success") saveDraft(null);
+    // Umami: how sends end (the fields themselves are never sent)
+    if (state.status === "success") track("Contact submit", { result: "success" });
+    else if (state.status === "error")
+      track("Contact submit", { result: state.formError === contactLabels.limited ? "limited" : state.formError ? "not sent" : "invalid" });
   }, [state]);
 
   useEffect(() => {

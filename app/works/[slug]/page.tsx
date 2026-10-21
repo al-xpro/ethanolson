@@ -4,6 +4,7 @@ import { WorkPage } from "@/components/cms/pages";
 import { StoryblokStory } from "@/lib/cms/live";
 import { isDraft, loadWorks } from "@/lib/cms/load";
 import { site } from "@/content/site";
+import { TrackView } from "@/lib/analytics";
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -58,6 +59,7 @@ export default async function WorkRoute({ params }: Props) {
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }}
         />
       )}
+      {work && <TrackView event="Work view" data={{ work: work.slug }} />}
       {/* In the Visual Editor, the draft renders through Storyblok and updates live */}
       {draft && story ? <StoryblokStory story={story as never} slug={slug} /> : <WorkPage work={work} next={next} />}
     </>

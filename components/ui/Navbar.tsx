@@ -324,6 +324,7 @@ const Navbar = ({ ctaLabel }: { ctaLabel: string }) => {
             <Link
               href="/contact"
               onClick={(e) => handleNavClick(e, "/contact")}
+              data-umami-event="Start a project"
               className={`hidden sm:inline-flex items-center h-14 md:h-20 xl:h-[5vw] px-6 md:px-8 xl:px-[2vw] rounded-full border border-white xl:border-[0.1vw] text-white text-sm xl:text-[0.9vw] uppercase tracking-widest hover:bg-white hover:text-black transition-all duration-300 ${
                 showHeader && !isOpen ? "pointer-events-auto opacity-100" : "opacity-0 invisible"
               }`}

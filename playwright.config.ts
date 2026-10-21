@@ -25,5 +25,14 @@ export default defineConfig({
     url: `http://localhost:${PORT}`,
     reuseExistingServer: !process.env.CI,
     timeout: 180_000,
+    // Test runs never reach real services: empty values win over .env.local, so no
+    // analytics, no e-mails and no database (the features step aside without them)
+    env: {
+      NEXT_PUBLIC_UMAMI_WEBSITE_ID: "",
+      NEXT_PUBLIC_UMAMI_SCRIPT_URL: "",
+      RESEND_API_KEY: "",
+      DATABASE_URL: "",
+      RATE_LIMIT_SALT: "",
+    },
   },
 });
