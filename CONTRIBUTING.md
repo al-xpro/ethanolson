@@ -1,7 +1,7 @@
 # Contributing
 
 Thanks for your interest. This is a personal concept project by
-[Alex Prostamo](https://alxpro.com), developed in the open. Here's how it accepts help.
+[AlxPro](https://alxpro.com), developed in the open. Here's how it accepts help.
 
 ## Issues are welcome
 

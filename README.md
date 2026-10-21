@@ -112,21 +112,21 @@ Put them in `.env.local`. Names only here. Never commit values.
 
 ## How this was built
 
-I built this alone, with AI coding agents ([Claude Code](https://claude.com/claude-code))
-as the implementers. I own the product decisions, the specs and the review. The agents
-write most of the code and do the GitHub busywork. Every change goes through the same
-loop:
+I'm the developer on this project, working with AI coding agents
+([Claude Code](https://claude.com/claude-code)) the way a lead works with a pair
+programmer. I own the architecture, the specs and the code that ships. Agents draft
+implementations; I read every diff, run it, and change the code myself until it's right.
 
-1. **Spec.** I describe the problem in plain words, and it becomes an issue with context,
-   a goal and acceptance criteria. Example: [#82](https://github.com/al-xpro/ethanolson/issues/82),
-   the home page freezes in Safari.
-2. **Build locally.** An agent works on a branch and runs typecheck, lint, tests and the
-   build. It leaves the branch on my machine: nothing is pushed before I've used it.
-3. **Review in the browser.** I check it in Safari and Chrome, on a phone and with reduced
-   motion, and send it back with notes until it's right. The 3D hero took several rounds
-   ([#47](https://github.com/al-xpro/ethanolson/issues/47),
-   [#89](https://github.com/al-xpro/ethanolson/issues/89),
-   [#96](https://github.com/al-xpro/ethanolson/issues/96)).
+Every change goes through the same loop:
+
+1. **Spec.** Each change starts as an issue with context, a goal and acceptance criteria.
+   Example: [#82](https://github.com/al-xpro/ethanolson/issues/82), the home page freezes
+   in Safari.
+2. **Implement on a branch.** The first draft runs typecheck, lint, tests and the build
+   before I see it.
+3. **Review and change it locally.** I read the diff, run the site in Safari and Chrome, on
+   a phone and with reduced motion, and edit the code directly where it needs it: the
+   lighting values of the 3D hero, layouts, copy. Nothing is pushed before I've used it.
 4. **Pull request.** What, Why and How to test, linked to its issue. CI has to pass, and I
    merge.
 5. **Ship.** A merge into `main` deploys to production.
@@ -136,22 +136,9 @@ pull request merges itself when CI is green. Features, data, security and CI tak
 **review lane** above. The [project board](https://github.com/users/al-xpro/projects/5)
 shows both.
 
-**Where the agents carried the work:** tracing the Safari freeze frame by frame to a fixed
-photo inside a clip-path that was repainted on every scroll
-([#82](https://github.com/al-xpro/ethanolson/issues/82)); cleaning the 3D model's geometry
-so every face is exactly flat; a content model that generates the Storyblok components,
-the types and the validation from one file
-([#88](https://github.com/al-xpro/ethanolson/issues/88)).
-
-**Where I stepped in:** the look (black metal, and when the lights come up), the scope
-(no real bookings with a fictional designer, so an availability calendar instead of a
-booking service: [#81](https://github.com/al-xpro/ethanolson/issues/81)), and what goes
-public (planning notes stay local, and the history was cleaned before `v1.0`).
-
-Commits written with an agent carry a `Co-Authored-By` trailer, and their pull requests
-say so, so the history shows who did what. The first version was built from January to
-March 2026, cleaned up and published as `v1.0` in October 2026, and developed in the open
-since.
+Commits drafted with an agent carry a `Co-Authored-By` trailer, so the history is honest
+about how the work was done. The first version was built from January to March 2026,
+published as `v1.0` in October 2026, and developed in the open since.
 
 ## Roadmap
 
@@ -167,5 +154,5 @@ Issues are welcome. See [CONTRIBUTING.md](CONTRIBUTING.md), the
 
 Media sources are listed in [CREDITS.md](CREDITS.md).
 
-© Alex Prostamo. All rights reserved. The code is public so it can be read and reviewed.
+© AlxPro. All rights reserved. The code is public so it can be read and reviewed.
 It is not licensed for reuse or redistribution. See [LICENSE](LICENSE).
