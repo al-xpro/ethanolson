@@ -13,15 +13,13 @@ export function NotFoundView() {
       gsap.matchMedia().add(MOTION_OK, () => {
         const digits = gsap.utils.toArray<HTMLElement>(".digit");
 
-        // The digits drop in and bounce, one after the other
-        gsap.from(digits, {
-          yPercent: -160,
-          rotate: (index) => [-18, 12, -8][index],
-          opacity: 0,
-          stagger: 0.15,
-          duration: 1.4,
-          ease: "bounce.out",
-        });
+        // The digits drop in and bounce, one after the other. They start hidden in CSS
+        // (intro-hidden), and autoAlpha makes each one visible as it starts.
+        gsap.fromTo(
+          digits,
+          { yPercent: -160, rotate: (index) => [-18, 12, -8][index], autoAlpha: 0 },
+          { yPercent: 0, rotate: 0, autoAlpha: 1, stagger: 0.15, duration: 1.4, ease: "bounce.out" }
+        );
 
         // Then each one follows the pointer at its own depth
         const movers = digits.map((digit) => ({
@@ -55,7 +53,7 @@ export function NotFoundView() {
       </p>
       <p aria-hidden className="flex text-[max(34vw,6.8rem)] sm:text-[26vw] leading-[0.8]">
         {["4", "0", "4"].map((digit, index) => (
-          <span key={index} className={`digit inline-block ${index === 1 ? "text-outline" : ""}`}>
+          <span key={index} className={`digit intro-hidden inline-block ${index === 1 ? "text-outline" : ""}`}>
             {digit}
           </span>
         ))}

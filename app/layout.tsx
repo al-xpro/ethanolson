@@ -47,6 +47,10 @@ export default async function RootLayout({
       <body
         className={`${playfair.variable} antialiased bg-[#111111] min-w-[320px] overflow-x-clip`}
       >
+        {/* Without JavaScript, nothing waits for an entrance animation (see .intro-hidden) */}
+        <noscript>
+          <style>{".intro-hidden{visibility:visible!important}"}</style>
+        </noscript>
         {/* Inline llms.txt (browsers ignore unknown script types): agents on any page get the
             map of the site, generated from content/, with a Markdown link for every page */}
         <script
