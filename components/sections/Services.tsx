@@ -5,6 +5,7 @@ import Image from "next/image";
 import { servicesData, servicesHeader } from "@/content/sections";
 import { gsap, useGSAP, MOTION_OK } from "@/lib/gsap";
 import AnimatedHeaderSection from "../ui/AnimatedHeaderSection";
+import { PillLink } from "../ui/PillLink";
 
 const Services = () => {
   const contentRef = useRef<HTMLDivElement>(null);
@@ -42,7 +43,7 @@ const Services = () => {
   return (
     <section
       id="services"
-      className="relative bg-black text-white overflow-hidden rounded-t-4xl xl:rounded-t-[2.5vw]"
+      className="relative bg-black text-white overflow-hidden"
     >
       {/* HEADER SECTION: shrink-0 prevents it from being crushed by the flex column */}
       <div className="shrink-0">
@@ -81,8 +82,8 @@ const Services = () => {
                 <Image
                   src={service.visual.src}
                   alt={service.visual.alt}
-                  fill
-                  className="object-cover transition-transform duration-700"
+                  placeholder="blur"
+                  className="h-full w-full object-cover transition-transform duration-700"
                   sizes="(max-width: 1024px) 100vw, 50vw"
                 />
 
@@ -111,6 +112,9 @@ const Services = () => {
             </div>
           ))}
         </div>
+      </div>
+      <div className="flex justify-center py-16 xl:py-[4vw]">
+        <PillLink href="/services">Explore the services →</PillLink>
       </div>
     </section>
   );

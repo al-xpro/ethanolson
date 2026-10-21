@@ -32,22 +32,22 @@ export default function OutroParallax() {
   );
 
   // Art direction: a landscape crop for desktop, a portrait crop for phones
-  const common = { alt: "", sizes: "100vw", quality: 75 };
+  const common = { alt: "", sizes: "100vw", quality: 75, placeholder: "blur" as const };
   const {
     props: { srcSet: desktopSrcSet },
-  } = getImageProps({ ...common, ...outroParallax.desktop });
+  } = getImageProps({ ...common, src: outroParallax.desktop });
   const {
     props: { srcSet: mobileSrcSet, ...imageProps },
-  } = getImageProps({ ...common, ...outroParallax.mobile });
+  } = getImageProps({ ...common, src: outroParallax.mobile });
 
   return (
     <div
       ref={container}
-      className="relative flex items-center justify-center h-screen overflow-hidden top-7 md:top-5 xl:top-[5vh]"
+      className="relative flex items-center justify-center h-screen overflow-hidden"
       style={{ clipPath: "polygon(0% 0, 100% 0%, 100% 100%, 0 100%)" }}
     >
       <div className="flex justify-center my-40 z-20">
-        <p className="text-[5vw] text-white uppercase text-center max-w-[50vw] leading-none">
+        <p className="text-4xl sm:text-6xl xl:text-[5vw] text-white uppercase text-center text-balance max-w-[88vw] sm:max-w-[70vw] xl:max-w-[50vw] leading-none">
           {outroParallax.text}
         </p>
       </div>

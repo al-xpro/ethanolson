@@ -1,3 +1,22 @@
+import type { StaticImageData } from "next/image";
+import draw from "@/public/images/draw.jpg";
+import particles from "@/public/images/particles.jpg";
+import interior from "@/public/images/interior.jpg";
+import metro from "@/public/images/metro.jpg";
+import laptop from "@/public/images/laptop.jpg";
+import pen from "@/public/images/pen.jpg";
+import firstService from "@/public/images/first-service.webp";
+import secondService from "@/public/images/second-service.png";
+import thirdService from "@/public/images/third-service.webp";
+import fourthService from "@/public/images/fourth-service.webp";
+import waterSpray from "@/public/images/water-spray.jpg";
+import wavingWater from "@/public/images/waving-water.jpg";
+import landscapeDesktop from "@/public/images/landscape-desktop.jpg";
+import landscapeMobile from "@/public/images/landscape-mobile.jpg";
+
+// Images are imported, not referenced by path: Next.js then knows their real size (so
+// every <img> gets explicit dimensions) and generates a blurred preview for loading.
+
 export type SectionHeader = {
   subTitle: string;
   title: string;
@@ -5,7 +24,7 @@ export type SectionHeader = {
 };
 
 export type Picture = {
-  src: string;
+  src: StaticImageData;
   alt: string;
 };
 
@@ -22,12 +41,12 @@ export const heroHeader: SectionHeader = {
 // Zoom Parallax (decorative, so alt is empty)
 
 export const zoomPictures: (Picture & { scale: number; className: string })[] = [
-  { src: "/images/draw.jpg", alt: "", scale: 4, className: "w-[25vw] h-[25vh]" },
-  { src: "/images/particles.jpg", alt: "", scale: 5, className: "top-[-30vh] left-[5vw] w-[35vw] h-[30vh]" },
-  { src: "/images/interior.jpg", alt: "", scale: 6, className: "top-[-10vh] left-[-25vw] w-[20vw] h-[45vh]" },
-  { src: "/images/metro.jpg", alt: "", scale: 7, className: "left-[27.5vw] w-[25vw] h-[25vh]" },
-  { src: "/images/laptop.jpg", alt: "", scale: 8, className: "top-[27.5vh] left-[5vw] w-[20vw] h-[25vh]" },
-  { src: "/images/pen.jpg", alt: "", scale: 9, className: "top-[27.5vh] left-[-22.5vw] w-[30vw] h-[25vh]" },
+  { src: draw, alt: "", scale: 4, className: "w-[25vw] h-[25vh]" },
+  { src: particles, alt: "", scale: 5, className: "top-[-30vh] left-[5vw] w-[35vw] h-[30vh]" },
+  { src: interior, alt: "", scale: 6, className: "top-[-10vh] left-[-25vw] w-[20vw] h-[45vh]" },
+  { src: metro, alt: "", scale: 7, className: "left-[27.5vw] w-[25vw] h-[25vh]" },
+  { src: laptop, alt: "", scale: 8, className: "top-[27.5vh] left-[5vw] w-[20vw] h-[25vh]" },
+  { src: pen, alt: "", scale: 9, className: "top-[27.5vh] left-[-22.5vw] w-[30vw] h-[25vh]" },
 ];
 
 // Intro Parallax
@@ -52,25 +71,25 @@ export const servicesData: { title: string; description: string; visual: Picture
     title: "Product Design & Design Systems",
     description:
       "Interfaces that scale. Tokens, components and accessible patterns keep a growing product consistent, from the first screen to the hundredth.",
-    visual: { src: "/images/first-service.png", alt: "" },
+    visual: { src: firstService, alt: "" },
   },
   {
     title: "Interactive Front Ends",
     description:
       "Motion and interaction that serve the content. Scroll scenes, micro-interactions and real-time 3D, with reduced-motion fallbacks built in.",
-    visual: { src: "/images/second-service.png", alt: "" },
+    visual: { src: secondService, alt: "" },
   },
   {
     title: "Back Ends & APIs",
     description:
       "Server actions, APIs, databases and auth, built type-safe from the schema to the form, so every interface has something solid behind it.",
-    visual: { src: "/images/third-service.png", alt: "" },
+    visual: { src: thirdService, alt: "" },
   },
   {
     title: "Performance & SEO",
     description:
       "Fast loads, clean metadata and structured data. Core Web Vitals are measured at launch and kept in budget after it.",
-    visual: { src: "/images/fourth-service.jpg", alt: "" },
+    visual: { src: fourthService, alt: "" },
   },
 ];
 
@@ -81,21 +100,17 @@ export const worksHeader: SectionHeader = {
   title: "Works",
   text: `Products I designed and built,
   from first sketch to production.
-  Case studies are coming soon.`,
+  Five of them, in detail, on the works page.`,
 };
 
-export const workImages: Picture[] = Array.from({ length: 12 }, (_, i) => {
-  const n = String(i + 1).padStart(2, "0");
-  return { src: `/projects/work-${n}.svg`, alt: `Placeholder wireframe for work ${n}` };
-});
 
 // Middle Parallax (decorative, so alt is empty)
 
 export const middleParallax = {
   video: { src: "/videos/water-ripple.mp4", poster: "/videos/water-ripple-poster.jpg" },
   pictures: [
-    { src: "/images/water-spray.jpg", alt: "" },
-    { src: "/images/waving-water.jpg", alt: "" },
+    { src: waterSpray, alt: "" },
+    { src: wavingWater, alt: "" },
   ] satisfies Picture[],
   firstContent:
     "Every interaction is fluid like water, and every interface is a reflection of the user's needs.",
@@ -107,11 +122,35 @@ export const middleParallax = {
 
 export const outroParallax = {
   text: "The world is a canvas, and I paint it with code.",
-  desktop: { src: "/images/landscape-desktop.jpg", width: 2560, height: 1440 },
-  mobile: { src: "/images/landscape-mobile.jpg", width: 1440, height: 2560 },
+  desktop: landscapeDesktop,
+  mobile: landscapeMobile,
 };
 
-// Contact section
+// Contact page
+
+export const contactPage = {
+  marquee: "Let's build it",
+  emailLabel: "E-mail",
+  replyLabel: "Replies",
+  replyText:
+    "Every message is read and answered personally.",
+  socialLabel: "Social media",
+  privacy: {
+    text: "I only use your details to reply to your message. More in the",
+    link: "privacy policy",
+  },
+  availability: {
+    label: "Availability",
+    intro: "Days I'm free for a call this month and next. Pick one to see the times.",
+    previous: "Previous month",
+    next: "Next month",
+    open: "Free for a call",
+    booked: "Booked",
+    none: "No free days left this month: have a look at the next one.",
+    note: "Times are Central European Time. Mention a day in your message and I'll confirm it.",
+    weekdays: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
+  },
+};
 
 export const contactHeader: SectionHeader = {
   subTitle: "Get in touch",
@@ -119,4 +158,14 @@ export const contactHeader: SectionHeader = {
   text: `Have a product in mind?
   Tell me about it, and let's
   build it together.`,
+};
+
+// 404 page
+
+export const notFoundPage = {
+  subTitle: "Error 404",
+  title: "Lost in the grid",
+  text: "This page doesn't exist, or it moved somewhere else.",
+  primary: { href: "/", label: "Back home" },
+  secondary: { href: "/works", label: "See the works" },
 };

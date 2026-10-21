@@ -10,9 +10,10 @@ All photographs in `public/images/` are AI-generated stock images from
 repository. They are not for resale.
 
 - `draw.jpg`, `particles.jpg`, `interior.jpg`, `metro.jpg`, `laptop.jpg`, `pen.jpg`
-- `first-service.png`, `second-service.png`, `third-service.png`, `fourth-service.jpg`
+- `first-service.webp`, `second-service.png`, `third-service.webp`, `fourth-service.webp`
 - `water-spray.jpg`, `waving-water.jpg`
 - `landscape-desktop.jpg`, `landscape-mobile.jpg`
+- `hero.jpg`, `about.jpg` (portraits on the home and about pages)
 
 ## Video
 
@@ -20,8 +21,15 @@ repository. They are not for resale.
   royalty-free stock footage.
 - `public/videos/*-poster.jpg`: still frames from those two videos.
 
+## 3D model
+
+- `public/models/optical-illusion.glb`: modified from
+  ["Optical Illusions"](https://sketchfab.com/3d-models/optical-illusions-bd5b32c2851749a7abcdc66c92a95965)
+  by [Johannes R.](https://sketchfab.com/selkie3d), licensed under
+  [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). Changes: the edges were
+  reshaped (the uprights lean by about 12°, the figure is 15% taller and 15% shallower)
+  and the material was replaced.
+
 ## Original work
 
-- The 3D Penrose triangle in the hero (`components/ui/OpticalIllusion.tsx`): built in code
-  for this project.
-- `public/projects/work-*.svg`: wireframe placeholders, made for this project.
+- `public/works/`: project covers and screens, made for this project.

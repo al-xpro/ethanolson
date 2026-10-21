@@ -1,8 +1,9 @@
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { SplitText } from "gsap/SplitText";
 import { useGSAP } from "@gsap/react";
 
-gsap.registerPlugin(ScrollTrigger, useGSAP);
+gsap.registerPlugin(ScrollTrigger, SplitText, useGSAP);
 
 if (typeof window !== "undefined") {
   // Prevents jumps when the mobile address bar shows or hides
@@ -13,4 +14,4 @@ if (typeof window !== "undefined") {
 // are skipped (and reverted) when the visitor prefers reduced motion.
 export const MOTION_OK = "(prefers-reduced-motion: no-preference)";
 
-export { gsap, ScrollTrigger, useGSAP };
+export { gsap, ScrollTrigger, SplitText, useGSAP };

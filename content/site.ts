@@ -8,14 +8,25 @@ export const site = {
   role: "Design Engineer",
   title: "Ethan Olson | Design Engineer",
   description:
-    "Concept portfolio of Ethan Olson, a fictional design engineer. Designed and developed by AlxPro.",
-  url: process.env.NEXT_PUBLIC_SITE_URL || "https://ethanolson.dev",
-  email: "hello@ethanolson.dev",
+    "Ethan Olson, design engineer: full-stack web products, from the first sketch to the database. Designed and developed by AlxPro.",
+  url: process.env.NEXT_PUBLIC_SITE_URL || "https://ethanolson.alxpro.com",
+  email: "hello@ethanolson.alxpro.com",
   creator: {
     name: "Alex Prostamo",
     brand: "AlxPro",
     url: "https://alxpro.com",
   },
+  navigation: [
+    { href: "/", label: "Home" },
+    { href: "/about", label: "About" },
+    { href: "/services", label: "Services" },
+    { href: "/works", label: "Works" },
+    { href: "/contact", label: "Contact" },
+  ],
+  legal: [
+    { href: "/privacy", label: "Privacy Policy" },
+    { href: "/terms", label: "Terms & Conditions" },
+  ],
   // Links with an empty href are not rendered.
   socials: [
     { name: "Instagram", href: "" },
