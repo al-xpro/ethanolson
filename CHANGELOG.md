@@ -3,6 +3,50 @@
 All notable changes to this project, newest first. Versions follow
 [semver](https://semver.org).
 
+## v1.1 · 2026-10-21
+
+Pages and polish: the one-page concept becomes a full site, editable in Storyblok, and goes
+live on Vercel.
+
+### Added
+
+- Pages: about, services, works with five project pages, contact, privacy policy, terms
+  and a 404 page, with a sticky reveal footer.
+- A testimonials deck on the home page, and the real projects in the works gallery.
+- Storyblok with the Visual Editor: every page's text, images and videos, and the works
+  (new ones too), checked against a content model with limits on characters, items and
+  file weight. Broken content falls back to the defaults on the published site.
+- Draft mode and a signed publish webhook that refreshes the site within seconds.
+- A preferred-call date picker on the contact page, with availability that changes every
+  month and no booking service; a drawer on phones.
+- `llms.txt` that follows the recommendations, a Markdown version of every page, and a
+  footer link to see any page as an agent does.
+- A minimap for in-page navigation on small screens, and smooth in-page navigation on the
+  services and legal pages.
+- Production deployments: every merge into `main` deploys.
+
+### Changed
+
+- The hero figure: a modified version of the original optical illusion, reshaped and
+  cleaned, in black metal. It turns into place, then turning white strips light it.
+- The favicon and icons, rendered from the figure.
+- The services section: a sticky four-step timeline instead of a card stack.
+- The contact form: on its own page, with errors only after Send.
+- Every image has explicit dimensions and a blur placeholder.
+- The concept is mentioned only in the footer.
+
+### Fixed
+
+- Safari: the home page froze and wouldn't scroll, and the outro stuttered.
+- Layouts in landscape on phones, and every block at least 320px wide.
+- Keyboard focus in the parallax sections (works tiles and testimonial links), and
+  prohibited ARIA attributes on split text.
+- The figure was cut at the bottom on tablets and laptops.
+
+### Removed
+
+- The Penrose triangle, the booking embed, and the scrollbars.
+
 ## v1.0 · 2026-10-15
 
 The first public release: the concept portfolio as it was built from January to March
