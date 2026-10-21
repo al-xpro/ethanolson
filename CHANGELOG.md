@@ -3,6 +3,43 @@
 All notable changes to this project, newest first. Versions follow
 [semver](https://semver.org).
 
+## v2.0 · 2026-10-21
+
+Full stack: the contact form delivers every message, the site is measured and hardened, and
+the home page loads a third of what it did.
+
+### Added
+
+- Contact e-mails with Resend and React Email: the message to the inbox (reply-to: the
+  visitor) and a confirmation to the visitor. If the e-mail to the inbox fails, the visitor
+  keeps the message and sees an error.
+- A rate limit on the contact form: one message per visitor per day, counted in Postgres
+  (Neon, Drizzle) with a salted hash, never an IP address.
+- Cookieless analytics: Vercel Web Analytics, and Umami with three events ("Start a
+  project", "Contact submit", "Work view").
+- Security headers: a Content Security Policy (only Storyblok's Visual Editor may frame the
+  site), X-Frame-Options, X-Content-Type-Options, Referrer-Policy and Permissions-Policy.
+- A failed send during a deployment keeps the message and offers a reload, instead of the
+  error page.
+
+### Changed
+
+- The 3D scene loads after the page, and the intro video when its section comes near: the
+  home page's first load went from 2.7 MB to 0.85 MB.
+- Video posters come through Storyblok's image service as WebP.
+- The privacy policy lists what the contact flow and the analytics really do.
+
+### Fixed
+
+- The intro video never played: the pinned section cancelled its autoplay.
+- The footer couldn't be revealed after sending the form: scroll animations now re-measure
+  when the page's height changes.
+- The 404 page flashed its final state before the digits dropped in.
+
+### Removed
+
+- Storing enquiries in a second Storyblok space, and Vercel BotID (not planned).
+
 ## v1.1 · 2026-10-21
 
 Pages and polish: the one-page concept becomes a full site, editable in Storyblok, and goes
