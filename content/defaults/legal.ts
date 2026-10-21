@@ -20,7 +20,7 @@ export const defaultPrivacy: LegalPage = {
       "list": [
         "Contact form: your name, e-mail address, budget range and message, so I can reply to your enquiry. The legal basis is the steps you ask me to take before a possible contract.",
         "Spam protection: a salted, one-way hash of your IP address, kept for one hour to limit how many messages can be sent. Your IP address itself is never stored. The legal basis is my legitimate interest in keeping the form usable.",
-        "Analytics: anonymous page views counted with Umami, without cookies and without identifying you. The legal basis is my legitimate interest in understanding which pages are useful.",
+        "Analytics: anonymous page views counted with Vercel Web Analytics and Umami, without cookies and without identifying you. The legal basis is my legitimate interest in understanding which pages are useful.",
         "Performance: anonymous loading measurements (Core Web Vitals) and the page they were taken on, with no IP address, user agent or cookie."
       ]
     },
@@ -28,7 +28,7 @@ export const defaultPrivacy: LegalPage = {
       "heading": "Who processes the data for me",
       "paragraphs": "These providers process data on my behalf, under data processing agreements:",
       "list": [
-        "Vercel (hosting): serves the website and keeps short-lived server logs.",
+        "Vercel (hosting and analytics): serves the website, keeps short-lived server logs and counts anonymous page views.",
         "Resend: delivers your message to my inbox by e-mail, and sends you its confirmation.",
         "ImprovMX: forwards e-mail sent to hello@ethanolson.alxpro.com to my mailbox, where messages are kept.",
         "Neon (EU servers): stores the spam-protection counters and performance measurements.",
