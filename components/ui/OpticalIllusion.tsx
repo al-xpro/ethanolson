@@ -40,7 +40,8 @@ export function OpticalIllusion({
   ...props
 }: JSX.IntrinsicElements["group"] & { reduceMotion?: boolean; onReady?: () => void; onTurned?: () => void }) {
   const container = useRef<THREE.Group>(null);
-  const { scene } = useGLTF(MODEL);
+  // The model isn't compressed: no Draco or meshopt decoders (meshopt compiles WebAssembly)
+  const { scene } = useGLTF(MODEL, false, false);
 
   const { viewport } = useThree();
   // At full size the figure spans about 2.6 × 3 scene units, float and rotation included.
@@ -122,4 +123,4 @@ export function OpticalIllusion({
   );
 }
 
-useGLTF.preload(MODEL);
+useGLTF.preload(MODEL, false, false);

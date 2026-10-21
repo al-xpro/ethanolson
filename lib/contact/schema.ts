@@ -1,6 +1,9 @@
 import { z } from "zod";
 import { isOpenSlot } from "@/lib/availability";
 
+// No compiled validators: they need eval, which the Content Security Policy forbids
+z.config({ jitless: true });
+
 export const BUDGETS = ["Under €5k", "€5k–15k", "€15k–50k", "Over €50k", "Not sure yet"] as const;
 
 // Shared by the form (field names, limits) and the server action (validation)
