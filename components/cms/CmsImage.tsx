@@ -3,8 +3,15 @@
 import Image, { type ImageLoader, type ImageProps } from "next/image";
 import type { Media } from "@/lib/cms/fields";
 
-// Storyblok resizes and compresses its own images: /m/<width>x0 returns the width asked for
+// Storyblok resizes and compresses its own images: /m/<width>x0 returns the width asked for,
+// as WebP when the browser accepts it
 const storyblokLoader: ImageLoader = ({ src, width, quality }) => `${src}/m/${width}x0/filters:quality(${quality ?? 75})`;
+
+/** A plain URL for media used outside <Image>, like a video poster: resized when it's in Storyblok */
+export const mediaSrc = (media: Media, width: number) =>
+  media.src.startsWith("https://a.storyblok.com/") && !/\.svg$/i.test(media.src)
+    ? storyblokLoader({ src: media.src, width, quality: 70 })
+    : media.src;
 
 /** An image from the content: a file in public/ or an asset in Storyblok, with its size and blur preview */
 export function CmsImage({
