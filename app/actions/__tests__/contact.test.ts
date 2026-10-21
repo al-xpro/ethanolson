@@ -5,6 +5,8 @@ vi.mock("next/headers", () => ({ headers: async () => new Headers({ "x-forwarded
 
 // The rate limiter is tested on its own (lib/__tests__/rate-limit.test.ts); here it's a switch
 const rate = vi.hoisted(() => ({ allowed: true }));
+const mail = vi.hoisted(() => ({ delivered: true }));
+vi.mock("@/lib/email", () => ({ readableCall: (value: string) => value, sendEnquiry: async () => ({ delivered: mail.delivered }) }));
 vi.mock("@/lib/rate-limit", () => ({
   clientIp: () => "203.0.113.7",
   visitorKey: () => "key",
@@ -62,6 +64,17 @@ describe("submitContact", () => {
     expect(state.status).toBe("error");
     if (state.status !== "error") return;
     expect(state.formError).toMatch(/try again later/);
+    expect(state.values.message).toBe(valid.message);
+  });
+
+  it("keeps the message and explains when it couldn't be e-mailed", async () => {
+    mail.delivered = false;
+    const state = await submitContact(initialContactState, form(valid));
+    mail.delivered = true;
+
+    expect(state.status).toBe("error");
+    if (state.status !== "error") return;
+    expect(state.formError).toMatch(/couldn't be sent/);
     expect(state.values.message).toBe(valid.message);
   });
 });
