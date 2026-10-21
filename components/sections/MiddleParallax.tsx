@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef } from "react";
-import { CmsImage } from "@/components/cms/CmsImage";
+import { CmsImage, mediaSrc } from "@/components/cms/CmsImage";
 import { animateWithGsap } from "@/lib/animation";
 import type { Home } from "@/lib/cms/model";
 import { editable } from "@/lib/cms/editable";
@@ -72,7 +72,7 @@ export const MiddleParallax = ({ content }: { content: Home["middle"] }) => {
                 playsInline
                 className="w-full h-full object-cover object-center rounded-xl xl:rounded-[1.5vw] aspect-square"
                 preload="none"
-                poster={content.poster.src}
+                poster={mediaSrc(content.poster, 1280)}
                 muted
                 aria-hidden
                 ref={videoRef}

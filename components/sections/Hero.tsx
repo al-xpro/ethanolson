@@ -1,15 +1,15 @@
 "use client";
 
-import { Suspense, useCallback, useEffect, useRef, useState } from "react";
-import { Canvas } from "@react-three/fiber";
-import { Float } from "@react-three/drei";
+import { useCallback, useEffect, useRef, useState } from "react";
+import dynamic from "next/dynamic";
 import AnimatedHeaderSection from "@/components/ui/AnimatedHeaderSection";
 import type { Home } from "@/lib/cms/model";
 import { editable } from "@/lib/cms/editable";
 import { usePrefersReducedMotion } from "@/lib/useMediaQuery";
 import { useFastWebGL } from "@/lib/useFastWebGL";
-import { OpticalIllusion } from "../ui/OpticalIllusion";
-import { StudioEnvironment } from "../ui/StudioEnvironment";
+
+// three.js is most of the page's JavaScript: it loads on its own, after the page is up
+const HeroScene = dynamic(() => import("./HeroScene"), { ssr: false });
 
 const Hero = ({ content }: { content: Home["hero"] }) => {
   const figureRef = useRef<HTMLElement>(null);
@@ -21,13 +21,40 @@ const Hero = ({ content }: { content: Home["hero"] }) => {
   // The figure turns into place in the dark; the lights come up once it settles
   const [lit, setLit] = useState(false);
   const onFigureTurned = useCallback(() => setLit(true), []);
+  // The scene loads once the page has finished loading and the browser is idle, so the
+  // heading (the largest thing on screen) never waits for three.js
+  const [loadScene, setLoadScene] = useState(false);
+
+  useEffect(() => {
+    if (!fastWebGL) return;
+    let cancel = () => {};
+    const start = () => {
+      const show = () => setLoadScene(true);
+      // Safari before 18 has no requestIdleCallback
+      if (typeof window.requestIdleCallback === "function") {
+        const id = window.requestIdleCallback(show, { timeout: 2000 });
+        cancel = () => window.cancelIdleCallback(id);
+      } else {
+        const id = window.setTimeout(show, 200);
+        cancel = () => window.clearTimeout(id);
+      }
+    };
+    if (document.readyState === "complete") start();
+    else window.addEventListener("load", start, { once: true });
+    return () => {
+      window.removeEventListener("load", start);
+      cancel();
+    };
+  }, [fastWebGL]);
 
   // Stop rendering the scene once it scrolls out of view
   useEffect(() => {
     const figure = figureRef.current;
     if (!figure) return;
 
-    const observer = new IntersectionObserver(([entry]) => setInView(entry.isIntersecting));
+    const observer = new IntersectionObserver(([entry]) =>
+      setInView(entry.isIntersecting),
+    );
     observer.observe(figure);
     return () => observer.disconnect();
   }, [fastWebGL]);
@@ -55,25 +82,15 @@ const Hero = ({ content }: { content: Home["hero"] }) => {
             sceneReady ? "opacity-100" : "opacity-0"
           }`}
         >
-          <Canvas
-            frameloop={inView ? "always" : "never"}
-            // Retina screens would render 4× the pixels at full density; 1.5× still looks sharp
-            dpr={[1, 1.5]}
-            camera={{ position: [0, 0, -10], fov: 17.5, near: 1, far: 20 }}
-          >
-            <ambientLight intensity={1} />
-            {/* The black metal is lit by what it reflects: a studio whose lights keep turning */}
-            <StudioEnvironment moving={!reduceMotion} lit={lit} />
-            <Suspense fallback={null}>
-              <Float
-                speed={reduceMotion ? 0 : 1}
-                rotationIntensity={reduceMotion ? 0 : 0.3}
-                floatIntensity={reduceMotion ? 0 : 1}
-              >
-                <OpticalIllusion reduceMotion={reduceMotion} onReady={onFigureReady} onTurned={onFigureTurned} />
-              </Float>
-            </Suspense>
-          </Canvas>
+          {loadScene && (
+            <HeroScene
+              inView={inView}
+              reduceMotion={reduceMotion}
+              lit={lit}
+              onReady={onFigureReady}
+              onTurned={onFigureTurned}
+            />
+          )}
         </figure>
       )}
     </section>

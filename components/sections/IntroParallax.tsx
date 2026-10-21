@@ -1,15 +1,42 @@
 "use client";
 
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import mask from "@/public/images/mask.svg";
 import type { Home } from "@/lib/cms/model";
 import { editable } from "@/lib/cms/editable";
+import { mediaSrc } from "@/components/cms/CmsImage";
 import { introText } from "@/content/ui";
 import { gsap, useGSAP } from "@/lib/gsap";
+import { usePrefersReducedMotion } from "@/lib/useMediaQuery";
 
 export const IntroParallax = ({ content }: { content: Home["intro"] }) => {
   const containerRef = useRef<HTMLDivElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
+  // The video (1.6 MB) loads once the section is half a screen away, so it doesn't compete
+  // with the first screen; the poster shows until then, and instead of it with reduced motion
+  const [near, setNear] = useState(false);
+  const reduceMotion = usePrefersReducedMotion();
+
+  // Started by hand: the pin moves the section into a wrapper, which cancels autoplay
+  useEffect(() => {
+    if (near && !reduceMotion) videoRef.current?.play().catch(() => {});
+  }, [near, reduceMotion]);
+
+  useEffect(() => {
+    const section = containerRef.current;
+    if (!section) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting) return;
+        setNear(true);
+        observer.disconnect();
+      },
+      { rootMargin: "0px 0px 50% 0px" }
+    );
+    observer.observe(section);
+    return () => observer.disconnect();
+  }, []);
 
   useGSAP(
     () => {
@@ -91,11 +118,11 @@ export const IntroParallax = ({ content }: { content: Home["intro"] }) => {
         <video
           // A new file restarts the element
           key={content.video.src}
-          src={content.video.src}
-          poster={content.poster.src}
+          ref={videoRef}
+          src={near && !reduceMotion ? content.video.src : undefined}
+          poster={mediaSrc(content.poster, 1280)}
           loop
           muted
-          autoPlay
           playsInline
           preload="metadata"
           aria-hidden
