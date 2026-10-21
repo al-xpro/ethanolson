@@ -47,6 +47,15 @@ body {
   }
 }
 
+/* Hidden until its entrance animation reveals it (GSAP's autoAlpha), so the server-rendered
+   end state never flashes first. With reduced motion, or without JavaScript (see the
+   layout's noscript), it simply shows. */
+@media (prefers-reduced-motion: no-preference) {
+  .intro-hidden {
+    visibility: hidden;
+  }
+}
+
 /* Every block keeps a 320px minimum, so narrow screens scroll sideways instead of
    breaking the layout */
 html {
