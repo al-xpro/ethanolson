@@ -31,6 +31,7 @@ the home page loads a third of what it did.
 
 ### Fixed
 
+- Safari stuttered once scrolling into the outro: the photo is now a CSS background.
 - The intro video never played: the pinned section cancelled its autoplay.
 - The footer couldn't be revealed after sending the form: scroll animations now re-measure
   when the page's height changes.
