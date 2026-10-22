@@ -1,12 +1,12 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useLenis } from "lenis/react";
 import { site } from "@/content/site";
 import { SocialLinks, activeSocials } from "@/components/ui/SocialLinks";
 import { AgentView } from "@/components/ui/AgentView";
-import { gsap, useGSAP, MOTION_OK, SplitText } from "@/lib/gsap";
+import { gsap, useGSAP, MOTION_OK, ScrollTrigger, SplitText } from "@/lib/gsap";
 
 const columnTitle = "text-xs xl:text-[0.8vw] tracking-[0.3rem] uppercase text-white/50";
 const footerLink =
@@ -42,13 +42,30 @@ export default function Footer() {
   }, []);
 
   // The links sit in a fixed layer that only shows at the end of the page. Focusing one
-  // doesn't scroll, so keyboard users are taken to the end first.
-  const revealOnFocus = () => {
-    if (!reveal) return;
+  // doesn't scroll, so keyboard users are taken to the end first. Lenis re-reads the page
+  // height first, in case it changed since its last measure.
+  const scrollToEnd = useCallback(() => {
     const end = document.documentElement.scrollHeight;
-    if (lenis) lenis.scrollTo(end, { immediate: true, force: true });
-    else window.scrollTo(0, end);
+    if (lenis) {
+      lenis.resize();
+      lenis.scrollTo(end, { immediate: true, force: true });
+    } else window.scrollTo(0, end);
+  }, [lenis]);
+
+  const revealOnFocus = () => {
+    if (reveal) scrollToEnd();
   };
+
+  // If the page is measured again while a footer link has focus (images loading, the
+  // contact form changing height), the end moves: follow it
+  useEffect(() => {
+    if (!reveal) return;
+    const followEnd = () => {
+      if (wrapper.current?.contains(document.activeElement)) scrollToEnd();
+    };
+    ScrollTrigger.addEventListener("refresh", followEnd);
+    return () => ScrollTrigger.removeEventListener("refresh", followEnd);
+  }, [reveal, scrollToEnd]);
 
   useGSAP(
     () => {
