@@ -42,7 +42,7 @@ export async function submitContact(
   const { allowed } = await limit(key, 1, 86_400);
   if (!allowed) return { status: "error", values, fieldErrors: {}, formError: contactLabels.limited };
 
-  // The e-mail to me is the only record of the message: if it fails, the visitor keeps it
+  // The logged notification is the only record of the message: if it fails, the visitor keeps it
   const { name, email, budget, message, call } = result.data;
   const { delivered } = await sendEnquiry({ name, email, budget, message, call: readableCall(call) });
   if (!delivered) return { status: "error", values, fieldErrors: {}, formError: contactLabels.notSent };

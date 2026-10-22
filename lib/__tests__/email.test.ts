@@ -24,13 +24,13 @@ afterEach(() => {
 });
 
 describe("sendEnquiry", () => {
-  it("sends the message to me, replying to the visitor, then a confirmation to them", async () => {
+  it("logs the message in Resend, replying to the visitor, then sends a confirmation to them", async () => {
     send.mockResolvedValue({ data: { id: "1" }, error: null });
     await expect(sendEnquiry(enquiry)).resolves.toEqual({ delivered: true });
 
     expect(send).toHaveBeenCalledTimes(2);
     const [toMe, toVisitor] = send.mock.calls.map(([options]) => options);
-    expect(toMe).toMatchObject({ to: "hello@ethanolson.alxpro.com", replyTo: "ada@example.com" });
+    expect(toMe).toMatchObject({ to: "delivered@resend.dev", replyTo: "ada@example.com" });
     expect(toVisitor).toMatchObject({ to: "ada@example.com", replyTo: "hello@ethanolson.alxpro.com" });
     // A name can't add lines (or headers) to the subject
     expect(toMe.subject).toBe("New enquiry from Ada Bcc: someone@example.com");

@@ -24,6 +24,8 @@ the home page loads a third of what it did.
 
 ### Changed
 
+- Enquiries are kept in Resend's log (the notification goes to its test inbox) instead of
+  the inbox; visitors still get a confirmation.
 - The 3D scene loads after the page, and the intro video when its section comes near: the
   home page's first load went from 2.7 MB to 0.85 MB.
 - Video posters come through Storyblok's image service as WebP.

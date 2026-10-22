@@ -20,10 +20,14 @@ export function readableCall(value: string | undefined): string {
 
 // Both e-mails come from the site's own address, on the domain verified in Resend
 const from = `Ethan Olson <${site.email}>`;
+// The notification goes to Resend's test inbox: it's delivered nowhere, but Resend's log
+// keeps it, with the whole message and the visitor's address (30 days on the free plan).
+// That log is where enquiries are read.
+const LOG_ONLY = "delivered@resend.dev";
 
 /**
- * Sends the message to me (reply-to: the visitor) and a confirmation to the visitor. The
- * e-mail to me is the only record of the message, so if it fails the caller must tell the
+ * Logs the message in Resend (reply-to: the visitor) and sends a confirmation to the visitor.
+ * The logged notification is the only record of the message, so if it fails the caller must tell the
  * visitor; a failed confirmation is only logged. Without RESEND_API_KEY (CI, a fresh clone)
  * nothing is sent.
  */
@@ -40,7 +44,7 @@ export async function sendEnquiry(enquiry: Enquiry): Promise<{ delivered: boolea
   const notification = await resend.emails
     .send({
       from,
-      to: site.email,
+      to: LOG_ONLY,
       replyTo: enquiry.email,
       subject: emailCopy.notification.subject(name),
       react: ContactNotification({ enquiry: { ...enquiry, name } }),
