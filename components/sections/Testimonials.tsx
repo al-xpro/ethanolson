@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import Link from "next/link";
 import { useLenis } from "lenis/react";
 import AnimatedHeaderSection from "@/components/ui/AnimatedHeaderSection";
@@ -8,7 +8,7 @@ import { PillLink } from "@/components/ui/PillLink";
 import type { Home } from "@/lib/cms/model";
 import { editable } from "@/lib/cms/editable";
 import { testimonialLabels } from "@/content/ui";
-import { gsap, useGSAP, MOTION_OK } from "@/lib/gsap";
+import { gsap, useGSAP, MOTION_OK, ScrollTrigger } from "@/lib/gsap";
 
 const initials = (name: string) =>
   name
@@ -86,15 +86,33 @@ export default function Testimonials({ content }: { content: Home["testimonials"
 
   // Cards behind the first one are covered, so focusing a link scrolls the deck to the
   // moment its card is at the front (or to the closing line)
-  const showFocusedCard = (event: React.FocusEvent<HTMLDivElement>) => {
-    const trigger = timeline.current?.scrollTrigger;
-    if (!trigger) return;
-    const card = (event.target as HTMLElement).closest(".testimonial-card");
-    const cards = Array.from(deck.current?.querySelectorAll(".testimonial-card") ?? []);
-    const top = trigger.labelToScroll(card ? `card-${cards.indexOf(card)}` : "closing");
-    if (lenis) lenis.scrollTo(top, { immediate: true, force: true });
-    else window.scrollTo(0, top);
-  };
+  const showCardOf = useCallback(
+    (element: Element) => {
+      const trigger = timeline.current?.scrollTrigger;
+      if (!trigger) return;
+      const card = element.closest(".testimonial-card");
+      const cards = Array.from(deck.current?.querySelectorAll(".testimonial-card") ?? []);
+      const top = trigger.labelToScroll(card ? `card-${cards.indexOf(card)}` : "closing");
+      if (lenis) {
+        lenis.resize();
+        lenis.scrollTo(top, { immediate: true, force: true });
+      } else window.scrollTo(0, top);
+    },
+    [lenis]
+  );
+
+  const showFocusedCard = (event: React.FocusEvent<HTMLDivElement>) => showCardOf(event.target);
+
+  // When the page is measured again while a link in the deck has focus, the moment its card
+  // is at the front moves: follow it
+  useEffect(() => {
+    const followFocus = () => {
+      const focused = document.activeElement;
+      if (focused && deck.current?.contains(focused)) showCardOf(focused);
+    };
+    ScrollTrigger.addEventListener("refresh", followFocus);
+    return () => ScrollTrigger.removeEventListener("refresh", followFocus);
+  }, [showCardOf]);
 
   return (
     <section id="testimonials" {...editable(content)} className="relative">
