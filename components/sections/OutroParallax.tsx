@@ -1,18 +1,22 @@
 "use client";
 
 import { useRef } from "react";
-import { getImageProps } from "next/image";
 import type { Home } from "@/lib/cms/model";
 import type { Media } from "@/lib/cms/fields";
 import { editable } from "@/lib/cms/editable";
-
-// Storyblok images are resized by Storyblok, local ones by Next.js
-const storyblok = (media: Media, width: number) => `${media.src}/m/${width}x0/filters:quality(75)`;
-const srcSet = (media: Media) =>
-  media.src.startsWith("https://a.storyblok.com/") && !media.src.endsWith(".svg")
-    ? [640, 1080, 1920, 2560].map((width) => `${storyblok(media, width)} ${width}w`).join(", ")
-    : undefined;
 import { gsap, useGSAP, MOTION_OK } from "@/lib/gsap";
+
+// One width per crop: Storyblok resizes its own images, Next.js the local ones
+const photoUrl = (media: Media, width: number) =>
+  media.src.endsWith(".svg")
+    ? media.src
+    : media.src.startsWith("https://a.storyblok.com/")
+      ? `${media.src}/m/${width}x0/filters:quality(75)`
+      : `/_next/image?url=${encodeURIComponent(media.src)}&w=${width}&q=75`;
+
+// The photo, with its blur preview underneath until it loads
+const background = (media: Media, width: number) =>
+  [`url("${photoUrl(media, width)}")`, media.blurDataURL && `url("${media.blurDataURL}")`].filter(Boolean).join(", ");
 
 export default function OutroParallax({ content }: { content: Home["outro"] }) {
   const container = useRef<HTMLDivElement>(null);
@@ -41,15 +45,6 @@ export default function OutroParallax({ content }: { content: Home["outro"] }) {
     { scope: container }
   );
 
-  // Art direction: a landscape crop for desktop, a portrait crop for phones
-  const common = { alt: "", sizes: "100vw", quality: 75, placeholder: "blur" as const };
-  const {
-    props: { srcSet: desktopSrcSet },
-  } = getImageProps({ ...common, src: content.desktopImage.src, width: content.desktopImage.width, height: content.desktopImage.height, blurDataURL: content.desktopImage.blurDataURL });
-  const {
-    props: { srcSet: mobileSrcSet, ...imageProps },
-  } = getImageProps({ ...common, src: content.mobileImage.src, width: content.mobileImage.width, height: content.mobileImage.height, blurDataURL: content.mobileImage.blurDataURL });
-
   return (
     // A transformed layer, not position: fixed inside a clip-path: Safari repainted the
     // fixed full-screen photo on every scroll frame, which froze the home page there
@@ -62,19 +57,18 @@ export default function OutroParallax({ content }: { content: Home["outro"] }) {
 
       <div className="absolute top-[-10vh] left-0 h-[120vh] w-full">
         <div className="outro-image relative w-full h-full will-change-transform">
-          <picture>
-            <source media="(min-width: 769px)" srcSet={srcSet(content.desktopImage) ?? desktopSrcSet} />
-            <source media="(max-width: 768px)" srcSet={srcSet(content.mobileImage) ?? mobileSrcSet} />
-            <img
-              {...imageProps}
-              alt=""
-              // On high-density screens the photo is painted at half size and scaled up 2×:
-              // a quarter of the pixels to rasterize when it first scrolls in, which Safari
-              // did in one frame and stalled on (a background photo behind text stays sharp
-              // enough at 1×)
-              className="absolute inset-0 w-full h-full object-cover [@media(min-resolution:2dppx)]:h-1/2 [@media(min-resolution:2dppx)]:w-1/2 [@media(min-resolution:2dppx)]:origin-top-left [@media(min-resolution:2dppx)]:scale-200"
-            />
-          </picture>
+          {/* Backgrounds, not an <img>: Safari rasterized the full-screen <img> the first time
+              it scrolled in (a 60 ms frame), and doesn't for a background. A landscape crop
+              for desktop, a portrait one for phones: a hidden element's background isn't
+              downloaded, so each screen fetches only its own. */}
+          <div
+            className="absolute inset-0 hidden min-[769px]:block bg-cover bg-center bg-no-repeat"
+            style={{ backgroundImage: background(content.desktopImage, 1920) }}
+          />
+          <div
+            className="absolute inset-0 min-[769px]:hidden bg-cover bg-center bg-no-repeat"
+            style={{ backgroundImage: background(content.mobileImage, 1080) }}
+          />
         </div>
       </div>
     </div>
