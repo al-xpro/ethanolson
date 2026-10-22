@@ -1,4 +1,10 @@
-import { expect, test } from "@playwright/test";
+import { expect, test, type Page } from "@playwright/test";
+
+// The home page's scroll scenes set themselves up after it loads: the deck's pin moves it
+// into a wrapper, which drops any focus already inside it, and focus before React hydrates
+// isn't seen at all. A person tabs long after that; tests wait for the same moment.
+const scenesReady = (page: Page) =>
+  page.waitForFunction(() => document.querySelector("#testimonials .pin-spacer"), null, { timeout: 30_000 });
 
 test("the menu links to every page, and marks the current one", async ({ page }) => {
   await page.goto("/");
@@ -43,6 +49,7 @@ test("unknown pages show the 404 page", async ({ page }) => {
 
 test("the footer links to the legal pages", async ({ page }) => {
   await page.goto("/");
+  await scenesReady(page);
   const footer = page.getByRole("contentinfo");
   const privacy = footer.getByRole("link", { name: "Privacy Policy" });
 
@@ -62,6 +69,7 @@ test("the footer links to the legal pages", async ({ page }) => {
 
 test("focusing a testimonial link brings its card to the front", async ({ page }) => {
   await page.goto("/");
+  await scenesReady(page);
   const link = page.locator(".testimonial-card").nth(2).getByRole("link");
   await link.focus();
   await expect(async () => {
