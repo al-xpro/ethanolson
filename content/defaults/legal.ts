@@ -19,7 +19,7 @@ export const defaultPrivacy: LegalPage = {
       "paragraphs": "I only collect what the site needs to work and to answer you:",
       "list": [
         "Contact form: your name, e-mail address, budget range and message, so I can reply to your enquiry. The legal basis is the steps you ask me to take before a possible contract.",
-        "Spam protection: a salted, one-way hash of your IP address, kept for one hour to limit how many messages can be sent. Your IP address itself is never stored. The legal basis is my legitimate interest in keeping the form usable.",
+        "Spam protection: a salted, one-way hash of your IP address, kept for one day to limit how many messages can be sent. Your IP address itself is never stored. The legal basis is my legitimate interest in keeping the form usable.",
         "Analytics: anonymous page views counted with Vercel Web Analytics and Umami, without cookies and without identifying you. The legal basis is my legitimate interest in understanding which pages are useful."
       ]
     },
@@ -41,7 +41,7 @@ export const defaultPrivacy: LegalPage = {
     },
     {
       "heading": "How long data is kept",
-      "paragraphs": "Contact messages are deleted 12 months after our last exchange, unless they become part of a project. Spam-protection counters are deleted after one hour. Anonymous analytics are kept in aggregate form.",
+      "paragraphs": "Contact messages are deleted 12 months after our last exchange, unless they become part of a project. Spam-protection counters are deleted after one day. Anonymous analytics are kept in aggregate form.",
       "list": []
     },
     {

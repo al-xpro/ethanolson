@@ -42,7 +42,7 @@ export const contactLabels = {
     text: "I only use your details to reply to your message. More in the",
     link: "privacy policy",
   },
-  limited: "You've sent a few messages in the last hour. Please try again later.",
+  limited: "You can send one message a day, and today's has already arrived. Please try again tomorrow, or write to hello@ethanolson.alxpro.com.",
   notSent: "Your message couldn't be sent right now. It's still in the form: please try again in a moment.",
   failed: {
     text: "Your message couldn't be sent. The site may have just been updated: reload the page and send it again. What you wrote will still be there.",

@@ -4,9 +4,10 @@ import { lt, sql } from "drizzle-orm";
 import { db, type Database } from "@/lib/db";
 import { rateLimits } from "@/lib/db/schema";
 
-// Every limiter counts in windows of one hour at most: the privacy policy promises the
-// counters are gone after an hour, and the clean-up below relies on it
-const HOUR = 3600;
+// Every limiter counts in windows of one day at most (a window starts at midnight UTC for
+// daily limits): the privacy policy promises the counters are gone within a day after their
+// window, and the clean-up below relies on it
+const DAY = 86_400;
 
 /**
  * Who's asking, without knowing who: a salted SHA-256 of the IP address and the route.
@@ -35,7 +36,7 @@ export async function limit(
   windowSeconds: number,
   { database = db(), now = new Date() }: { database?: Database | null; now?: Date } = {}
 ): Promise<{ allowed: boolean; count: number }> {
-  if (windowSeconds > HOUR) throw new Error("Rate-limit windows can't be longer than an hour");
+  if (windowSeconds > DAY) throw new Error("Rate-limit windows can't be longer than a day");
   if (!database || !key) return { allowed: true, count: 0 };
 
   const windowStart = new Date(Math.floor(now.getTime() / (windowSeconds * 1000)) * windowSeconds * 1000);
@@ -48,7 +49,7 @@ export async function limit(
         set: { count: sql`${rateLimits.count} + 1` },
       })
       .returning({ count: rateLimits.count }),
-    database.delete(rateLimits).where(lt(rateLimits.windowStart, new Date(now.getTime() - HOUR * 1000))),
+    database.delete(rateLimits).where(lt(rateLimits.windowStart, new Date(now.getTime() - DAY * 1000))),
   ]);
   return { allowed: row.count <= max, count: row.count };
 }
