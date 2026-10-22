@@ -24,7 +24,8 @@ const contentSecurityPolicy = [
   "form-action 'self'",
   // Only Storyblok's Visual Editor may show the site in a frame
   "frame-ancestors 'self' https://app.storyblok.com",
-  "upgrade-insecure-requests",
+  // No upgrade-insecure-requests: Vercel serves HTTPS only already (HSTS), and Safari would
+  // upgrade a local production build's http://localhost requests and lose its stylesheet
 ].join("; ");
 
 const securityHeaders = [
