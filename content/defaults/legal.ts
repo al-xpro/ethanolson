@@ -28,8 +28,8 @@ export const defaultPrivacy: LegalPage = {
       "paragraphs": "These providers process data on my behalf, under data processing agreements:",
       "list": [
         "Vercel (hosting and analytics): serves the website, keeps short-lived server logs and counts anonymous page views.",
-        "Resend: delivers your message to my inbox by e-mail, and sends you its confirmation.",
-        "ImprovMX: forwards e-mail sent to hello@ethanolson.alxpro.com to my mailbox, where messages are kept.",
+        "Resend: sends you a confirmation, and keeps your message in its log for 30 days, where I read it.",
+        "ImprovMX: forwards e-mail sent to hello@ethanolson.alxpro.com, such as a reply to the confirmation, to my mailbox.",
         "Neon (EU servers): stores the spam-protection counters.",
         "Umami: counts anonymous page views."
       ]
@@ -41,7 +41,7 @@ export const defaultPrivacy: LegalPage = {
     },
     {
       "heading": "How long data is kept",
-      "paragraphs": "Contact messages are deleted 12 months after our last exchange, unless they become part of a project. Spam-protection counters are deleted after one day. Anonymous analytics are kept in aggregate form.",
+      "paragraphs": "Contact messages are kept in Resend's log for 30 days; replies by e-mail are deleted 12 months after our last exchange, unless they become part of a project. Spam-protection counters are deleted after one day. Anonymous analytics are kept in aggregate form.",
       "list": []
     },
     {
