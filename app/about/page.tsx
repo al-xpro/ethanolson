@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
-import { AboutPageView } from "@/components/cms/pages";
-import { StoryblokStory } from "@/lib/cms/live";
-import { isDraft, loadAbout } from "@/lib/cms/load";
+import { AboutPageView } from "@/components/cms/pages/about";
+import { loadAbout } from "@/lib/cms/load";
 
 export const metadata: Metadata = {
   title: "About",
@@ -11,7 +10,6 @@ export const metadata: Metadata = {
 };
 
 export default async function AboutPage() {
-  const [{ content, story }, draft] = await Promise.all([loadAbout(), isDraft()]);
-  if (draft && story) return <StoryblokStory story={story as never} />;
+  const { content } = await loadAbout();
   return <AboutPageView content={content} />;
 }

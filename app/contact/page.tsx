@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
-import { ContactPageView } from "@/components/cms/pages";
-import { StoryblokStory } from "@/lib/cms/live";
-import { isDraft, loadContact } from "@/lib/cms/load";
+import { ContactPageView } from "@/components/cms/pages/contact";
+import { loadContact } from "@/lib/cms/load";
 
 export const metadata: Metadata = {
   title: "Contact",
@@ -10,7 +9,6 @@ export const metadata: Metadata = {
 };
 
 export default async function ContactPage() {
-  const [{ content, story }, draft] = await Promise.all([loadContact(), isDraft()]);
-  if (draft && story) return <StoryblokStory story={story as never} />;
+  const { content } = await loadContact();
   return <ContactPageView content={content} />;
 }
