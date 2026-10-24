@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { WorkPage } from "@/components/cms/pages";
-import { StoryblokStory } from "@/lib/cms/live";
-import { isDraft, loadWorks } from "@/lib/cms/load";
+import { WorkPage } from "@/components/cms/pages/work";
+import { loadWorks } from "@/lib/cms/load";
 import { site } from "@/content/site";
 import { TrackView } from "@/lib/analytics";
 
@@ -32,15 +31,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function WorkRoute({ params }: Props) {
   const { slug } = await params;
-  const [{ works, stories }, draft] = await Promise.all([loadWorks(), isDraft()]);
+  const { works } = await loadWorks();
   const index = works.findIndex((item) => item.slug === slug);
-  const story = stories.get(slug);
-  if (index === -1 && !(draft && story)) notFound();
+  if (index === -1) notFound();
 
   const work = works[index];
   const next = works[(index + 1) % works.length];
 
-  const jsonLd = work && {
+  const jsonLd = {
     "@context": "https://schema.org",
     "@type": "CreativeWork",
     name: work.title,
@@ -53,15 +51,12 @@ export default async function WorkRoute({ params }: Props) {
 
   return (
     <>
-      {jsonLd && (
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }}
-        />
-      )}
-      {work && <TrackView event="Work view" data={{ work: work.slug }} />}
-      {/* In the Visual Editor, the draft renders through Storyblok and updates live */}
-      {draft && story ? <StoryblokStory story={story as never} slug={slug} /> : <WorkPage work={work} next={next} />}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }}
+      />
+      <TrackView event="Work view" data={{ work: work.slug }} />
+      <WorkPage work={work} next={next} />
     </>
   );
 }

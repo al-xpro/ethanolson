@@ -30,6 +30,9 @@ the home page loads a third of what it did.
   home page's first load went from 2.7 MB to 0.85 MB.
 - Video posters come through Storyblok's image service as WebP.
 - The privacy policy lists what the contact flow and the analytics really do.
+- Each page loads only its own code: the home page's JavaScript went from 261 KB to 215 KB
+  compressed. The Visual Editor's drafts render in a route of their own.
+- Next.js 16.4.3, for three security advisories.
 
 ### Fixed
 
@@ -38,6 +41,9 @@ the home page loads a third of what it did.
 - The footer couldn't be revealed after sending the form: scroll animations now re-measure
   when the page's height changes.
 - The 404 page flashed its final state before the digits dropped in.
+- PageSpeed Insights scored the home page about 70 on mobile: machines without a GPU ran the
+  3D scene in software, and the check meant to skip it blocked the page for 1.5 s. It now
+  reads the renderer's name, in a worker, once the page has loaded.
 
 ### Removed
 
