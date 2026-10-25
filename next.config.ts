@@ -42,19 +42,31 @@ const securityHeaders = [
   },
 ];
 
+const draftCookie = { type: "cookie", key: "__prerender_bypass" } as const;
+
 const nextConfig: NextConfig = {
   // Media uploaded in Storyblok (resized by Storyblok's own image service, see CmsImage)
   images: { remotePatterns: [{ protocol: "https", hostname: "a.storyblok.com" }] },
   async headers() {
     return [{ source: "/:path*", headers: securityHeaders }];
   },
-  // Markdown versions of the pages for agents (app/md, lib/llms.ts)
   async rewrites() {
-    return [
-      { source: "/index.md", destination: "/md" },
-      { source: "/works/:slug.md", destination: "/md/works/:slug" },
-      { source: "/:page.md", destination: "/md/:page" },
-    ];
+    return {
+      // In draft mode (the Visual Editor), the pages render through app/live, which alone
+      // loads Storyblok's SDK. Checked before the prerendered pages, on the cookie draft mode sets.
+      beforeFiles: [
+        { source: "/", destination: "/live", has: [draftCookie] },
+        { source: "/:page(about|services|works|contact|privacy|terms)", destination: "/live/:page", has: [draftCookie] },
+        { source: "/works/:slug([^/.]+)", destination: "/live/works/:slug", has: [draftCookie] },
+      ],
+      // Markdown versions of the pages for agents (app/md, lib/llms.ts)
+      afterFiles: [
+        { source: "/index.md", destination: "/md" },
+        { source: "/works/:slug.md", destination: "/md/works/:slug" },
+        { source: "/:page.md", destination: "/md/:page" },
+      ],
+      fallback: [],
+    };
   },
 };
 

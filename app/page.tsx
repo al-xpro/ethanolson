@@ -1,6 +1,5 @@
-import { HomePage } from "@/components/cms/pages";
-import { StoryblokStory } from "@/lib/cms/live";
-import { isDraft, loadHome, loadWorks } from "@/lib/cms/load";
+import { HomePage } from "@/components/cms/pages/home";
+import { loadHome, loadWorks } from "@/lib/cms/load";
 import { site } from "@/content/site";
 
 const jsonLd = {
@@ -17,15 +16,14 @@ const jsonLd = {
 };
 
 export default async function Home() {
-  const [{ content, story }, { works }, draft] = await Promise.all([loadHome(), loadWorks(), isDraft()]);
+  const [{ content }, { works }] = await Promise.all([loadHome(), loadWorks()]);
   return (
     <>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }}
       />
-      {/* In the Visual Editor, the draft renders through Storyblok and updates live */}
-      {draft && story ? <StoryblokStory story={story as never} /> : <HomePage content={content} works={works} />}
+      <HomePage content={content} works={works} />
     </>
   );
 }

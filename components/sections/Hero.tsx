@@ -6,7 +6,7 @@ import AnimatedHeaderSection from "@/components/ui/AnimatedHeaderSection";
 import type { Home } from "@/lib/cms/model";
 import { editable } from "@/lib/cms/editable";
 import { usePrefersReducedMotion } from "@/lib/useMediaQuery";
-import { useFastWebGL } from "@/lib/useFastWebGL";
+import { hasFastWebGL } from "@/lib/webgl";
 
 // three.js is most of the page's JavaScript: it loads on its own, after the page is up
 const HeroScene = dynamic(() => import("./HeroScene"), { ssr: false });
@@ -15,21 +15,24 @@ const Hero = ({ content }: { content: Home["hero"] }) => {
   const figureRef = useRef<HTMLElement>(null);
   const [inView, setInView] = useState(true);
   const reduceMotion = usePrefersReducedMotion();
-  const fastWebGL = useFastWebGL();
   const [sceneReady, setSceneReady] = useState(false);
   const onFigureReady = useCallback(() => setSceneReady(true), []);
   // The figure turns into place in the dark; the lights come up once it settles
   const [lit, setLit] = useState(false);
   const onFigureTurned = useCallback(() => setLit(true), []);
   // The scene loads once the page has finished loading and the browser is idle, so the
-  // heading (the largest thing on screen) never waits for three.js
+  // heading (the largest thing on screen) never waits for three.js; and only on a GPU
   const [loadScene, setLoadScene] = useState(false);
 
   useEffect(() => {
-    if (!fastWebGL) return;
+    let active = true;
     let cancel = () => {};
     const start = () => {
-      const show = () => setLoadScene(true);
+      const show = () => {
+        hasFastWebGL().then((fast) => {
+          if (fast && active) setLoadScene(true);
+        });
+      };
       // Safari before 18 has no requestIdleCallback
       if (typeof window.requestIdleCallback === "function") {
         const id = window.requestIdleCallback(show, { timeout: 2000 });
@@ -42,10 +45,11 @@ const Hero = ({ content }: { content: Home["hero"] }) => {
     if (document.readyState === "complete") start();
     else window.addEventListener("load", start, { once: true });
     return () => {
+      active = false;
       window.removeEventListener("load", start);
       cancel();
     };
-  }, [fastWebGL]);
+  }, []);
 
   // Stop rendering the scene once it scrolls out of view
   useEffect(() => {
@@ -57,7 +61,7 @@ const Hero = ({ content }: { content: Home["hero"] }) => {
     );
     observer.observe(figure);
     return () => observer.disconnect();
-  }, [fastWebGL]);
+  }, [loadScene]);
 
   return (
     <section
@@ -74,7 +78,7 @@ const Hero = ({ content }: { content: Home["hero"] }) => {
         attrs={editable(content.header)}
       />
       {/* Without a GPU the scene would stutter, so it's skipped */}
-      {fastWebGL && (
+      {loadScene && (
         <figure
           ref={figureRef}
           aria-hidden
@@ -82,15 +86,13 @@ const Hero = ({ content }: { content: Home["hero"] }) => {
             sceneReady ? "opacity-100" : "opacity-0"
           }`}
         >
-          {loadScene && (
-            <HeroScene
-              inView={inView}
-              reduceMotion={reduceMotion}
-              lit={lit}
-              onReady={onFigureReady}
-              onTurned={onFigureTurned}
-            />
-          )}
+          <HeroScene
+            inView={inView}
+            reduceMotion={reduceMotion}
+            lit={lit}
+            onReady={onFigureReady}
+            onTurned={onFigureTurned}
+          />
         </figure>
       )}
     </section>

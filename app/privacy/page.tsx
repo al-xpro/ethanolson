@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
-import { LegalPageView } from "@/components/cms/pages";
-import { StoryblokStory } from "@/lib/cms/live";
-import { isDraft, loadPrivacy } from "@/lib/cms/load";
+import { LegalPageView } from "@/components/cms/pages/legal";
+import { loadPrivacy } from "@/lib/cms/load";
 
 export async function generateMetadata(): Promise<Metadata> {
   const { content } = await loadPrivacy();
@@ -17,11 +16,6 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function PrivacyPage() {
-  const [{ content, story }, draft] = await Promise.all([
-    loadPrivacy(),
-    isDraft(),
-  ]);
-  if (draft && story)
-    return <StoryblokStory story={story as never} slug="privacy" />;
+  const { content } = await loadPrivacy();
   return <LegalPageView content={content} />;
 }

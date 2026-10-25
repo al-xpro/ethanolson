@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
-import { LegalPageView } from "@/components/cms/pages";
-import { StoryblokStory } from "@/lib/cms/live";
-import { isDraft, loadTerms } from "@/lib/cms/load";
+import { LegalPageView } from "@/components/cms/pages/legal";
+import { loadTerms } from "@/lib/cms/load";
 
 export async function generateMetadata(): Promise<Metadata> {
   const { content } = await loadTerms();
@@ -16,11 +15,6 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function TermsPage() {
-  const [{ content, story }, draft] = await Promise.all([
-    loadTerms(),
-    isDraft(),
-  ]);
-  if (draft && story)
-    return <StoryblokStory story={story as never} slug="terms" />;
+  const { content } = await loadTerms();
   return <LegalPageView content={content} />;
 }
